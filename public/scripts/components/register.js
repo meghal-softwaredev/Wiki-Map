@@ -19,16 +19,16 @@ $(() => {
 
   window.$registerForm = $registerForm;
 
-  $registerForm.on("submit", function (e) {
-    e.preventDefault();
+  // $registerForm.on("submit", function (e) {
+  //   e.preventDefault();
 
-    const data = $(this).serialize();
+  //   const data = $(this).serialize();
 
-    signUp(data)
-      .then(getMyDetails)
-      .then((json) => {
-        header.update(json.user);
-        views_manager.show("my-maps");
-      });
-  });
+  //   signUp(data)
+  //     .then(getMyDetails)
+  //     .then((json) => {
+  //       header.update(json.user);
+  //       views_manager.show("my-maps");
+  //     });
+  // });
 });

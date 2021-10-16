@@ -1,6 +1,5 @@
 // Client facing scripts here
 $(() => {
-  const $main = $('#main-content');
   const $logInForm = $(`
   <div class="container login-container">
     <div class="img">
@@ -22,5 +21,5 @@ $(() => {
     </div>
   </div>
   `);
-  $logInForm.appendTo($main);
+  window.$logInForm = $logInForm;
 });
