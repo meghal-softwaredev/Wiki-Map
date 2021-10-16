@@ -5,17 +5,19 @@ $(() => {
 
   window.views_manager.show = function (item) {
     $logInForm.detach();
-    $registerForm.detach();
+    $registerPage.detach();
+    $mapsDisplay.detach();
 
     switch (item) {
       case 'logIn':
         $logInForm.appendTo($main);
         break;
       case "signUp":
-        $registerForm.appendTo($main);
+        $registerPage.appendTo($main);
         break;
       case 'mapsDisplay':
         $mapsDisplay.appendTo($main);
+        break;
     }
   };
 });

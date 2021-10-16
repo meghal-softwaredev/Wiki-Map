@@ -1,5 +1,15 @@
 // Register new user form
 $(() => {
+  const $registerPage = $(`<section id="signup-container">`);
+  const $imageContainer = $(`<div class="img">`);
+  const $image = $(
+    `<img src='../../assets/signup.png' alt='image' height=400px width=400px>`
+  );
+  $imageContainer.append($image);
+
+  const $formContainer = $(`<div class="signup-form">`);
+  const $header = $(`<h1>Sign Up</h1>`);
+
   const $registerForm = $(`
   <section id="signup-container">
     <div class="img">
@@ -20,17 +30,16 @@ $(() => {
           <label for="password">Password</label>
             <input type="password" class="form-control" style="width:300px;" id="password" name="password" placeholder="Password">
         </div>
-        <button type="submit" class="signup-button">Sign up</button>
+        <button class="signup-button">Sign up</button>
       </form>
-    </div>
-  </section>
   `);
+  $formContainer.append($header, $registerForm);
+  $registerPage.append($imageContainer, $formContainer);
 
-  window.$registerForm = $registerForm;
+  window.$registerPage = $registerPage;
 
   $("#register-form").on("submit", function (e) {
     e.preventDefault();
-
     const data = $(this).serialize();
     console.log(data);
     signUp(data).then((json) => {

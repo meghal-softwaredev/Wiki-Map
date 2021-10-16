@@ -13,10 +13,8 @@ module.exports = (db) => {
   // Create a new user
   router.post("/register", (req, res) => {
     const user = req.body;
-    console.log("user", user);
     user.password = bcrypt.hashSync(user.password, 12);
     const { name, email, password } = user;
-    console.log("inside add User");
     return db
       .query(
         `
@@ -26,8 +24,8 @@ module.exports = (db) => {
         [name, email, password]
       )
       .then((result) => {
-        console.log(result.rows[0]);
-        result.rows[0];
+        console.log("result", result.rows[0]);
+        return res.json({ user: result.rows[0] });
       })
       .catch((err) => err.message);
   });
