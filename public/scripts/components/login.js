@@ -7,7 +7,7 @@ $(() => {
     </div>
     <div class="login-form">
       <h1>Login</h1>
-      <form method="POST" action="/login">
+      <form id="login-form" method="POST" action="api/users/login">
         <div class="form-group">
           <label for="email">Email address</label>
             <input type="email" class="form-control" style="width:300px;" id="email" name="email" placeholder="Enter email">
@@ -22,4 +22,20 @@ $(() => {
   </section>
   `);
   window.$logInForm = $logInForm;
+
+  $("#login-form").on("submit", function (e) {
+    e.preventDefault();
+
+    const data = $(this).serialize();
+    logIn(data).then((json) => {
+      console.log(json);
+      if (!json.user) {
+        views_manager.show("error", "Failed to login");
+        return;
+      }
+      console.log(json.user);
+      header.update(json.user);
+      views_manager.show("mapsDisplay");
+    });
+  });
 });
