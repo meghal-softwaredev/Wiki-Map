@@ -19,22 +19,6 @@ $(() => {
 
   window.$registerForm = $registerForm;
 
-  // to go in network.js
-  getMyDetails = () => {
-    console.log("getMyDetails");
-    return $.ajax({
-      url: "/users/me",
-    });
-  };
-
-  signUp = (data) => {
-    return $.ajax({
-      method: "POST",
-      url: "/users",
-      data,
-    });
-  };
-
   $registerForm.on("submit", function (e) {
     e.preventDefault();
 
