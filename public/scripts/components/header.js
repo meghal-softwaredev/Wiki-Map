@@ -1,7 +1,7 @@
 $(() => {
   window.header = {};
 
-  const $pageHeader = $('#page-header');
+  const $pageHeader = $("#page-header");
 
   const $userLinks = $(`
   <nav id="page-header__user-links" class="page-header__user-links">
@@ -14,11 +14,10 @@ $(() => {
   `);
   $pageHeader.append($userLinks);
 
-  $("header").on('click', '.login_button', () => {
-    views_manager.show('logIn');
+  $("header").on("click", ".login_button", () => {
+    views_manager.show("logIn");
   });
-  $("header").on('click', '.sign-up_button', () => {
-    views_manager.show('signUp');
+  $("header").on("click", ".sign-up_button", () => {
+    views_manager.show("signUp");
   });
-
 });

@@ -1,3 +1,14 @@
--- Users table seeds here (Example)
-INSERT INTO users (name) VALUES ('Alice');
-INSERT INTO users (name) VALUES ('Kira');
+INSERT INTO users (name, email, password) 
+VALUES ('Angelica Anderson', 'angelica@gmail.com', 'password'), ('Billy Bob', 'billy@gmail.com', 'password');
+
+INSERT INTO maps (owner_id, title, description) 
+VALUES (1, 'parks', 'green places'), (2, 'restaurants', 'best lunch spots');
+
+INSERT INTO contributors (user_id, map_id)
+VALUES (1, 2);
+
+INSERT INTO favourites (user_id, map_id, favourite)
+VALUES (1, 2, true), (2, 2, false);
+
+INSERT INTO points (user_id, map_id, title, description, img_url)
+VALUES (1, 2, 'tim hortons', 'coffee and timbits', 'https://imgur.com/gallery/rcxKimS')
