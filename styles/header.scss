@@ -31,6 +31,10 @@ header {
 
     li {
       margin-left: 1em;
+      &:hover {
+        cursor: pointer;
+        border-bottom: 2px solid $white;
+      }
     }
   }
 }

@@ -44,6 +44,7 @@ $font-body: "Open Sans", sans-serif;
   &:hover {
     cursor: pointer;
     background-color: $hover-color;
+    transition: 0.2s ease-in-out;
   }
 }
 

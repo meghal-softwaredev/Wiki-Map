@@ -1,17 +1,51 @@
 @use "_variables" as *;
 
-.login-container {
-  display: flex;
-  margin: 50px 50px 50px 50px;
-  .img {
-    align-self: flex-start;
-    margin-top: 50px;
-  }
-  .login {
-    align-self: flex-end;
-    margin-left: 100px;
-    margin-top: 0px;
+#login-container {
+  height: 90vh;
+  width: auto;
+  @include flex-center(row);
 
-    height: max-content;
+  .img {
+    margin-right: 5em;
+    height: 500px;
+    img {
+      height: 100%;
+      width: auto;
+    }
+  }
+
+  .login-form {
+    margin-left: 5em;
+    @include flex-center(column);
+
+    h1 {
+      width: 100%;
+      text-align: left;
+      font-family: $font-title;
+    }
+
+    label {
+      font-family: $font-title;
+    }
+
+    .login-button {
+      @include button($blue, $darkblue);
+    }
   }
 }
+
+// .login-container {
+//   display: flex;
+//   margin: 50px 50px 50px 50px;
+//   .img {
+//     align-self: flex-start;
+//     margin-top: 50px;
+//   }
+//   .login {
+//     align-self: flex-end;
+//     margin-left: 100px;
+//     margin-top: 0px;
+
+//     height: max-content;
+//   }
+// }
