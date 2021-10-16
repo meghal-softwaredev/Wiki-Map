@@ -60,12 +60,3 @@ $font-body: "Open Sans", sans-serif;
 @mixin button-add {
   @include button($green, $darkgreen);
 }
-
-// navbar
-// @mixin navbar {
-//   position: sticky;
-//   z-index: 1000;
-//   padding: 0 3rem;
-//   color: $white;
-//   background-color: ;
-// }
