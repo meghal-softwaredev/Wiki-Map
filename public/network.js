@@ -8,7 +8,7 @@ getMyDetails = () => {
 signUp = (data) => {
   return $.ajax({
     method: "POST",
-    url: "/maps/:id",
+    url: "/users",
     data,
   });
 };
