@@ -1,14 +1,14 @@
-getMyDetails = () => {
-  console.log("getMyDetails");
-  return $.ajax({
-    url: "/maps/:id",
-  });
-};
+// getMyDetails = () => {
+//   console.log("getMyDetails");
+//   return $.ajax({
+//     url: "/maps/:id",
+//   });
+// };
 
-signUp = (data) => {
-  return $.ajax({
-    method: "POST",
-    url: "/users",
-    data,
-  });
-};
+// signUp = (data) => {
+//   return $.ajax({
+//     method: "POST",
+//     url: "/users",
+//     data,
+//   });
+// };

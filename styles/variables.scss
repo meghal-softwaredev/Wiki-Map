@@ -1,0 +1,71 @@
+// VARIABLES
+// Colours
+$red: #f44335;
+$darkred: #d63226;
+
+$orange: #ff9801;
+$darkorange: #d48104;
+
+$yellow: #ffdc00;
+$darkyellow: #dfc30e;
+
+$green: #60a917;
+$darkgreen: #59961d;
+
+$blue: #02a9f4;
+$darkblue: #1793cc;
+
+$black: #222;
+$white: #f8f8ff;
+
+// Fonts
+$font-title: "Overpass", sans-serif;
+$font-body: "Open Sans", sans-serif;
+
+// MIXINS
+//  flex center
+@mixin flex-center($direction) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: center;
+  align-items: center;
+}
+
+// buttons
+@mixin button($bkground-color, $hover-color) {
+  color: $white;
+  text-transform: capitalize;
+  text-align: center;
+  text-decoration: none;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: $bkground-color;
+  &:hover {
+    cursor: pointer;
+    background-color: $hover-color;
+  }
+}
+
+@mixin button-edit {
+  @include button($yellow, $darkyellow);
+}
+
+@mixin button-delete {
+  @include button($red, $darkred);
+}
+@mixin button-primary {
+  @include button($blue, $darkblue);
+}
+@mixin button-add {
+  @include button($green, $darkgreen);
+}
+
+// navbar
+// @mixin navbar {
+//   position: sticky;
+//   z-index: 1000;
+//   padding: 0 3rem;
+//   color: $white;
+//   background-color: ;
+// }
