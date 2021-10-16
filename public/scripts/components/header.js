@@ -15,12 +15,9 @@ $(() => {
   $pageHeader.append($userLinks);
 
   $("header").on("click", ".login_button", () => {
-    console.log("clicked login");
     views_manager.show("logIn");
   });
   $("header").on("click", ".sign-up_button", () => {
-    console.log("clicked sign up");
-
     views_manager.show("signUp");
   });
 });
