@@ -11,12 +11,6 @@ $(() => {
   const $header = $(`<h1>Sign Up</h1>`);
 
   const $registerForm = $(`
-  <section id="signup-container">
-    <div class="img">
-      <img src='../../assets/signup.png' alt='image' height=400px width=400px>
-    </div>
-    <div class="signup-form">
-      <h1>Sign Up</h1>
       <form id='register-form' method="POST" action="/api/users/register">
         <div class="form-group">
           <label for="name">Name</label>

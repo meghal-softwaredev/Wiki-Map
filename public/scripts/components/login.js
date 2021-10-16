@@ -10,11 +10,11 @@ $(() => {
       <form id="login-form" method="POST" action="api/users/login">
         <div class="form-group">
           <label for="email">Email address</label>
-            <input type="email" class="form-control" style="width:300px;" id="email" name="email" placeholder="Enter email">
+            <input required type="email" class="form-control" style="width:300px;" id="email" name="email" placeholder="Enter email">
         </div>
         <div class="form-group">
           <label for="password">Password</label>
-            <input type="password" class="form-control" style="width:300px;" id="password" name="password" placeholder="Password">
+            <input required type="password" class="form-control" style="width:300px;" id="password" name="password" placeholder="Password">
         </div>
         <button type="submit" class="login-button">Login</button>
       </form>
@@ -26,6 +26,7 @@ $(() => {
   $("#login-form").on("submit", function (e) {
     e.preventDefault();
 
+    console.log("login this:", this);
     const data = $(this).serialize();
     logIn(data).then((json) => {
       console.log(json);
