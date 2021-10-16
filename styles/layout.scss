@@ -1,6 +1,12 @@
 @use "_variables" as *;
 
-body,
 html {
-  margin: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+main {
+  width: 90%;
+  margin: 8vh auto 0 auto;
+  font-family: $font-body;
 }
