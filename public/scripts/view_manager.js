@@ -5,7 +5,8 @@ $(() => {
 
   window.views_manager.show = function (item) {
     $logInForm.detach();
-    $registerPage.detach();
+    $registerForm.detach();
+    $map.detach();
     $mapsDisplay.detach();
 
     switch (item) {
@@ -17,6 +18,9 @@ $(() => {
         break;
       case 'mapsDisplay':
         $mapsDisplay.appendTo($main);
+        break;
+      case 'showMap':
+        $map.appendTo($main);
         break;
     }
   };
