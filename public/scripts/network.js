@@ -8,7 +8,7 @@
 // signUp = (data) => {
 //   return $.ajax({
 //     method: "POST",
-//     url: "/users",
+//     url: "/api/users/register",
 //     data,
 //   });
-// };
+//};
