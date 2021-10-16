@@ -1,0 +1,35 @@
+@use "_variables" as *;
+
+#signup-container {
+  height: 90vh;
+  width: auto;
+  @include flex-center(row);
+
+  .img {
+    margin-right: 5em;
+    height: 500px;
+    img {
+      height: 100%;
+      width: auto;
+    }
+  }
+
+  .signup-form {
+    margin-left: 5em;
+    @include flex-center(column);
+
+    h1 {
+      width: 100%;
+      text-align: left;
+      font-family: $font-title;
+    }
+
+    label {
+      font-family: $font-title;
+    }
+
+    .signup-button {
+      @include button($blue, $darkblue);
+    }
+  }
+}

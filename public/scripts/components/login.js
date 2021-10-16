@@ -19,7 +19,7 @@ $(() => {
         <button type="submit" class="login-button">Login</button>
       </form>
     </div>
-  </div>
+  </section>
   `);
   window.$logInForm = $logInForm;
 });
