@@ -7,13 +7,14 @@ $(() => {
     $logInForm.detach();
     $registerForm.detach();
     $map.detach();
+    $mapsDisplay.detach();
 
     switch (item) {
       case 'logIn':
         $logInForm.appendTo($main);
         break;
       case "signUp":
-        $registerForm.appendTo($main);
+        $registerPage.appendTo($main);
         break;
       case 'mapsDisplay':
         $mapsDisplay.appendTo($main);
