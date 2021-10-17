@@ -9,9 +9,8 @@ $(() => {
     $map.detach();
     $mapsDisplay.detach();
     $createNewMap.detach();
-    // if ($profile) {
-    //   $profile.detach();
-    // }
+    $profile.detach();
+    createNewMap.detach();
 
     switch (item) {
       case "logIn":
@@ -26,9 +25,9 @@ $(() => {
       case "showMap":
         $map.appendTo($main);
         break;
-      // case 'profile':
-      //   $profile.appendTo($main);
-      //   break;
+      case "profile":
+        $profile.appendTo($main);
+        break;
       case "createNewMap":
         $createNewMap.appendTo($main);
         break;

@@ -38,7 +38,7 @@ $(() => {
       .then(function( json ) {
       updateHeader(json.user);
     });
-
+    getUser();
   $("header").on('click', '.nav-logo', () => {
     views_manager.show('mapsDisplay');
   });
@@ -57,6 +57,7 @@ $(() => {
   $("header").on("click", ".logout", () => {
     logOut().then(() => {
       updateHeader(null);
+      views_manager.show("logIn");
     });
   });
 });

@@ -13,6 +13,7 @@ module.exports = (db) => {
   // Get user info
   router.get('/info', (req, res) => {
     const userID = req.session.userId;
+    console.log("user ID", userID);
     return db.query(`
       SELECT * FROM users where id = $1`, [userID])
         .then((result) => {
@@ -45,7 +46,7 @@ module.exports = (db) => {
     //logout route
     router.post("/logout", (req, res) => {
       req.session = null;
-      res.redirect('/login');
+      res.send({});
     });
 
 
@@ -88,6 +89,5 @@ module.exports = (db) => {
       })
       .catch((e) => res.send(e));
   });
-
   return router;
 };
