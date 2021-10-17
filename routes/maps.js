@@ -42,18 +42,18 @@ module.exports = (db) => {
         .catch((err) => err.message);
     }
 
-    // return (
-    //   db
-    //     ///////////// add params back in after done testing $1 [userID]
-    //     .query(
-    //       `SELECT * FROM maps LEFT OUTER JOIN favourites ON map_id = maps.id WHERE maps.owner_id = 2`
-    //     )
-    //     .then((result) => {
-    //       console.log("get users maps", result.rows);
-    //       return res.json({ userMaps: result.rows });
-    //     })
-    //     .catch((err) => err.message)
-    // );
+    return (
+      db
+        ///////////// add params back in after done testing $1 [userID]
+        .query(
+          `SELECT * FROM maps LEFT OUTER JOIN favourites ON map_id = maps.id WHERE maps.owner_id = 2`
+        )
+        .then((result) => {
+          console.log("get users maps", result.rows);
+          return res.json({ userMaps: result.rows });
+        })
+        .catch((err) => err.message)
+    );
   });
 
   return router;
