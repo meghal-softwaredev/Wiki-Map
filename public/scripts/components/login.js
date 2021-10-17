@@ -1,14 +1,16 @@
 // Client facing scripts here
 $(() => {
-  // <section id="login-container">
-  // <div class="img">
-  //   <img src='../../assets/map.png' alt='image' height=400px width=400px>
-  // </div>
-  // <div class="login-form">
-  //   <h1>Login</h1>
-  // </div>
-  // </section>
-  const $logInForm = $(`
+  const $loginPage = $(`<section id="login-container">`);
+  const $imageContainer = $(`<div class="img">`);
+  const $img =
+    $(`<img src='../../assets/map.png' alt='user icon' height=400px width=400px>
+  `);
+  $imageContainer.append($img);
+
+  const $formContainer = $(`<div class="login-form">`);
+  const $header = $(`<h1>Login</h1>`);
+
+  const $loginForm = $(`
       <form id="login-form">
         <div class="form-group">
           <label for="email">Email address</label>
@@ -20,11 +22,13 @@ $(() => {
         </div>
         <button type="submit" class="login-button">Login</button>
       </form>
-  
   `);
-  window.$logInForm = $logInForm;
+  $formContainer.append($header, $loginForm);
+  $loginPage.append($imageContainer, $formContainer);
 
-  $($logInForm).on("submit", function (e) {
+  window.$loginPage = $loginPage;
+
+  $($loginForm).on("submit", function (e) {
     e.preventDefault();
 
     const data = $(this).serialize();
