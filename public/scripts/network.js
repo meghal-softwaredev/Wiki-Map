@@ -5,3 +5,11 @@ function signUp(data) {
     data
   });
 }
+
+function createNewMap(data) {
+  return $.ajax({
+    method: "POST",
+    url: "/api/maps/new",
+    data
+  });
+}
