@@ -33,8 +33,7 @@ function createNewMap(data) {
 }
 
 function getUserMaps() {
-  console.log("getUserMaps is called");
   return $.ajax({
-    url: "api/maps/id",
+    url: "api/maps/all",
   });
 }

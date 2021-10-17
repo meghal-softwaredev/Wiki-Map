@@ -29,21 +29,17 @@ module.exports = (db) => {
       .catch((err) => err.message);
   });
 
-  router.get("/id", (req, res) => {
+  router.get("/all", (req, res) => {
     const userID = req.session.userId;
     console.log("id from cookies", userID);
     if (!userID) {
-      // not a user
-      return (
-        db
-          ///////////// add params back in after done testing $1 [userID]
-          .query(`SELECT * FROM maps`)
-          .then((result) => {
-            console.log("get users maps", result.rows);
-            return res.json({ userMaps: result.rows });
-          })
-          .catch((err) => err.message)
-      );
+      return db
+        .query(`SELECT * FROM maps`)
+        .then((result) => {
+          console.log("get users maps", result.rows);
+          return res.json({ userMaps: result.rows });
+        })
+        .catch((err) => err.message);
     }
 
     // return (

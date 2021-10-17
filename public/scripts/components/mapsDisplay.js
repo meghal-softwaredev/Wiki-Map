@@ -18,7 +18,7 @@
 $(() => {
   const $mapsDisplay = $(`
   <section id="maps-display">
-    <h1>Your Maps</h1>
+    <h1>All Maps</h1>
   </section>
   `);
   window.$mapsDisplay = $mapsDisplay;
@@ -44,11 +44,6 @@ $(() => {
             <h3 class="title">${map.title}</h3>
             <p class="description">${map.description}</p>
           </div>
-          <div class="like-button">
-            <i class="fas fa-heart"></i>
-          </div>
-          <button>Edit</button>
-          <button>Delete</button>
         </div>`);
     });
   };
