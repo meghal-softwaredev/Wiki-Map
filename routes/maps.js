@@ -9,9 +9,22 @@ const express = require("express");
 const router = express.Router();
 
 module.exports = (db) => {
-  // create a new map
-  router.post("/new", (req, res) => {
-    console.log(req.body);
+  // deleting a marker not finished
+  router.post('/deleteMarker', (req, res) => {
+    const id = req.body;
+    return db.query(`
+    DELETE FROM points WHERE id=$1;
+      VALUES ($1)`,
+      [id])
+      .then((result) => {
+        console.log("result", result.rows[0]);
+        return res.json({user: result.rows[0]});
+      })
+      .catch((err) => err.message);
+    });
+
+  // create a new map in database and adding contributors if there is one.
+  router.post('/new', (req, res) => {
     const user = req.body;
     const { title, description, emailContributors } = user;
     return db

@@ -10,6 +10,7 @@ $(() => {
     $mapsDisplay.detach();
     $createNewMap.detach();
     $profile.detach();
+    $createNewMap.detach();
 
     switch (item) {
       case "logIn":

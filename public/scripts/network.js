@@ -48,3 +48,11 @@ function getUserMaps() {
     url: "api/maps/all",
   });
 }
+
+function deleteMarker(id) {
+  return $.ajax({
+    method: "POST",
+    url: "api/maps/deleteMarker",
+    id
+  });
+}
