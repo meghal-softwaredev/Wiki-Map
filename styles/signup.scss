@@ -1,10 +1,9 @@
 @use "_variables" as *;
 
-#login-container {
+#signup-container {
   height: 90vh;
   width: auto;
   @include flex-center(row);
-
   .img {
     margin-right: 5em;
     height: 500px;
@@ -14,7 +13,7 @@
     }
   }
 
-  .login-form {
+  .signup-form {
     margin-left: 5em;
     @include flex-center(column);
 
@@ -28,7 +27,7 @@
       font-family: $font-title;
     }
 
-    .login-button {
+    .signup-button {
       @include button($blue, $darkblue);
     }
   }
