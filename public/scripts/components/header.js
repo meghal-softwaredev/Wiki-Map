@@ -49,7 +49,7 @@ $(() => {
     views_manager.show("signUp");
   });
   $("header").on("click", ".new-map", () => {
-    views_manager.show("showMap");
+    views_manager.show("createNewMap");
   });
   $("header").on("click", ".profile", () => {
     views_manager.show("profile");
