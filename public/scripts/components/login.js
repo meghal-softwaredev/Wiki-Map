@@ -28,7 +28,7 @@ $(() => {
 
   window.$loginPage = $loginPage;
 
-  $($loginForm).on("submit", function (e) {
+  $loginForm.on("submit", function (e) {
     e.preventDefault();
 
     const data = $(this).serialize();

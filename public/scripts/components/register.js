@@ -3,7 +3,7 @@ $(() => {
   const $registerPage = $(`<section id="signup-container">`);
   const $imageContainer = $(`<div class="img">`);
   const $image = $(
-    `<img src='../../assets/signup.png' alt='map graphic image' height=400px width=400px>`
+    `<img src='../../assets/signup.png' alt='image' height=400px width=400px>`
   );
   $imageContainer.append($image);
 
@@ -32,7 +32,7 @@ $(() => {
 
   window.$registerPage = $registerPage;
 
-  $($registerForm).on("submit", function (e) {
+  $registerForm.on("submit", function (e) {
     e.preventDefault();
     const data = $(this).serialize();
     console.log(data);
