@@ -7,12 +7,7 @@ $(() => {
 
   window.$mapsDisplay = $mapsDisplay;
 
-  const renderAllMaps = (mapsData, favsData) => {
-    console.log("mapsData:", mapsData);
-    console.log("favsData:", favsData);
-
-    // console.log("render all maps");
-    // console.log("maps data from query:", mapsData);
+  const renderAllMaps = (mapsData, favsData = []) => {
     mapsData.map((map) => {
       $mapsDisplay.append(`
       <article class="user-map">
@@ -21,16 +16,34 @@ $(() => {
           <div class="map-info">
             <h3 class="title">${map.title}</h3>
             <p class="description">${map.description}</p>
-            ${favsData.map((fav) => {
-              console.log({ fav, map });
-              if (fav.map_id === map.id) {
-                return `<i class="fas fa-heart favourited-map"></i>`;
-              }
-            })}
+             ${favsData.map((fav) => {
+               if (fav.map_id === map.id) {
+                 return `<i class="fas fa-heart favourited-map"></i>`;
+               }
+             })}
           </div>
         </div>`);
     });
   };
+
+  // ${
+  //   favsData.find((fav) => fav.map_id === map.id)
+  //     ? `<i class="fas fa-heart favourited-map"></i>`
+  //     : `<i class="fas fa-heart"></i>`
+  // }
+
+  // ${
+  //   !userID
+  //     ? ""
+  //     : favsData.find((fav) => fav.map_id === map.id)
+  //     ? `<i class="fas fa-heart favourited-map"></i>`
+  //     : `<i class="fas fa-heart"></i>`
+  // }
+  // ${favsData.map((fav) => {
+  //   if (fav.map_id === map.id) {
+  //     return `<i class="fas fa-heart favourited-map"></i>`;
+  //   }
+  // })}
 
   getUserMaps().then((json) => {
     console.log(json);
@@ -38,13 +51,4 @@ $(() => {
     const userFavs = json.userFavs;
     return renderAllMaps(userMaps, userFavs);
   });
-  // .then((userMaps) => {
-  //   console.log("the userMaps", userMaps);
-  //   // console.log("the userID:", userID);
-
-  //   // if (!user) render all maps
-  //   renderAllMaps(userMaps);
-
-  //   // if (user) render all maps PLUS likes
-  // });
 });

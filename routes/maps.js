@@ -29,6 +29,7 @@ module.exports = (db) => {
       .catch((err) => err.message);
   });
 
+  // Show all maps
   router.get("/all", (req, res) => {
     const userID = req.session.userId;
     console.log("id from cookies", userID);
@@ -42,41 +43,28 @@ module.exports = (db) => {
         .catch((err) => err.message);
     }
 
-    // questions:
-    // how to pass userID?
-    // how to make new query to with join on favourites, with no repeats
-
-    // goal: show all maps, then,
-    // show hearts/likes next to maps favourited by signed in user
-
-    // const userMaps = {};
     const maps = db.query(`SELECT * FROM maps`);
+    // const userFavourites = db.query(
+    //   `SELECT * FROM favourites WHERE user_id = $1`,
+    //   [userID]
+    // );
+
+    // TEST CODE
     const userFavourites = db.query(
       `SELECT * FROM favourites WHERE user_id = 1`
     );
+
     Promise.all([maps, userFavourites]).then((result) => {
-      console.log("result maps from promise:", result[0].rows);
-      console.log("result favs from promise:", result[1].rows);
-      // return res.json({ userMaps: result[0].rows, userFavs: result[1].rows });
       return res.json({
         userMaps: result[0].rows,
+        userFavs: result[1].rows,
+        // TEST CODE
         userFavs: [
           { id: 1, user_id: 1, map_id: 2, favourite: true },
           { id: 1, user_id: 1, map_id: 1, favourite: true },
         ],
       });
     });
-
-    //   .then((result) => {
-    //     return res.json({ userMaps: result.rows });
-    //   })
-    //   .catch((err) => err.message);
-
-    // .then(
-    //   (result) => {
-    //     return res.json({ userFavourites: result.rows });
-    //   }
-    // );
   });
 
   return router;
