@@ -32,13 +32,12 @@ $(() => {
     e.preventDefault();
 
     const data = $(this).serialize();
-    console.log("the data:", data);
     logIn(data).then((json) => {
       if (!json.user) {
         views_manager.show("error", "Failed to login");
         return;
       }
-      // header.update(json.user);
+      header.update(json.user);
       views_manager.show("mapsDisplay");
     });
   });

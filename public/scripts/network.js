@@ -14,7 +14,6 @@ function logIn(data) {
   });
 }
 function getUser() {
-  console.log("getuser");
   return $.ajax({
     url: "/api/users/info",
   });
@@ -23,12 +22,19 @@ function logOut() {
   return $.ajax({
     method: "POST",
     url: "/api/users/logout",
-  })
+  });
 }
 function createNewMap(data) {
   return $.ajax({
     method: "POST",
     url: "/api/maps/new",
-    data
+    data,
+  });
+}
+
+function getUserMaps() {
+  console.log("getUserMaps is called");
+  return $.ajax({
+    url: "api/maps/id",
   });
 }
