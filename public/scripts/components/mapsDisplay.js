@@ -7,22 +7,32 @@ $(() => {
 
   window.$mapsDisplay = $mapsDisplay;
 
+  // const showMapAtId = (id) => {
+  //   console.log("clicked id:", id);
+  //   views_manager.show("showMap");
+  // };
+  // <article id=${map.id} class="user-map" onClick=(${showMapAtId(map.id)})>
+
   const renderAllMaps = (mapsData, favsData = []) => {
     mapsData.map((map) => {
       $mapsDisplay.append(`
-      <article class="user-map">
-        <div class="map-item">
-          <img src="" alt="" />
+      <article id=${map.id} class="user-map">
+        <div class="map-item">}
+          <i class="fas fa-map-marked-alt"></i>
           <div class="map-info">
             <h3 class="title">${map.title}</h3>
+            <span>|</span>
             <p class="description">${map.description}</p>
-             ${favsData.map((fav) => {
-               if (fav.map_id === map.id) {
-                 return `<i class="fas fa-heart favourited-map"></i>`;
-               }
-             })}
           </div>
-        </div>`);
+             ${favsData
+               .map((fav) => {
+                 if (fav.map_id === map.id) {
+                   return `<i class="fas fa-heart favourited-map"></i>`;
+                 }
+               })
+               .join("")}
+        </div>
+      </article>`);
     });
   };
 
@@ -31,19 +41,6 @@ $(() => {
   //     ? `<i class="fas fa-heart favourited-map"></i>`
   //     : `<i class="fas fa-heart"></i>`
   // }
-
-  // ${
-  //   !userID
-  //     ? ""
-  //     : favsData.find((fav) => fav.map_id === map.id)
-  //     ? `<i class="fas fa-heart favourited-map"></i>`
-  //     : `<i class="fas fa-heart"></i>`
-  // }
-  // ${favsData.map((fav) => {
-  //   if (fav.map_id === map.id) {
-  //     return `<i class="fas fa-heart favourited-map"></i>`;
-  //   }
-  // })}
 
   getUserMaps().then((json) => {
     console.log(json);
