@@ -6,6 +6,7 @@ $(() => {
   window.views_manager.show = function (item) {
     $logInForm.detach();
     $registerForm.detach();
+    $map.detach();
 
     switch (item) {
       case 'logIn':
@@ -16,6 +17,10 @@ $(() => {
         break;
       case 'mapsDisplay':
         $mapsDisplay.appendTo($main);
+        break;
+      case 'showMap':
+        $map.appendTo($main);
+        break;
     }
   };
 });
