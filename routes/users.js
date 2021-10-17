@@ -30,62 +30,45 @@ module.exports = (db) => {
       .catch((err) => err.message);
   });
 
-  // Login user if valid
-  // 1 (helper)
-  // returns * of a user
-  const getUserWithEmail = (email) => {
-    return db
-      .query(`SELECT * FROM users WHERE email = $1`, [email])
-      .then((result) => {
-        if (result.rows.length) {
-          return result.rows[0];
-        }
-        return null;
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
+  // Login existing user and set cookie
+  const verifyLogin = (email, password) => {
+    // verify email
+    return (
+      db
+        .query(`SELECT * FROM users WHERE email = $1`, [email])
+        .then((result) => {
+          if (result.rows.length) {
+            return result.rows[0];
+          }
+          return null;
+        })
+        // verify password
+        .then((user) => {
+          if (bcrypt.compareSync(password, user.password)) {
+            return user;
+          }
+          return null;
+        })
+        .catch((err) => {
+          console.log(err.message);
+        })
+    );
   };
+  exports.verifyLogin = verifyLogin;
 
-  // 2 (helper)
-  // using * of user, check password matches
-  const verifyPassword = (email, password) => {
-    return db.getUserWithEmail(email).then((user) => {
-      if (bcrypt.compareSync(password, user.password)) {
-        return user;
-      }
-      return null;
-    });
-  };
-
-  // 3 (post request) /api/isers/login
   router.post("/login", (req, res) => {
     const { email, password } = req.body;
+    verifyLogin(email, password)
+      .then((user) => {
+        if (!user) {
+          res.send({ error: "error" });
+          return;
+        }
+        req.session.userId = user.id;
+        res.send({ user: { name: user.name, email: user.email, id: user.id } });
+      })
+      .catch((err) => res.send(err));
   });
-
-  // const login = (email, password) => {
-  //   return db.getUserWithEmail(email).then((user) => {
-  //     if (bcrypt.compareSync(password, user.password)) {
-  //       return user;
-  //     }
-  //     return null;
-  //   });
-  // };
-  // exports.login = login;
-
-  // router.post("/login", (req, res) => {
-  //   const { email, password } = req.body;
-  //   login(email, password)
-  //     .then((user) => {
-  //       if (!user) {
-  //         res.send({ error: "error" });
-  //         return;
-  //       }
-  //       req.session.userId = user.id;
-  //       res.send({ user: { name: user.name, email: user.email, id: user.id } });
-  //     })
-  //     .catch((e) => res.send(e));
-  // });
 
   return router;
 };

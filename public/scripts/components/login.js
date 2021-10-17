@@ -1,12 +1,12 @@
 // Client facing scripts here
 $(() => {
+  // <section id="login-container">
+  // <div class="img">
+  //   <img src='../../assets/map.png' alt='image' height=400px width=400px>
+  // </div>
+  // <div class="login-form">
+  //   <h1>Login</h1>
   const $logInForm = $(`
-  <section id="login-container">
-    <div class="img">
-      <img src='../../assets/map.png' alt='image' height=400px width=400px>
-    </div>
-    <div class="login-form">
-      <h1>Login</h1>
       <form id="login-form" method="POST" action="api/users/login">
         <div class="form-group">
           <label for="email">Email address</label>
@@ -26,16 +26,15 @@ $(() => {
   $("#login-form").on("submit", function (e) {
     e.preventDefault();
 
-    console.log("login this:", this);
     const data = $(this).serialize();
     logIn(data).then((json) => {
-      console.log(json);
+      console.log("this is json from logIn:", json);
       if (!json.user) {
         views_manager.show("error", "Failed to login");
         return;
       }
-      console.log(json.user);
-      header.update(json.user);
+      // header.update(json.user);
+      console.log("logged in!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
       views_manager.show("mapsDisplay");
     });
   });
