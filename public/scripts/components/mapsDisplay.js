@@ -17,30 +17,44 @@ $(() => {
     mapsData.map((map) => {
       $mapsDisplay.append(`
       <article id=${map.id} class="user-map">
-        <div class="map-item">}
+        <div class="map-item">
           <i class="fas fa-map-marked-alt"></i>
           <div class="map-info">
             <h3 class="title">${map.title}</h3>
             <span>|</span>
             <p class="description">${map.description}</p>
           </div>
-             ${favsData
-               .map((fav) => {
-                 if (fav.map_id === map.id) {
-                   return `<i class="fas fa-heart favourited-map"></i>`;
-                 }
-               })
-               .join("")}
+          ${favsData
+            .map((fav) => {
+              if (fav.map_id === map.id) {
+                return `<i class="fas fa-heart favourited-map"></i>`;
+              }
+            })
+            .join("")}
         </div>
       </article>`);
     });
   };
+
+  // ${favsData
+  //   .map((fav) => {
+  //     if (fav.map_id === map.id) {
+  //       return `<i class="fas fa-heart favourited-map"></i>`;
+  //     }
+  //   })
+  //   .join("")}
 
   // ${
   //   favsData.find((fav) => fav.map_id === map.id)
   //     ? `<i class="fas fa-heart favourited-map"></i>`
   //     : `<i class="fas fa-heart"></i>`
   // }
+
+  // <i class="fas fa-heart  ${
+  //   favsData.filter((fav) => fav.map_id === map.id).length
+  //     ? "favourited-map"
+  //     : ""
+  // }"></i>
 
   getUserMaps().then((json) => {
     console.log(json);
