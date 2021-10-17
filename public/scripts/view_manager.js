@@ -8,6 +8,7 @@ $(() => {
     $registerPage.detach();
     $map.detach();
     $mapsDisplay.detach();
+    $createNewMap.detach();
     // if ($profile) {
     //   $profile.detach();
     // }
@@ -28,7 +29,7 @@ $(() => {
       // case 'profile':
       //   $profile.appendTo($main);
       //   break;
-      case 'createNewMap':
+      case "createNewMap":
         $createNewMap.appendTo($main);
         break;
     }

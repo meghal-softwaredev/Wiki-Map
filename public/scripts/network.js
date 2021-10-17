@@ -36,6 +36,5 @@ function createNewMap(data) {
 function getUserMaps() {
   return $.ajax({
     url: "api/maps/all",
-    data,
   });
 }

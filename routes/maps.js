@@ -32,27 +32,51 @@ module.exports = (db) => {
   router.get("/all", (req, res) => {
     const userID = req.session.userId;
     console.log("id from cookies", userID);
+
     if (!userID) {
       return db
         .query(`SELECT * FROM maps`)
         .then((result) => {
-          console.log("get users maps", result.rows);
           return res.json({ userMaps: result.rows });
         })
         .catch((err) => err.message);
     }
-    return (
-      db
-        ///////////// add params back in after done testing $1 [userID]
-        .query(
-          `SELECT * FROM maps LEFT OUTER JOIN favourites ON map_id = maps.id WHERE maps.owner_id = 2`
-        )
-        .then((result) => {
-          console.log("get users maps", result.rows);
-          return res.json({ userMaps: result.rows });
-        })
-        .catch((err) => err.message)
+
+    // questions:
+    // how to pass userID?
+    // how to make new query to with join on favourites, with no repeats
+
+    // goal: show all maps, then,
+    // show hearts/likes next to maps favourited by signed in user
+
+    // const userMaps = {};
+    const maps = db.query(`SELECT * FROM maps`);
+    const userFavourites = db.query(
+      `SELECT * FROM favourites WHERE user_id = 1`
     );
+    Promise.all([maps, userFavourites]).then((result) => {
+      console.log("result maps from promise:", result[0].rows);
+      console.log("result favs from promise:", result[1].rows);
+      // return res.json({ userMaps: result[0].rows, userFavs: result[1].rows });
+      return res.json({
+        userMaps: result[0].rows,
+        userFavs: [
+          { id: 1, user_id: 1, map_id: 2, favourite: true },
+          { id: 1, user_id: 1, map_id: 1, favourite: true },
+        ],
+      });
+    });
+
+    //   .then((result) => {
+    //     return res.json({ userMaps: result.rows });
+    //   })
+    //   .catch((err) => err.message);
+
+    // .then(
+    //   (result) => {
+    //     return res.json({ userFavourites: result.rows });
+    //   }
+    // );
   });
 
   return router;
