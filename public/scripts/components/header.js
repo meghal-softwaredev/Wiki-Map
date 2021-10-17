@@ -13,7 +13,7 @@ $(() => {
   </nav>
   `);
   $pageHeader.append($userLinks);
-
+  //window.header.update = updateHeader;
   $("header").on('click', '.login_button', () => {
     views_manager.show('logIn');
   });

@@ -7,16 +7,25 @@
 
 const express = require("express");
 const router = express.Router();
+const bcrypt = require('bcrypt');
 
 module.exports = (db) => {
-  router.get("/", (req, res) => {
-    db.query(`SELECT * FROM users;`)
-      .then((data) => {
-        const users = data.rows;
-        res.json({ users });
-      })
-      .catch((err) => {
-        res.status(500).json({ error: err.message });
-      });
-  });
+  // Create a new user
+  router.post('/register', (req, res) => {
+    const user = req.body;
+    console.log('user', user);
+    user.password = bcrypt.hashSync(user.password, 12);
+    const {name, email, password} = user;
+    console.log("inside add User")
+    return db.query(`
+      INSERT INTO users (name, email, password)
+      VALUES ($1, $2, $3)
+      RETURNING *`,
+      [name,email, password])
+      .then((result) => {
+        console.log(result.rows[0]);
+        result.rows[0]})
+      .catch((err) => err.message);
+    });
+    return router;
 };

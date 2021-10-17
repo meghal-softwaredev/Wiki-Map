@@ -1,14 +1,8 @@
-// getMyDetails = () => {
-//   console.log("getMyDetails");
-//   return $.ajax({
-//     url: "/maps/:id",
-//   });
-// };
-
-// signUp = (data) => {
-//   return $.ajax({
-//     method: "POST",
-//     url: "/api/users/register",
-//     data,
-//   });
-//};
+function signUp(data) {
+  console.log("inside signup - network");
+  return $.ajax({
+    method: "POST",
+    url: "/api/users/register",
+    data,
+  });
+};

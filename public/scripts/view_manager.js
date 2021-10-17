@@ -14,6 +14,8 @@ $(() => {
       case "signUp":
         $registerForm.appendTo($main);
         break;
+      case 'mapsDisplay':
+        $mapsDisplay.appendTo($main);
     }
   };
 });
