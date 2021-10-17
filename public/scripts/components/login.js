@@ -6,8 +6,10 @@ $(() => {
   // </div>
   // <div class="login-form">
   //   <h1>Login</h1>
+  // </div>
+  // </section>
   const $logInForm = $(`
-      <form id="login-form" method="POST" action="api/users/login">
+      <form id="login-form">
         <div class="form-group">
           <label for="email">Email address</label>
             <input required type="email" class="form-control" style="width:300px;" id="email" name="email" placeholder="Enter email">
@@ -18,23 +20,21 @@ $(() => {
         </div>
         <button type="submit" class="login-button">Login</button>
       </form>
-    </div>
-  </section>
+  
   `);
   window.$logInForm = $logInForm;
 
-  $("#login-form").on("submit", function (e) {
+  $($logInForm).on("submit", function (e) {
     e.preventDefault();
 
     const data = $(this).serialize();
+    console.log("the data:", data);
     logIn(data).then((json) => {
-      console.log("this is json from logIn:", json);
       if (!json.user) {
         views_manager.show("error", "Failed to login");
         return;
       }
       // header.update(json.user);
-      console.log("logged in!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
       views_manager.show("mapsDisplay");
     });
   });

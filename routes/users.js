@@ -67,7 +67,7 @@ module.exports = (db) => {
         req.session.userId = user.id;
         res.send({ user: { name: user.name, email: user.email, id: user.id } });
       })
-      .catch((err) => res.send(err));
+      .catch((e) => res.send(e));
   });
 
   return router;

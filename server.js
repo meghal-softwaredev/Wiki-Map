@@ -36,7 +36,7 @@ app.use(express.static("public"));
 
 app.use(
   cookieSession({
-    name: "session",
+    name: "wikiMapsSession",
     keys: ["key1"],
   })
 );
