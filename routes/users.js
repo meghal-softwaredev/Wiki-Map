@@ -21,7 +21,6 @@ module.exports = (db) => {
       RETURNING *`,
       [name,email, password])
       .then((result) => {
-        console.log("result", result.rows[0]);
         return res.json({user: result.rows[0]});
       })
       .catch((err) => err.message);
