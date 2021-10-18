@@ -25,3 +25,15 @@ function logOut() {
     url: "/api/users/logout",
   })
 }
+function getFavouriteMaps() {
+  return $.ajax({
+    url: "/api/users/favourite",
+  })
+}
+function getContributedMaps() {
+  return $.ajax({
+    url: "/api/users/contributed",
+  })
+}
+
+

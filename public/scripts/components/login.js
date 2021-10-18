@@ -38,7 +38,7 @@ $(() => {
         views_manager.show("error", "Failed to login");
         return;
       }
-      // header.update(json.user);
+      header.update(json.user);
       views_manager.show("mapsDisplay");
     });
   });
