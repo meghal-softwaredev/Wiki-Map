@@ -28,6 +28,9 @@ $(() => {
       // case 'profile':
       //   $profile.appendTo($main);
       //   break;
+      case 'createNewMap':
+        $createNewMap.appendTo($main);
+        break;
     }
   };
 });

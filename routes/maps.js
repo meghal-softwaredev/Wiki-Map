@@ -9,19 +9,21 @@ const express = require('express');
 const router  = express.Router();
 
 module.exports = (db) => {
-  // router.get("/", (req, res) => {
-  //   let query = `SELECT * FROM widgets`;
-  //   console.log(query);
-  //   db.query(query)
-  //     .then(data => {
-  //       const widgets = data.rows;
-  //       res.json({ widgets });
-  //     })
-  //     .catch(err => {
-  //       res
-  //         .status(500)
-  //         .json({ error: err.message });
-  //     });
-  // });
-  // return router;
-};
+  // create a new map
+  router.post('/new', (req, res) => {
+    console.log(req.body)
+    const user = req.body;
+    const {title, description, emailContributors} = user;
+    return db.query(`
+      INSERT INTO maps (title, description)
+      VALUES ($1, $2)
+      RETURNING *`,
+      [title, description])
+      .then((result) => {
+        console.log("result", result.rows[0]);
+        return res.json({user: result.rows[0]});
+      })
+      .catch((err) => err.message);
+    });
+    return router;
+  }
