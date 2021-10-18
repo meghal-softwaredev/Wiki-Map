@@ -8,7 +8,7 @@
 */
 
 // these are the main variable
-const markers = [{lat:45.5017, lng:-73.5673, title:'hello', description:'try 1', image:'thats a link'}, {lat:45.6930, lng:-73.6331, title:'haloa', description:'try 2', image:'thats a linksss'}]
+const markers = [{id:1, lat:45.5017, lng:-73.5673, title:'hello', description:'try 1', image:'thats a link'}, {id:2, lat:45.6930, lng:-73.6331, title:'haloa', description:'try 2', image:'thats a linksss'}]
 let firstCenter = {};
 
 // this is the HTML ton include the map and every marker with each of their content
@@ -19,7 +19,6 @@ navigator.geolocation.getCurrentPosition(showPosition);
 
 function showPosition(position) {
   firstCenter = {lat:position.coords.latitude, lng:position.coords.longitude};
-  console.log(firstCenter)
 }
 
   function initMap() {
@@ -61,18 +60,30 @@ const renderAllMarkers = (markers) => {
       <h2>${mark.title}</h2>
       <p>change this to a img src= ${mark.image}</p>
       <p>${mark.description}</p>
-      <button>Delete</button>
+      <form class="delete">
+        <button class="deleteButton" action="${mark.id}">Delete</button>
+      </form>
     </article>`;
   });
   return allMarkers;
 };
 
 $(() => {
-  const $main = $('#main-content');
   const $map = $(`
   <h1>My map</h1>
     ${createMap}
     ${renderAllMarkers(markers)}
   `);
   window.$map = $map;
+
+  $map.on('submit', function (e) {
+    e.preventDefault();
+    console.log(e)
+    deleteMarker(id) // use the action of the button delete but i still dont know how
+    .then(() => {
+      const $main = $("#main-content");
+      $main.empty();
+      $map.appendTo($main);
+    });
+  });
 });
