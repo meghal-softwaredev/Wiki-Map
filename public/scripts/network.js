@@ -25,10 +25,11 @@ function logOut() {
     url: "/api/users/logout",
   })
 }
+
 function createNewMap(data) {
   return $.ajax({
     method: "POST",
-    url: "/api/maps/new",
+    url: "api/maps/new",
     data
   });
 }
