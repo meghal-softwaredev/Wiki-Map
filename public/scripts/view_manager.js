@@ -5,9 +5,12 @@ $(() => {
 
   window.views_manager.show = function (item) {
     $logInForm.detach();
-    $registerForm.detach();
+    $registerPage.detach();
     $map.detach();
     $mapsDisplay.detach();
+    // if ($profile) {
+    //   $profile.detach();
+    // }
 
     switch (item) {
       case 'logIn':
@@ -22,6 +25,9 @@ $(() => {
       case 'showMap':
         $map.appendTo($main);
         break;
+      // case 'profile':
+      //   $profile.appendTo($main);
+      //   break;
     }
   };
 });
