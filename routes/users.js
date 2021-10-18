@@ -7,7 +7,7 @@
 
 const express = require("express");
 const router = express.Router();
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 
 module.exports = (db) => {
   // Get user info
@@ -23,15 +23,18 @@ module.exports = (db) => {
     })
 
   // Create a new user
-  router.post('/register', (req, res) => {
+  router.post("/register", (req, res) => {
     const user = req.body;
     user.password = bcrypt.hashSync(user.password, 12);
-    const {name, email, password} = user;
-    return db.query(`
+    const { name, email, password } = user;
+    return db
+      .query(
+        `
       INSERT INTO users (name, email, password)
       VALUES ($1, $2, $3)
       RETURNING *`,
-      [name,email, password])
+        [name, email, password]
+      )
       .then((result) => {
         //set cookie
         req.session.userId = result.rows[0].id;
@@ -44,5 +47,47 @@ module.exports = (db) => {
       req.session = null;
       res.redirect('/login');
     });
-    return router;
+
+
+  // Login existing user and set cookie
+  const verifyLogin = (email, password) => {
+    // verify email
+    return (
+      db
+        .query(`SELECT * FROM users WHERE email = $1`, [email])
+        .then((result) => {
+          if (result.rows.length) {
+            return result.rows[0];
+          }
+          return null;
+        })
+        // verify password
+        .then((user) => {
+          if (bcrypt.compareSync(password, user.password)) {
+            return user;
+          }
+          return null;
+        })
+        .catch((err) => {
+          console.log(err.message);
+        })
+    );
+  };
+  exports.verifyLogin = verifyLogin;
+
+  router.post("/login", (req, res) => {
+    const { email, password } = req.body;
+    verifyLogin(email, password)
+      .then((user) => {
+        if (!user) {
+          res.send({ error: "error" });
+          return;
+        }
+        req.session.userId = user.id;
+        res.send({ user: { name: user.name, email: user.email, id: user.id } });
+      })
+      .catch((e) => res.send(e));
+  });
+
+  return router;
 };

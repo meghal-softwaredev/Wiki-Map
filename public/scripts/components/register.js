@@ -2,14 +2,16 @@
 $(() => {
   const $registerPage = $(`<section id="signup-container">`);
   const $imageContainer = $(`<div class="img">`);
-  const $image = $(`<img src='../../assets/signup.png' alt='image' height=400px width=400px>`);
+  const $image = $(
+    `<img src='../../assets/signup.png' alt='image' height=400px width=400px>`
+  );
   $imageContainer.append($image);
 
   const $formContainer = $(`<div class="signup-form">`);
   const $header = $(`<h1>Sign Up</h1>`);
 
   const $registerForm = $(`
-      <form id="register-form">
+      <form id='register-form'>
         <div class="form-group">
           <label for="name">Name</label>
             <input type="name" class="form-control" style="width:300px;" id="name" name="name" placeholder="Enter name">
@@ -30,7 +32,7 @@ $(() => {
 
   window.$registerPage = $registerPage;
 
-  $registerForm.on('submit', function (e) {
+  $registerForm.on("submit", function (e) {
     e.preventDefault();
     const data = $(this).serialize();
     signUp(data)
@@ -40,4 +42,3 @@ $(() => {
     });
   });
 });
-
