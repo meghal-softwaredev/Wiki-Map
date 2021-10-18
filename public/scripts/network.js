@@ -36,4 +36,10 @@ function getContributedMaps() {
   })
 }
 
-
+function createNewMap(data) {
+  return $.ajax({
+    method: "POST",
+    url: "api/maps/new",
+    data
+  });
+}

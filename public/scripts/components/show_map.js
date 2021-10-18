@@ -44,26 +44,15 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkD
 </div>`;
 
 
-// this is the form to add collaborators
-const collab = `
-<form>
-<h2>add collaborators</h2>
-<label for="collab">Enter the email adress of the collaborator you want to add</label>
-<input type="text">
-<input type="submit" value="Submit">
-</form>
-`;
-
 // this is the listing of all the marker under the map
 const renderAllMarkers = (markers) => {
   let allMarkers = `<h1>there is all of your markers</h1>`;
   markers.forEach((mark) => {
-    allMarkers += `<article style="display:flex; flex-direction:row; justify-content:space-between;">
+    allMarkers += `
+    <article style="display:flex; flex-direction:row; justify-content:space-between;">
       <h2>${mark.title}</h2>
       <p>change this to a img src= ${mark.image}</p>
       <p>${mark.description}</p>
-      <button type="button">Edit</button>
-      <button type="button">Delete</button>
     </article>`;
   });
   return allMarkers;
@@ -75,7 +64,6 @@ $(() => {
   <h1>My map</h1>
     ${createMap}
     ${renderAllMarkers(markers)}
-    ${collab}
   `);
   window.$map = $map;
 });
