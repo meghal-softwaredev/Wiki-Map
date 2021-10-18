@@ -12,7 +12,7 @@ $(() => {
 
     switch (item) {
       case 'logIn':
-        $logInForm.appendTo($main);
+        $createNewMap.appendTo($main);
         break;
       case "signUp":
         $registerPage.appendTo($main);

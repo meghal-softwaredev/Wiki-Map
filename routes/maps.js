@@ -11,6 +11,7 @@ const router  = express.Router();
 module.exports = (db) => {
   // create a new map
   router.post('/new', (req, res) => {
+    console.log(req.body)
     const user = req.body;
     const {title, description, emailContributors} = user;
     return db.query(`
