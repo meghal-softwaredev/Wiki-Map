@@ -1,14 +1,14 @@
 $(() => {
   window.header = {};
 
-  const $pageHeader = $('#page-header');
+  const $pageHeader = $("#page-header");
   let currentUser = null;
   function updateHeader(user) {
     currentUser = user;
     $pageHeader.find(".page-header__user-links").remove();
     let $userLinks;
     if (!user) {
-    $userLinks = $(`
+      $userLinks = $(`
       <nav id="navbar" class="page-header__user-links">
         <div class="nav-logo">Wiki Maps</div>
         <ul class="nav-links">
@@ -17,9 +17,8 @@ $(() => {
         </ul>
       </nav>
     `);
-    }
-    else {
-    $userLinks = $(`
+    } else {
+      $userLinks = $(`
       <nav id="navbar" class="page-header__user-links">
         <div class="nav-logo">Wiki Maps</div>
         <ul class="nav-links">
@@ -31,19 +30,18 @@ $(() => {
       `);
     }
     $pageHeader.append($userLinks);
-    }
-    window.header.update = updateHeader;
+  }
+  window.header.update = updateHeader;
 
-    getUser()
-      .then(function( json ) {
-      updateHeader(json.user);
-    });
-    getUser();
-  $("header").on('click', '.nav-logo', () => {
-    views_manager.show('mapsDisplay');
+  getUser().then(function (json) {
+    updateHeader(json.user);
   });
-  $("header").on('click', '.login_button', () => {
-    views_manager.show('logIn');
+  getUser();
+  $("header").on("click", ".nav-logo", () => {
+    views_manager.show("mapsDisplay");
+  });
+  $("header").on("click", ".login_button", () => {
+    views_manager.show("logIn");
   });
   $("header").on("click", ".sign-up_button", () => {
     views_manager.show("signUp");

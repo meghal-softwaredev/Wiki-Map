@@ -8,36 +8,55 @@
 */
 
 // these are the main variable
-let markers = [];
-const firstCenter = {lat:43.651070, lng:-79.347015};
+const markers = [
+  {
+    id: 1,
+    lat: 45.5017,
+    lng: -73.5673,
+    title: "hello",
+    description: "try 1",
+    image: "thats a link",
+  },
+  {
+    id: 2,
+    lat: 45.693,
+    lng: -73.6331,
+    title: "haloa",
+    description: "try 2",
+    image: "thats a linksss",
+  },
+];
+let firstCenter = { lat: 45.5017, lng: -73.5673 };
 
 // this is the HTML ton include the map and every marker with each of their content
 const createMap = (mapId) => {
    return `
   <h1>${mapId}</h1>
-  <div id="map" class="map" style="height:400px; width:600px;"></div>
-  <section class="new-marker" style="display:none">
-    <form id="new-marker-form">
-      <input name="title" id="marker-title" placeholder="Marker Title" />
-      <textarea name="description" id="marker-description" placeholder="Marker Description"></textarea>
-      <input name="imageURL" id="marker-image" placeholder="Marker Image URL" />
-      <button id="marker-btn">Create Marker</button>
-    </form>
-  </section>
+<div id="map" class="map" style="height:400px; width:600px;"></div>
+<section class="new-marker" style="display: none">
+  <form id="new-marker-form">
+    <input name="title" id="marker-title" placeholder="Marker Title" />
+    <textarea name="description" id="marker-description" placeholder="Marker Description"></textarea>
+    <input name="imageURL" id="marker-image" placeholder="Marker Image URL" />
+    <button id="marker-btn">Create Marker</button>
+  </form>
+</section>
 
-  <script>
-  navigator.geolocation.getCurrentPosition(showPosition);
 
-  function showPosition(position) {
-    firstCenter = {lat:position.coords.latitude, lng:position.coords.longitude};
-  }
+<script>
+navigator.geolocation.getCurrentPosition(showPosition);
+
+function showPosition(position) {
+  firstCenter = {lat:position.coords.latitude, lng:position.coords.longitude};
+}
+  let map;
 
   function initMap() {
     const options = {
       zoom:15,
       center: firstCenter
     };
-    const map = new google.maps.Map(document.getElementById('map'), options);
+     const map = new google.maps.Map(document.getElementById('map'), options);
 
     function addMarker (props) {
       const content = "<h2>" + props.title + "</h2>";
@@ -56,7 +75,11 @@ const createMap = (mapId) => {
       });
       markers.push(marker);
     }
+    markers.forEach(mark => {
+      addMarker(mark)
+    })
 
+    console.log('map', map)
     map.addListener('click', event => {
       //form SlideDown
       $('.new-marker').show().slideDown('slow', () => {
@@ -130,7 +153,3 @@ $(() => {
   window.$mapWrapper = $mapWrapper;
   window.makeMap = makeMap;
 });
-
-
-
-

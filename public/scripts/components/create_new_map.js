@@ -11,11 +11,11 @@ $(() => {
       <button class="createNew-button">Create new map!</button>
     </form>
   </form>
-  `)
+  `);
 
   window.$createNewMap = $createNewMap;
 
-  $createNewMap.on('submit', function (e) {
+  $createNewMap.on("submit", function (e) {
     e.preventDefault();
     let data = $(this).serialize();
     getUser()
