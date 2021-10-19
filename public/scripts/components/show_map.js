@@ -12,8 +12,10 @@
 let firstCenter = {};
 
 // this is the HTML ton include the map and every marker with each of their content
-const createMap = `
-<div id="map" style="height:400px; width:400px;">
+const createMap = (mapId) => {
+  return `
+  <h1>${mapId}</h1>
+<div id="${mapId}" class="map" style="height:400px; width:400px;">
 <script>
 navigator.geolocation.getCurrentPosition(showPosition);
 
@@ -71,6 +73,7 @@ function showPosition(position) {
 <script
 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkDPnwd1JKc&callback=initMap&v=weekly"async></script>
 </div>`;
+};
 
 //  const coords = { title: 'test', {coords: { event.latLng}}}
 
@@ -89,22 +92,29 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkD
 // };
 
 $(() => {
-  const $map = $(`
+  const $mapWrapper = $(`<div></div>`);
+  const makeMap = (mapId) => {
+    const $map = $(`
     <h1>My map</h1>
-    ${createMap}
+    ${createMap(mapId)}
   `);
-  window.$map = $map;
 
-  $map.on("submit", function (e) {
-    e.preventDefault();
-    console.log(e);
-    deleteMarker(id) // use the action of the button delete but i still dont know how
-      .then(() => {
-        const $main = $("#main-content");
-        $main.empty();
-        $map.appendTo($main);
-      });
-  });
+    $map.on("submit", function (e) {
+      e.preventDefault();
+      console.log(e);
+      deleteMarker(id) // use the action of the button delete but i still dont know how
+        .then(() => {
+          const $main = $("#main-content");
+          $main.empty();
+          $map.appendTo($main);
+        });
+    });
+
+    return $map;
+  };
+
+  window.$mapWrapper = $mapWrapper;
+  window.makeMap = makeMap;
 });
 
 // ${renderAllMarkers(markers)}
