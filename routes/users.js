@@ -33,18 +33,26 @@ module.exports = (db) => {
     const user = req.body;
     user.password = bcrypt.hashSync(user.password, salt);
     const { name, email, password } = user;
-    return db
-      .query(
-        `
-      INSERT INTO users (name, email, password)
-      VALUES ($1, $2, $3)
-      RETURNING *`,
-        [name, email, password]
-      )
-      .then((result) => {
-        //set cookie
-        req.session.userId = result.rows[0].id;
-        return res.json({ user: result.rows[0] });
+    return db.query(`
+      SELECT * FROM users WHERE email=$1
+    `, [email])
+      .then((account) => {
+        if (account.rows[0]) {
+          res.send(false);
+        } else {
+          return db.query(`
+            INSERT INTO users (name, email, password)
+            VALUES ($1, $2, $3)
+            RETURNING *`,
+              [name, email, password]
+            )
+            .then((result) => {
+              //set cookie
+              req.session.userId = result.rows[0].id;
+              return res.json({ user: result.rows[0] });
+            })
+            .catch((err) => err.message);
+        }
       })
       .catch((err) => err.message);
   });
