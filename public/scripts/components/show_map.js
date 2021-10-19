@@ -8,12 +8,12 @@
 */
 
 // these are the main variable
-//const markers = [{id:1, lat:45.5017, lng:-73.5673, title:'hello', description:'try 1', image:'thats a link'}, {id:2, lat:45.6930, lng:-73.6331, title:'haloa', description:'try 2', image:'thats a linksss'}]
+const markers = [{id:1, lat:45.5017, lng:-73.5673, title:'hello', description:'try 1', image:'thats a link'}, {id:12, lat:45.6930, lng:-73.6331, title:'haloa', description:'try 2', image:'thats a linksss'}]
 let firstCenter = {};
 
 // this is the HTML ton include the map and every marker with each of their content
 const createMap = `
-<div id="map" style="height:400px; width:400px;">
+<div id="map">
 <script>
 navigator.geolocation.getCurrentPosition(showPosition);
 
@@ -46,73 +46,72 @@ function showPosition(position) {
       markers.push(marker);
     }
     markers.forEach(mark => {
-      addMark(mark)
+      addMarker(mark)
     })
 
-    map.addListener('click', event => {
-
-      const title = "test";
-      const description = "Hello";
-      const icon = "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
-      const coords = event.latLng;
-      const props = {
-        title,
-        description,
-        icon,
-        coords
-      }
-      addMarker(props);
-    });
-    document
-    .getElementById("delete-markers")
-    .addEventListener("click", deleteMarkers);
   }
 </script>
 <script
 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkDPnwd1JKc&callback=initMap&v=weekly"async></script>
 </div>`;
 
-//  const coords = { title: 'test', {coords: { event.latLng}}}
 
 // this is the listing of all the marker under the map
-// const renderAllMarkers = (markers) => {
-//   let allMarkers = `<h1>there is all of your markers</h1>`;
-//   // markers.forEach((mark) => {
-//   //   allMarkers += `
-//   //   <article style="display:flex; flex-direction:row; justify-content:space-between;">
-//   //     <h2>${mark.title}</h2>
-//   //     <p>change this to a img src= ${mark.image}</p>
-//   //     <p>${mark.description}</p>
-//   //   </article>`;
-//   // });
-//   return allMarkers;
-// };
-
-$(() => {
-  const $map = $(`
-    <h1>My map</h1>
-    ${createMap}
-  `);
-  window.$map = $map;
-
-  $map.on('submit', function (e) {
-    e.preventDefault();
-    console.log(e)
-    deleteMarker(id) // use the action of the button delete but i still dont know how
-    .then(() => {
-      const $main = $("#main-content");
-      $main.empty();
-      $map.appendTo($main);
+  const renderAllMarkers = (markers) => {
+   let allMarkers = `
+   <table class="table">
+   <thead>
+     <tr>
+       <th scope="col">Title</th>
+       <th scope="col">Image</th>
+       <th scope="col">Description</th>
+       <th scope="col">Delete</th>
+     </tr>
+   </thead>
+   <tbody>
+   `;
+    markers.forEach((mark) => {
+      allMarkers += `
+          <tr>
+            <td>${mark.title}</td>
+            <td>change this to a img src= ${mark.image}</td>
+            <td>${mark.description}</td>
+            <td>
+            <form>
+              <button type="Delete" id="deleteMarker" data-id="${mark.id}">Delete</button>
+            </form>
+            </td>
+          </tr>
+          `;
     });
-  });
+    allMarkers +=
+    `</tbody>
+    </table>`;
+
+    return allMarkers;
+  };
+
+    $(() => {
+      const $map = $(`
+      <div id="showMap">
+      <h1>we need to put the map title here</h1>
+      ${createMap}
+      ${renderAllMarkers(markers)}
+      </div>
+      `);
+
+      window.$map = $map;
+
+      $(document).on('click', '#deleteMarker', function(e){
+        e.preventDefault();
+        deleteMarker($(this).attr("data-id"))
+        .then(() => {
+          const $main = $("#main-content");
+          $main.empty();
+          $map.appendTo($main);
+        });
+      });
 });
-
-    // ${renderAllMarkers(markers)}
-
-
-
-
-
 
 
 
