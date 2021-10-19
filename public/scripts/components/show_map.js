@@ -9,7 +9,7 @@
 
 // these are the main variable
 //const markers = [{id:1, lat:45.5017, lng:-73.5673, title:'hello', description:'try 1', image:'thats a link'}, {id:2, lat:45.6930, lng:-73.6331, title:'haloa', description:'try 2', image:'thats a linksss'}]
-//let firstCenter = {};
+let firstCenter = {};
 
 // this is the HTML ton include the map and every marker with each of their content
 const createMap = `
