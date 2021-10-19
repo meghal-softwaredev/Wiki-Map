@@ -8,8 +8,25 @@
 */
 
 // these are the main variable
-const markers = [{id:1, lat:45.5017, lng:-73.5673, title:'hello', description:'try 1', image:'thats a link'}, {id:2, lat:45.6930, lng:-73.6331, title:'haloa', description:'try 2', image:'thats a linksss'}]
-let firstCenter = {lat:45.5017, lng:-73.5673};
+const markers = [
+  {
+    id: 1,
+    lat: 45.5017,
+    lng: -73.5673,
+    title: "hello",
+    description: "try 1",
+    image: "thats a link",
+  },
+  {
+    id: 2,
+    lat: 45.693,
+    lng: -73.6331,
+    title: "haloa",
+    description: "try 2",
+    image: "thats a linksss",
+  },
+];
+let firstCenter = { lat: 45.5017, lng: -73.5673 };
 
 // this is the HTML ton include the map and every marker with each of their content
 const createMap = (mapId) => {
@@ -38,7 +55,7 @@ function showPosition(position) {
       zoom:15,
       center: firstCenter
     };
-    const map = new google.maps.Map(document.getElementById('map'), options);
+    // const map = new google.maps.Map(document.getElementById('map'), options);
 
     function addMarker (props) {
       const content = "<h2>" + props.title + "</h2>";
@@ -58,11 +75,15 @@ function showPosition(position) {
       markers.push(marker);
     }
     markers.forEach(mark => {
-      addMark(mark)
+      console.log('mark:', mark)
+      ///////////////////////////////////////////////////////////////////////////////////////////////////////
+      addMarker(mark)
     })
 
+    console.log('map', map)
     map.addListener('click', event => {
       //form SlideDown
+      console.log('clicked map!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
       $('.new-marker').show().slideDown('slow', () => {
         $('#marker-title').focus();
         $('#new-marker-form').on("submit", (event) => {
@@ -103,18 +124,18 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkD
 //  const coords = { title: 'test', {coords: { event.latLng}}}
 
 //this is the listing of all the marker under the map
-const renderAllMarkers = (markers) => {
-  let allMarkers = `<h1>there is all of your markers</h1>`;
-  markers.forEach((mark) => {
-    allMarkers += `
-    <article style="display:flex; flex-direction:row; justify-content:space-between;">
-      <h2>${mark.title}</h2>
-      <p>change this to a img src= ${mark.image}</p>
-      <p>${mark.description}</p>
-    </article>`;
-  });
-  return allMarkers;
-};
+// const renderAllMarkers = (markers) => {
+//   let allMarkers = `<h1>there is all of your markers</h1>`;
+//   markers.forEach((mark) => {
+//     allMarkers += `
+//     <article style="display:flex; flex-direction:row; justify-content:space-between;">
+//       <h2>${mark.title}</h2>
+//       <p>change this to a img src= ${mark.image}</p>
+//       <p>${mark.description}</p>
+//     </article>`;
+//   });
+//   return allMarkers;
+// };
 
 $(() => {
   const $mapWrapper = $(`<div class='map-wrapper'></div>`);
@@ -122,7 +143,6 @@ $(() => {
     const $map = $(`
     <h1>My map</h1>
     ${createMap(mapId)}
-
   `);
 
     $map.on("submit", function (e) {
@@ -142,4 +162,3 @@ $(() => {
   window.$mapWrapper = $mapWrapper;
   window.makeMap = makeMap;
 });
-
