@@ -56,7 +56,7 @@ function showPosition(position) {
       zoom:15,
       center: firstCenter
     };
-    const map = new google.maps.Map(document.getElementById('map'), options);
+     const map = new google.maps.Map(document.getElementById('map'), options);
 
     function addMarker (props) {
       const content = "<h2>" + props.title + "</h2>";
@@ -76,15 +76,12 @@ function showPosition(position) {
       markers.push(marker);
     }
     markers.forEach(mark => {
-      console.log('mark:', mark)
-      ///////////////////////////////////////////////////////////////////////////////////////////////////////
       addMarker(mark)
     })
 
     console.log('map', map)
     map.addListener('click', event => {
       //form SlideDown
-      console.log('clicked map!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
       $('.new-marker').show().slideDown('slow', () => {
         $('#marker-title').focus();
         $('#new-marker-form').on("submit", (event) => {
