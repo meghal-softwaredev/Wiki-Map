@@ -7,7 +7,8 @@
 
 const express = require("express");
 const router = express.Router();
-const bcrypt = require("bcrypt");
+const bcrypt = require('bcryptjs');
+const salt = bcrypt.genSaltSync(10);
 
 module.exports = (db) => {
   // Get user info
@@ -30,7 +31,7 @@ module.exports = (db) => {
   // Create a new user
   router.post("/register", (req, res) => {
     const user = req.body;
-    user.password = bcrypt.hashSync(user.password, 12);
+    user.password = bcrypt.hashSync(user.password, salt);
     const { name, email, password } = user;
     return db
       .query(
@@ -56,17 +57,16 @@ module.exports = (db) => {
 
   // Login existing user and set cookie
   const verifyLogin = (email, password) => {
-    // verify email
     return (
       db
         .query(`SELECT * FROM users WHERE email = $1`, [email])
-        // verify password
+        // verify email
         .then((data) => {
-          if (data.rows) {
+          if (data.rows[0]) {
             const userPassword = data.rows[0].password;
-            console.log(bcrypt.compareSync(password, userPassword));
+            // verify password
             if (bcrypt.compareSync(password, userPassword)) {
-              return data.rows[0];
+              return {id: data.rows[0].id, name: data.rows[0].name, email: data.rows[0].email};
             }
           }
           return null;
@@ -81,17 +81,15 @@ module.exports = (db) => {
   router.post("/login", (req, res) => {
     const { email, password } = req.body;
     verifyLogin(email, password)
-      .then((user) => {
-        console.log("user:", user);
-        if (!user) {
-          res.send({ error: "error" });
-          return;
+      .then((userInfo) => {
+        if (!userInfo) {
+          res.send(false);
+        } else {
+          req.session.userId = userInfo.id;
+          res.send({ user: { name: userInfo.name, email: userInfo.email, id: userInfo.id } });
         }
-        console.log("user after verified:", user);
-        req.session.userId = user.id;
-        res.send({ user: { name: user.name, email: user.email, id: user.id } });
       })
-      .catch((err) => res.send(err));
+      .catch((err) => {res.send(err)});
   });
   return router;
 };
