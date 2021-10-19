@@ -11,23 +11,26 @@ $(() => {
       <button type="submit" class="createNew-button">Create new map!</button>
     </form>
   </form>
-  `)
+  `);
 
   window.$createNewMap = $createNewMap;
 
-  $createNewMap.on('submit', function (e) {
+  $createNewMap.on("submit", function (e) {
     e.preventDefault();
     let data = $(this).serialize();
     getUser()
-    .then((json) => {
-      data += `&owner_id=${json.user.id}`;
-      console.log(data)
-      createNewMap(data)
-    })
-    .then(() => {
-      const $main = $("#main-content");
-      $main.empty();
-      views_manager.show('showMap');
-    });
+      .then((json) => {
+        data += `&owner_id=${json.user.id}`;
+        console.log(data);
+        return createNewMap(data);
+      })
+      .then((map) => {
+        console.log("map", map);
+        const $main = $("#main-content");
+        const mapId = map.map.id;
+        // console.log("ID", mapId);
+        $main.empty();
+        views_manager.show("showMap", { mapId });
+      });
   });
 });

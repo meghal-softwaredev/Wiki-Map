@@ -18,13 +18,13 @@ module.exports = (db) => {
       [id])
       .then((result) => {
         console.log("result", result.rows[0]);
-        return res.json({user: result.rows[0]});
+        return res.json({ user: result.rows[0] });
       })
       .catch((err) => err.message);
-    });
+  });
 
   // create a new map in database and adding contributors if there is one.
-  router.post('/new', (req, res) => {
+  router.post("/new", (req, res) => {
     const user = req.body;
     const { title, description, emailContributors } = user;
     return db
@@ -37,7 +37,7 @@ module.exports = (db) => {
       )
       .then((result) => {
         console.log("result", result.rows[0]);
-        return res.json({ user: result.rows[0] });
+        return res.json({ map: result.rows[0] });
       })
       .catch((err) => err.message);
   });
@@ -45,7 +45,6 @@ module.exports = (db) => {
   // Show all maps
   router.get("/all", (req, res) => {
     const userID = req.session.userId;
-    console.log("id from cookies", userID);
 
     if (!userID) {
       return db
@@ -57,11 +56,11 @@ module.exports = (db) => {
     }
 
     const maps = db.query(`SELECT * FROM maps`);
+
     // const userFavourites = db.query(
     //   `SELECT * FROM favourites WHERE user_id = $1`,
     //   [userID]
     // );
-
     // TEST CODE
     const userFavourites = db.query(
       `SELECT * FROM favourites WHERE user_id = 1`
@@ -70,7 +69,8 @@ module.exports = (db) => {
     Promise.all([maps, userFavourites]).then((result) => {
       return res.json({
         userMaps: result[0].rows,
-        userFavs: result[1].rows,
+
+        // userFavs: result[1].rows,
         // TEST CODE
         userFavs: [
           { id: 1, user_id: 1, map_id: 2, favourite: true },
@@ -78,6 +78,26 @@ module.exports = (db) => {
         ],
       });
     });
+  });
+
+  router.post("/marker/new", (req, res) => {
+    const marker = req.body;
+    const mapID = 1;
+    const { title, description, imageURL } = marker;
+    const userID = req.session.userId;
+    return db
+      .query(
+        `
+        INSERT INTO points (user_id, map_id, title, description, img_url)
+        VALUES ($1, $2, $3, $4, $5)
+        RETURNING *`,
+        [userID, mapID, title, description, imageURL]
+      )
+      .then((result) => {
+        console.log("result", result.rows[0]);
+        return res.json({ marker: result.rows[0] });
+      })
+      .catch((err) => err.message);
   });
 
   return router;

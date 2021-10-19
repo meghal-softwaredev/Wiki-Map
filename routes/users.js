@@ -22,7 +22,6 @@ module.exports = (db) => {
         [userID]
       )
       .then((result) => {
-        // console.log("server", result.rows[0]);
         return res.json({ user: result.rows[0] });
       })
       .catch((err) => err.message);
