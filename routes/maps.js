@@ -1,7 +1,7 @@
 /*
  * All routes for Widgets are defined here
- * Since this file is loaded in server.js into api/widgets,
- *   these routes are mounted onto /widgets
+ * Since this file is loaded in server.js into api/mpas,
+ *   these routes are mounted onto /maps
  * See: https://expressjs.com/en/guide/using-middleware.html#middleware.router
  */
 
@@ -10,15 +10,12 @@ const router = express.Router();
 
 module.exports = (db) => {
   // deleting a marker not finished
-  router.post("/deleteMarker", (req, res) => {
-    const id = req.body;
-    return db
-      .query(
-        `
-    DELETE FROM points WHERE id=$1;
-      VALUES ($1)`,
-        [id]
-      )
+  router.post('/deleteMarker', (req, res) => {
+    const id = req.body.id;
+    return db.query(`
+    DELETE FROM points WHERE id=$1
+      RETURNING *`,
+      [id])
       .then((result) => {
         console.log("result", result.rows[0]);
         return res.json({ user: result.rows[0] });

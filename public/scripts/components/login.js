@@ -12,6 +12,7 @@ $(() => {
 
   const $loginForm = $(`
       <form id="login-form">
+        <div id="error"></div>
         <div class="form-group">
           <label for="email">Email address</label>
             <input required type="email" class="form-control" style="width:300px;" id="email" name="email" placeholder="Enter email">
@@ -30,15 +31,21 @@ $(() => {
 
   $loginForm.on("submit", function (e) {
     e.preventDefault();
-
     const data = $(this).serialize();
-    logIn(data).then((json) => {
-      if (!json.user) {
-        views_manager.show("error", "Failed to login");
-        return;
+    logIn(data)
+    .then((json) => {
+      if (!json) {
+        $("#error").slideDown("slow", () => {
+          $('#error').empty();
+          $('#error').append("Bad credentials.");
+        });
+      } else {
+        header.update(json.user);
+        views_manager.show("mapsDisplay");
       }
-      header.update(json.user);
-      views_manager.show("mapsDisplay");
+    })
+    .catch((error) => {
+      console.log(error)
     });
   });
 });

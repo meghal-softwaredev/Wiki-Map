@@ -2,7 +2,7 @@ function signUp(data) {
   return $.ajax({
     method: "POST",
     url: "/api/users/register",
-    data,
+    data
   });
 }
 
@@ -10,7 +10,7 @@ function logIn(data) {
   return $.ajax({
     method: "POST",
     url: "/api/users/login",
-    data,
+    data
   });
 }
 function getUser() {
@@ -62,6 +62,6 @@ function deleteMarker(id) {
   return $.ajax({
     method: "POST",
     url: "api/maps/deleteMarker",
-    id
+    data: {id}
   });
 }

@@ -118,21 +118,65 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkD
 </div>`;
 };
 
-//  const coords = { title: 'test', {coords: { event.latLng}}}
 
-//this is the listing of all the marker under the map
-// const renderAllMarkers = (markers) => {
-//   let allMarkers = `<h1>there is all of your markers</h1>`;
-//   markers.forEach((mark) => {
-//     allMarkers += `
-//     <article style="display:flex; flex-direction:row; justify-content:space-between;">
-//       <h2>${mark.title}</h2>
-//       <p>change this to a img src= ${mark.image}</p>
-//       <p>${mark.description}</p>
-//     </article>`;
-//   });
-//   return allMarkers;
-// };
+// this is the listing of all the marker under the map
+  const renderAllMarkers = (markers) => {
+   let allMarkers = `
+   <table class="table">
+   <thead>
+     <tr>
+       <th scope="col">Title</th>
+       <th scope="col">Image</th>
+       <th scope="col">Description</th>
+       <th scope="col">Delete</th>
+     </tr>
+   </thead>
+   <tbody>
+   `;
+    markers.forEach((mark) => {
+      allMarkers += `
+          <tr>
+            <td>${mark.title}</td>
+            <td>change this to a img src= ${mark.image}</td>
+            <td>${mark.description}</td>
+            <td>
+            <form>
+              <button type="Delete" id="deleteMarker" data-id="${mark.id}">Delete</button>
+            </form>
+            </td>
+          </tr>
+          `;
+    });
+    allMarkers +=
+    `</tbody>
+    </table>`;
+    return allMarkers;
+  };
+
+    $(() => {
+      // const $map = $(`
+      // <div id="showMap">
+      // <h1>we need to put the map title here</h1>
+      // ${createMap}
+      // ${renderAllMarkers(markers)}
+      // </div>
+      // `);
+
+      // window.$map = $map;
+
+      $(document).on('click', '#deleteMarker', function(e){
+        e.preventDefault();
+        deleteMarker($(this).attr("data-id"))
+        .then(() => {
+          const $main = $("#main-content");
+          $main.empty();
+          $map.appendTo($main);
+        });
+      });
+});
+
+
+
 
 $(() => {
   const $mapWrapper = $(`<div class='map-wrapper'></div>`);
@@ -141,17 +185,6 @@ $(() => {
     <h1>My map</h1>
     ${createMap(mapId)}
   `);
-
-    $map.on("submit", function (e) {
-      e.preventDefault();
-      console.log(e);
-      deleteMarker(id) // use the action of the button delete but i still dont know how
-        .then(() => {
-          const $main = $("#main-content");
-          $main.empty();
-          $map.appendTo($main);
-        });
-    });
 
     return $map;
   };
