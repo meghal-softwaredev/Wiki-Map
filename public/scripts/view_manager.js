@@ -6,7 +6,6 @@ $(() => {
   window.views_manager.show = function (item, options) {
     $loginPage.detach();
     $registerPage.detach();
-    // $map.detach();
     $mapWrapper.detach();
     $mapsDisplay.detach();
     $createNewMap.detach();
@@ -24,10 +23,10 @@ $(() => {
         $mapsDisplay.appendTo($main);
         break;
       case "showMap":
+        $mapWrapper.empty();
         const $map = makeMap(options.mapId);
-        console.log("map:", $map);
-        // $map.appendTo($mapWrapper);
         $mapWrapper.appendTo($main);
+        $map.appendTo($mapWrapper);
         break;
       case "profile":
         $profile.appendTo($main);

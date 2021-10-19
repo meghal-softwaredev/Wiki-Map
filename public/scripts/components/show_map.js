@@ -15,7 +15,7 @@ let firstCenter = {};
 const createMap = (mapId) => {
   return `
   <h1>${mapId}</h1>
-<div id="${mapId}" class="map" style="height:400px; width:400px;">
+<div id="map" class="map" style="height:400px; width:400px;">
 <script>
 navigator.geolocation.getCurrentPosition(showPosition);
 
@@ -92,11 +92,12 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkD
 // };
 
 $(() => {
-  const $mapWrapper = $(`<div></div>`);
+  const $mapWrapper = $(`<div class='map-wrapper'></div>`);
   const makeMap = (mapId) => {
     const $map = $(`
     <h1>My map</h1>
     ${createMap(mapId)}
+
   `);
 
     $map.on("submit", function (e) {

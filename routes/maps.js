@@ -60,11 +60,11 @@ module.exports = (db) => {
     }
 
     const maps = db.query(`SELECT * FROM maps`);
+
     // const userFavourites = db.query(
     //   `SELECT * FROM favourites WHERE user_id = $1`,
     //   [userID]
     // );
-
     // TEST CODE
     const userFavourites = db.query(
       `SELECT * FROM favourites WHERE user_id = 1`
@@ -73,6 +73,7 @@ module.exports = (db) => {
     Promise.all([maps, userFavourites]).then((result) => {
       return res.json({
         userMaps: result[0].rows,
+
         // userFavs: result[1].rows,
         // TEST CODE
         userFavs: [

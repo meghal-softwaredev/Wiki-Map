@@ -21,7 +21,6 @@ module.exports = (db) => {
         [userID]
       )
       .then((result) => {
-        // console.log("server", result.rows[0]);
         return res.json({ user: result.rows[0] });
       })
       .catch((err) => err.message);
@@ -82,12 +81,10 @@ module.exports = (db) => {
     const { email, password } = req.body;
     verifyLogin(email, password)
       .then((user) => {
-        console.log("user:", user);
         if (!user) {
           res.send({ error: "error" });
           return;
         }
-        console.log("user after verified:", user);
         req.session.userId = user.id;
         res.send({ user: { name: user.name, email: user.email, id: user.id } });
       })
