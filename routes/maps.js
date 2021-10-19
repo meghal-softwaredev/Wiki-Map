@@ -40,7 +40,7 @@ module.exports = (db) => {
       )
       .then((result) => {
         console.log("result", result.rows[0]);
-        return res.json({ user: result.rows[0] });
+        return res.json({ map: result.rows[0] });
       })
       .catch((err) => err.message);
   });
@@ -48,7 +48,6 @@ module.exports = (db) => {
   // Show all maps
   router.get("/all", (req, res) => {
     const userID = req.session.userId;
-    console.log("id from cookies", userID);
 
     if (!userID) {
       return db
@@ -82,6 +81,26 @@ module.exports = (db) => {
         ],
       });
     });
+  });
+
+  router.post("/marker/new", (req, res) => {
+    const marker = req.body;
+    const mapID = 1;
+    const { title, description, imageURL } = marker;
+    const userID = req.session.userId;
+    return db
+      .query(
+        `
+        INSERT INTO points (user_id, map_id, title, description, img_url)
+        VALUES ($1, $2, $3, $4, $5)
+        RETURNING *`,
+        [userID, mapID, title, description, imageURL]
+      )
+      .then((result) => {
+        console.log("result", result.rows[0]);
+        return res.json({ marker: result.rows[0] });
+      })
+      .catch((err) => err.message);
   });
 
   return router;

@@ -22,12 +22,15 @@ $(() => {
     .then((json) => {
       data += `&owner_id=${json.user.id}`;
       console.log(data)
-      createNewMap(data)
+      return createNewMap(data)
     })
-    .then(() => {
+    .then((map) => {
+      console.log("map",map);
       const $main = $("#main-content");
+      const mapId = map.map.id;
+      console.log("ID", mapId);
       $main.empty();
-      views_manager.show('showMap');
+      views_manager.show('showMap', {mapId});
     });
   });
 });
