@@ -48,3 +48,13 @@ function getUserMaps() {
     url: "api/maps/all",
   });
 }
+
+function setMarker(data) {
+  console.log("network");
+  return $.ajax({
+    method: "POST",
+    url: "api/maps/marker/new",
+    data,
+  });
+}
+

@@ -14,13 +14,21 @@ const firstCenter = {lat: 43.6532, lng: -79.347015};
 
 // this is the HTML ton include the map and every marker with each of their content
 const createMap = `
-<div id="map" style="height:400px; width:400px;">
+<div id="map" style="height:400px; width:600px;"></div>
+<section class="new-marker" style="display: none">
+  <form id="new-marker-form">
+    <input name="title" id="marker-title" placeholder="Marker Title" />
+    <textarea name="description" id="marker-description" placeholder="Marker Description"></textarea>
+    <input name="imageURL" id="marker-image" placeholder="Marker Image URL" />
+    <button id="marker-btn">Create Marker</button>
+  </form>
+</section>
 <script>
 let markers = [];
 
   function initMap() {
     const options = {
-      zoom:9,
+      zoom:15,
       center: firstCenter
     };
     const map = new google.maps.Map(document.getElementById('map'), options);
@@ -43,6 +51,21 @@ let markers = [];
       markers.push(marker);
     }
     map.addListener('click', event => {
+      //form SlideDown
+      $('.new-marker').show().slideDown('slow', () => {
+        $('#marker-title').focus();
+        $('#new-marker-form').on("submit", (event) => {
+
+          event.preventDefault();
+          const data = $('#new-marker-form').serialize();
+          console.log("", data);
+          setMarker(data)
+          .then(json => {
+
+          });
+          $('.new-marker').show().slideUp();
+          });
+    });
 
       const title = "test";
       const description = "Hello";
@@ -88,6 +111,7 @@ $(() => {
     ${createMap}
   `);
   window.$map = $map;
+
 });
 
     // ${renderAllMarkers(markers)}
