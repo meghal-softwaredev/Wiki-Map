@@ -14,7 +14,6 @@ function logIn(data) {
   });
 }
 function getUser() {
-  console.log("getuser");
   return $.ajax({
     url: "/api/users/info",
   });
