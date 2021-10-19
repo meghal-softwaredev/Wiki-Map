@@ -49,6 +49,7 @@ navigator.geolocation.getCurrentPosition(showPosition);
 function showPosition(position) {
   firstCenter = {lat:position.coords.latitude, lng:position.coords.longitude};
 }
+  let map;
 
   function initMap() {
     const options = {
