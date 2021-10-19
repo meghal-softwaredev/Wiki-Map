@@ -11,17 +11,21 @@ const bcrypt = require("bcrypt");
 
 module.exports = (db) => {
   // Get user info
-  router.get('/info', (req, res) => {
+  router.get("/info", (req, res) => {
     const userID = req.session.userId;
     console.log("user ID", userID);
-    return db.query(`
-      SELECT * FROM users where id = $1`, [userID])
-        .then((result) => {
-          console.log("server", result.rows[0]);
-        return res.json({user: result.rows[0]});
+    return db
+      .query(
+        `
+      SELECT * FROM users where id = $1`,
+        [userID]
+      )
+      .then((result) => {
+        // console.log("server", result.rows[0]);
+        return res.json({ user: result.rows[0] });
       })
       .catch((err) => err.message);
-    })
+  });
 
   // Create a new user
   router.post("/register", (req, res) => {
@@ -39,16 +43,16 @@ module.exports = (db) => {
       .then((result) => {
         //set cookie
         req.session.userId = result.rows[0].id;
-        return res.json({user: result.rows[0]});
+        return res.json({ user: result.rows[0] });
       })
       .catch((err) => err.message);
-    });
-    //logout route
-    router.post("/logout", (req, res) => {
-      req.session = null;
-      res.send({});
-    });
+  });
 
+  //logout route
+  router.post("/logout", (req, res) => {
+    req.session = null;
+    res.send({});
+  });
 
   // Login existing user and set cookie
   const verifyLogin = (email, password) => {
@@ -56,16 +60,14 @@ module.exports = (db) => {
     return (
       db
         .query(`SELECT * FROM users WHERE email = $1`, [email])
-        .then((result) => {
-          if (result.rows.length) {
-            return result.rows[0];
-          }
-          return null;
-        })
         // verify password
-        .then((user) => {
-          if (bcrypt.compareSync(password, user.password)) {
-            return user;
+        .then((data) => {
+          if (data.rows) {
+            const userPassword = data.rows[0].password;
+            console.log(bcrypt.compareSync(password, userPassword));
+            if (bcrypt.compareSync(password, userPassword)) {
+              return data.rows[0];
+            }
           }
           return null;
         })
@@ -80,14 +82,16 @@ module.exports = (db) => {
     const { email, password } = req.body;
     verifyLogin(email, password)
       .then((user) => {
+        console.log("user:", user);
         if (!user) {
           res.send({ error: "error" });
           return;
         }
+        console.log("user after verified:", user);
         req.session.userId = user.id;
         res.send({ user: { name: user.name, email: user.email, id: user.id } });
       })
-      .catch((e) => res.send(e));
+      .catch((err) => res.send(err));
   });
   return router;
 };
