@@ -1,0 +1,25 @@
+@use "_variables" as *;
+
+#createNewMapForm {
+  height: 90vh;
+  font-family: $font-body;
+  @include flex-center(row);
+  img {
+    height: 500px;
+    margin-right: 10em;
+  }
+  .fullForm{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    label{
+      align-self: center;
+    }
+    h1{
+      font-family: $font-title;
+    }
+    .createNew-button {
+      @include button($green, $darkgreen);
+    }
+  }
+}
