@@ -56,7 +56,7 @@ function showPosition(position) {
       zoom:15,
       center: firstCenter
     };
-     const map = new google.maps.Map(document.getElementById('map'), options);
+     map = new google.maps.Map(document.getElementById('map'), options);
 
     function addMarker (props) {
       const content = "<h2>" + props.title + "</h2>";
