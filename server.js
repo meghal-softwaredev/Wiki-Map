@@ -22,10 +22,12 @@ app.use(morgan("dev"));
 
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieSession({
-  name: 'session',
-  keys: ['Knowledge is Power', 'Time is money']
-}));
+app.use(
+  cookieSession({
+    name: "session",
+    keys: ["Knowledge is Power", "Time is money"],
+  })
+);
 
 app.use(
   "/styles",

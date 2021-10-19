@@ -8,6 +8,7 @@ $(() => {
     $registerPage.detach();
     $map.detach();
     $mapsDisplay.detach();
+    $createNewMap.detach();
     $profile.detach();
     $createNewMap.detach();
 
@@ -24,11 +25,10 @@ $(() => {
       case "showMap":
         $map.appendTo($main);
         break;
-      case 'profile':
-        console.log($profile);
+      case "profile":
         $profile.appendTo($main);
         break;
-      case 'createNewMap':
+      case "createNewMap":
         $createNewMap.appendTo($main);
         break;
     }

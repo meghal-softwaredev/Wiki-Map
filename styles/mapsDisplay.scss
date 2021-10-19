@@ -1,0 +1,46 @@
+@use "_variables" as *;
+
+#maps-display {
+  h1 {
+    margin: 1em auto;
+    text-align: center;
+  }
+}
+
+.user-map {
+  margin-bottom: 2em;
+  &:hover {
+    transform: scale(1.02);
+    cursor: pointer;
+  }
+  .map-item {
+    @include flex-center(row);
+    justify-content: left;
+    height: 100%;
+    padding: 15px;
+    background-color: #f5f5f5;
+    border: 2px solid rgb(121, 121, 121);
+    border-radius: 5px;
+    .fa-map-marked-alt {
+      font-size: 4em;
+      margin-right: 0.5em;
+    }
+    .map-info {
+      @include flex-center(row);
+      h3,
+      p,
+      span {
+        margin: 0;
+        text-transform: capitalize;
+      }
+      span {
+        font-size: 2em;
+        margin: 0;
+      }
+    }
+    .fa-heart {
+      margin-left: 0.5em;
+      font-size: 2em;
+    }
+  }
+}
