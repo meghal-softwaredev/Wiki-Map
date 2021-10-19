@@ -6,15 +6,15 @@ $(() => {
   `);
   window.$profile = $profile;
   const userProfile = (user) => {
-      $profile.append(`
-      <div>
-        <label>User Name: </label>
-        <p>${user.name}</p>
-      </div>
-      <div>
-        <label>Email: </label>
-        <p>${user.email}</p>
-      </div>`);
+    $profile.append(`
+    <div>
+      <label>User Name: </label>
+      <p>${user.name}</p>
+    </div>
+    <div>
+      <label>Email: </label>
+      <p>${user.email}</p>
+    </div>`);
   }
   // $profile.append(`
   // <br>
@@ -47,7 +47,6 @@ $(() => {
 
   getUser()
   .then(json => {
-    console.log(json);
     userProfile(json.user);
   });
 

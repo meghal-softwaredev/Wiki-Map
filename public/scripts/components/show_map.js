@@ -8,30 +8,29 @@
 */
 
 // these are the main variable
-const markers = [{id:1, lat:45.5017, lng:-73.5673, title:'hello', description:'try 1', image:'thats a link'}, {id:2, lat:45.6930, lng:-73.6331, title:'haloa', description:'try 2', image:'thats a linksss'}]
-let firstCenter = {lat:45.5017, lng:-73.5673};
+let markers = [];
+const firstCenter = {lat:43.651070, lng:-79.347015};
 
 // this is the HTML ton include the map and every marker with each of their content
 const createMap = (mapId) => {
-  return `
+   return `
   <h1>${mapId}</h1>
-<div id="map" class="map" style="height:400px; width:600px;"></div>
-<section class="new-marker" style="display: none">
-  <form id="new-marker-form">
-    <input name="title" id="marker-title" placeholder="Marker Title" />
-    <textarea name="description" id="marker-description" placeholder="Marker Description"></textarea>
-    <input name="imageURL" id="marker-image" placeholder="Marker Image URL" />
-    <button id="marker-btn">Create Marker</button>
-  </form>
-</section>
+  <div id="map" class="map" style="height:400px; width:600px;"></div>
+  <section class="new-marker" style="display:none">
+    <form id="new-marker-form">
+      <input name="title" id="marker-title" placeholder="Marker Title" />
+      <textarea name="description" id="marker-description" placeholder="Marker Description"></textarea>
+      <input name="imageURL" id="marker-image" placeholder="Marker Image URL" />
+      <button id="marker-btn">Create Marker</button>
+    </form>
+  </section>
 
+  <script>
+  navigator.geolocation.getCurrentPosition(showPosition);
 
-<script>
-navigator.geolocation.getCurrentPosition(showPosition);
-
-function showPosition(position) {
-  firstCenter = {lat:position.coords.latitude, lng:position.coords.longitude};
-}
+  function showPosition(position) {
+    firstCenter = {lat:position.coords.latitude, lng:position.coords.longitude};
+  }
 
   function initMap() {
     const options = {
@@ -57,16 +56,12 @@ function showPosition(position) {
       });
       markers.push(marker);
     }
-    markers.forEach(mark => {
-      addMark(mark)
-    })
 
     map.addListener('click', event => {
       //form SlideDown
       $('.new-marker').show().slideDown('slow', () => {
         $('#marker-title').focus();
         $('#new-marker-form').on("submit", (event) => {
-
           event.preventDefault();
           const data = $('#new-marker-form').serialize();
           console.log("", data);
@@ -75,8 +70,8 @@ function showPosition(position) {
 
           });
           $('.new-marker').show().slideUp();
-          });
-    });
+        });
+      });
 
       const title = "test";
       const description = "Hello";
@@ -90,31 +85,25 @@ function showPosition(position) {
       }
       addMarker(props);
     });
-    document
-    .getElementById("delete-markers")
-    .addEventListener("click", deleteMarkers);
-  }
-</script>
-<script
-src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkDPnwd1JKc&callback=initMap&v=weekly"async></script>
-</div>`;
+  </script>
+  <script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkDPnwd1JKc&callback=initMap&v=weekly"async></script>
+  </div>`;
 };
-
-//  const coords = { title: 'test', {coords: { event.latLng}}}
 
 //this is the listing of all the marker under the map
-const renderAllMarkers = (markers) => {
-  let allMarkers = `<h1>there is all of your markers</h1>`;
-  markers.forEach((mark) => {
-    allMarkers += `
-    <article style="display:flex; flex-direction:row; justify-content:space-between;">
-      <h2>${mark.title}</h2>
-      <p>change this to a img src= ${mark.image}</p>
-      <p>${mark.description}</p>
-    </article>`;
-  });
-  return allMarkers;
-};
+// const renderAllMarkers = (markers) => {
+//   let allMarkers = `<h1>there is all of your markers</h1>`;
+//   markers.forEach((mark) => {
+//     allMarkers += `
+//     <article style="display:flex; flex-direction:row; justify-content:space-between;">
+//       <h2>${mark.title}</h2>
+//       <p>change this to a img src= ${mark.image}</p>
+//       <p>${mark.description}</p>
+//     </article>`;
+//   });
+//   return allMarkers;
+// };
 
 $(() => {
   const $mapWrapper = $(`<div class='map-wrapper'></div>`);
@@ -122,19 +111,18 @@ $(() => {
     const $map = $(`
     <h1>My map</h1>
     ${createMap(mapId)}
-
   `);
 
-    $map.on("submit", function (e) {
-      e.preventDefault();
-      console.log(e);
-      deleteMarker(id) // use the action of the button delete but i still dont know how
-        .then(() => {
-          const $main = $("#main-content");
-          $main.empty();
-          $map.appendTo($main);
-        });
-    });
+    // $map.on("submit", function (e) {
+    //   e.preventDefault();
+    //   console.log(e);
+    //   deleteMarker(id) // use the action of the button delete but i still dont know how
+    //     .then(() => {
+    //       const $main = $("#main-content");
+    //       $main.empty();
+    //       $map.appendTo($main);
+    //     });
+    // });
 
     return $map;
   };
@@ -142,4 +130,7 @@ $(() => {
   window.$mapWrapper = $mapWrapper;
   window.makeMap = makeMap;
 });
+
+
+
 

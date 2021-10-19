@@ -9,7 +9,6 @@ $(() => {
 
   const renderAllMaps = (mapsData, favsData = []) => {
     mapsData.map((map) => {
-      console.log("map", map);
       const $mapArticle = $(
         `<article data-id=${map.id} class="user-map"></article>`
       );
