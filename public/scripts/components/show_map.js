@@ -79,7 +79,6 @@ function showPosition(position) {
       addMarker(mark)
     })
 
-    console.log('map', map)
     map.addListener('click', event => {
       //form SlideDown
       $('.new-marker').show().slideDown('slow', () => {
