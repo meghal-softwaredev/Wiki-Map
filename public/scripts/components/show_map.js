@@ -80,7 +80,6 @@ function showPosition(position) {
     })
 
     map.addListener('click', event => {
-      //form SlideDown
       $('.new-marker').show().slideDown('slow', () => {
         $('#marker-title').focus();
         $('#new-marker-form').on("submit", (event) => {
