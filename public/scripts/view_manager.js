@@ -3,9 +3,7 @@ $(() => {
 
   window.views_manager = {};
 
-
   window.views_manager.show = function (item, options) {
-    console.log("in the view manager", item)
     $loginPage.detach();
     $registerPage.detach();
     $mapWrapper.detach();
@@ -22,7 +20,6 @@ $(() => {
         $registerPage.appendTo($main);
         break;
       case "mapsDisplay":
-        console.log("in map display")
         $mapsDisplay.appendTo($main);
         break;
       case "showMap":

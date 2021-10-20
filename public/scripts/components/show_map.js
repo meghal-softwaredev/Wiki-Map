@@ -14,7 +14,7 @@ let firstCenter = { lat: 45.5017, lng: -73.5673 };
 // this is the HTML ton include the map and every marker with each of their content
 const createMap = (mapId, pointer) => {
   return `
-  <div id="map" class="map" style="height:400px; width:600px;"></div>
+  <div id="map" class="map" style="height:600px; width:100%;"></div>
   <section class="new-marker" style="display: none">
     <form id="new-marker-form">
       <input name="title" id="marker-title" placeholder="Marker Title" />
@@ -148,7 +148,6 @@ const listAllMarkers = (markers) => {
 };
 
 const createButton = (favouriteId) => {
-  console.log(favouriteId);
   if (favouriteId === "not logged in") {
     return `<h1>NO LIKES</h1>`;
   }
@@ -165,11 +164,14 @@ var mapFinal = (mapId) => {
     const map = json.map;
     const mapPoints = json.mapPoints;
     const mapFavourite = json.mapFavourite;
-    const $mapTitle = $(`<h1>${map.title}</h1>`);
+
     const $map = $(`
-      <div class='map-heart'>
+      <div class="title-like">
+      ${map.title}
+      ${createButton(mapFavourite.id, mapPoints)}
+      </div>
+      <div class='google-map'>
         ${createMap(map.id)}
-        ${createButton(mapFavourite.id, mapPoints)}
       </div>
       <div class='points'>
         ${listAllMarkers(mapPoints)}
@@ -257,6 +259,6 @@ var mapFinal = (mapId) => {
       });
     });
 
-    return $map.after($mapTitle);
+    return $map;
   });
 };
