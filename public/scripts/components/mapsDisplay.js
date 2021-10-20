@@ -24,7 +24,7 @@ $(() => {
         ${favsData
           .map((fav) => {
             if (fav.map_id === map.id) {
-              return `<i class="fas fa-heart favourited-map"></i>`;
+              return `<i data-favid=${fav.map_id} class="fas fa-heart favourited-map"></i>`;
             }
           })
           .join("")}

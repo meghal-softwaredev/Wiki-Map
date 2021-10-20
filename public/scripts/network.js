@@ -2,7 +2,7 @@ function signUp(data) {
   return $.ajax({
     method: "POST",
     url: "/api/users/register",
-    data
+    data,
   });
 }
 
@@ -10,7 +10,7 @@ function logIn(data) {
   return $.ajax({
     method: "POST",
     url: "/api/users/login",
-    data
+    data,
   });
 }
 function getUser() {
@@ -27,12 +27,12 @@ function logOut() {
 function getFavouriteMaps() {
   return $.ajax({
     url: "/api/users/favourite",
-  })
+  });
 }
 function getContributedMaps() {
   return $.ajax({
     url: "/api/users/contributed",
-  })
+  });
 }
 
 function createNewMap(data) {
@@ -61,7 +61,30 @@ function deleteMarker(id) {
   return $.ajax({
     method: "POST",
     url: "api/maps/deleteMarker",
-    data: {id}
+    data: { id },
+  });
+}
+
+function deleteLike(mapId) {
+  return $.ajax({
+    method: "POST",
+    url: "api/maps/like/delete",
+    data: { mapId },
+  });
+}
+
+function addLike(mapId) {
+  return $.ajax({
+    method: "POST",
+    url: "api/maps/like/add",
+    data: { mapId },
+  });
+}
+
+function getAllMapData(mapId) {
+  return $.ajax({
+    url: "api/maps/all/id",
+    data: { mapId },
   });
 }
 

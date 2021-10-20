@@ -10,12 +10,15 @@ const router = express.Router();
 
 module.exports = (db) => {
   // deleting a marker not finished
-  router.post('/deleteMarker', (req, res) => {
+  router.post("/deleteMarker", (req, res) => {
     const id = req.body.id;
-    return db.query(`
+    return db
+      .query(
+        `
     DELETE FROM points WHERE id=$1
       RETURNING *`,
-      [id])
+        [id]
+      )
       .then((result) => {
         console.log("result", result.rows[0]);
         return res.json({ user: result.rows[0] });
@@ -43,9 +46,9 @@ module.exports = (db) => {
 
   // Show all maps
   router.get("/all", (req, res) => {
-    const userID = req.session.userId;
+    const userId = req.session.userId;
 
-    if (!userID) {
+    if (!userId) {
       return db
         .query(`SELECT * FROM maps`)
         .then((result) => {
@@ -58,7 +61,7 @@ module.exports = (db) => {
 
     // const userFavourites = db.query(
     //   `SELECT * FROM favourites WHERE user_id = $1`,
-    //   [userID]
+    //   [userId]
     // );
     // TEST CODE
     const userFavourites = db.query(
@@ -81,17 +84,29 @@ module.exports = (db) => {
 
   router.post("/marker/new", (req, res) => {
     const marker = req.body;
-    const { title, description, imageURL, lat, lng, mapId } = marker;
+    const { mapId, title, description, imageURL, icon, lat, lng} = marker;
+    console.log("imageURl", imageURL, "icon", icon);
+    if (icon === 'beach') {
+      iconURL = "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
+    } else if (icon === 'park') {
+      iconURL = "assets/park.png";
+    } else if (icon === 'restaurant') {
+      iconURL = "assets/restaurant.jpeg";
+    } else if (icon === 'movie') {
+      iconURL = "assets/movie.jpeg";
+    }
+
     const userID = req.session.userId;
     return db
       .query(
         `
-        INSERT INTO points (user_id, map_id, title, description, img_url, lat, lng)
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        INSERT INTO points (user_id, map_id, title, description, img_url, icon_url, lat, lng)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
         RETURNING *`,
-        [userID, mapId, title, description, imageURL, lat, lng]
+        [userID, mapId, title, description, imageURL, iconURL, lat, lng]
       )
       .then((result) => {
+        console.log(result.rows[0]);
         return res.json({ marker: result.rows[0] });
       })
       .catch((err) => err.message);
@@ -118,6 +133,65 @@ module.exports = (db) => {
         console.log("result", result.rows[0]);
       })
       .catch((err) => err.message);
+  });
+
+  // delete like
+  router.post("/like/delete", (req, res) => {
+    const userId = req.session.userId;
+    const mapId = req.body.mapId;
+    return db
+      .query(`DELETE FROM favourites WHERE map_id = $1 AND user_id = $2`, [
+        mapId,
+        userId,
+      ])
+      .catch((err) => err.message);
+  });
+
+  // add like
+  router.post("/like/add", (req, res) => {
+    const userId = req.session.userId;
+    const mapId = req.body.mapId;
+    return db
+      .query(`INSERT INTO favourites (user_id, map_id) VALUES ($1, $2)`, [
+        userId,
+        mapId,
+      ])
+      .catch((err) => err.message);
+  });
+
+  // All map data for id (points, favourites, maps)
+  router.get("/all/id", (req, res) => {
+    const userId = req.session.userId;
+    const mapId = req.query.mapId;
+
+    const map = db.query(`SELECT * FROM maps WHERE id = $1`, [mapId]);
+    const points = db.query(`SELECT * FROM points WHERE map_id = $1`, [mapId]);
+    const favourite = db.query(
+      `SELECT * FROM favourites WHERE user_id = $1 AND map_id = $2`,
+      [userId, mapId]
+    );
+
+    // if not logged in, only show map and points data
+    if (!userId) {
+      return db
+        .query(`SELECT * FROM maps WHERE id = $1`, [mapId])
+        .then((result) => {
+          return res.json({
+            map: result.rows[0],
+            mapPoints: {},
+            mapFavourite: { id: "not logged in" },
+          });
+        })
+        .catch((err) => err.message);
+    }
+
+    Promise.all([map, points, favourite]).then((result) => {
+      return res.json({
+        map: result[0].rows[0],
+        mapPoints: result[1].rows,
+        mapFavourite: result[2].rows[0] || {},
+      });
+    });
   });
 
   return router;
