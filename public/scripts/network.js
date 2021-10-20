@@ -64,3 +64,11 @@ function deleteMarker(id) {
     data: {id}
   });
 }
+
+function addContributors(userId, mapId) {
+  return $.ajax({
+    method: "POST",
+    url: "api/users/addContributors",
+    data: {userId, mapId}
+  });
+}

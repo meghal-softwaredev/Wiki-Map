@@ -8,7 +8,7 @@
 */
 
 // these are the main variable
-const markers = [];
+const markers = [{id:1}];
 let firstCenter = { lat: 45.5017, lng: -73.5673 };
 
 // this is the HTML ton include the map and every marker with each of their content
@@ -102,7 +102,7 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkD
 
 
 // this is the listing of all the marker under the map
-  const renderAllMarkers = (markers) => {
+  const listAllMarkers = (markers) => {
    let allMarkers = `
    <table class="table">
    <thead>
@@ -135,28 +135,6 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkD
     return allMarkers;
   };
 
-    $(() => {
-      // const $map = $(`
-      // <div id="showMap">
-      // <h1>we need to put the map title here</h1>
-      // ${createMap}
-      // ${renderAllMarkers(markers)}
-      // </div>
-      // `);
-
-      // window.$map = $map;
-
-      $(document).on('click', '#deleteMarker', function(e){
-        e.preventDefault();
-        deleteMarker($(this).attr("data-id"))
-        .then(() => {
-          const $main = $("#main-content");
-          $main.empty();
-          $map.appendTo($main);
-        });
-      });
-});
-
 
 
 
@@ -166,7 +144,7 @@ $(() => {
     const $map = $(`
     <h1>My map</h1>
     ${createMap(mapId)}
-
+    ${listAllMarkers(markers)}
   `);
 
     return $map;
@@ -174,4 +152,18 @@ $(() => {
 
   window.$mapWrapper = $mapWrapper;
   window.makeMap = makeMap;
+
+  $(document).on('click', '#deleteMarker', function(e){
+    e.preventDefault();
+    getUser()
+    .then(json => {
+      addContributors(json.user.id, mapId) // need to setup that mapId var
+      deleteMarker($(this).attr("data-id"))
+      .then(() => {
+        const $main = $("#main-content");
+        $main.empty();
+        window.makeMap = makeMap; // not sure how to call the page "reload", i think it can wotrk that way but need the data to be sure(see how it act)
+      });
+    });
+  });
 });

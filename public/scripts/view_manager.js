@@ -3,6 +3,7 @@ $(() => {
 
   window.views_manager = {};
 
+
   window.views_manager.show = function (item, options) {
     $loginPage.detach();
     $registerPage.detach();
