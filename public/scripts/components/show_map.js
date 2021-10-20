@@ -136,13 +136,13 @@ const renderAllMarkers = (markers) => {
 };
 
 ///// test with all routes ///////////
-const renderButton = (map, mapPoints, mapFavourites) => {
-  console.log({ map });
-  console.log({ mapPoints });
-  console.log({ mapFavourites });
+// const renderButton = (map, mapPoints, mapFavourites) => {
+//   console.log({ map });
+//   console.log({ mapPoints });
+//   console.log({ mapFavourites });
 
-  return;
-};
+//   return;
+// };
 
 $(() => {
   // const $map = $(`
@@ -192,16 +192,18 @@ $(() => {
     if ($($btn).hasClass(redHeart)) {
       $($btn).removeClass(redHeart);
       return deleteLike($mapId);
-    }
-    $($btn).addClass(redHeart);
-    return addLike($mapId);
-  });
+    }ourites, points
+    // TEST CODE
+    const maps = db.query(`SELECT * FROM maps WHERE id = 1`);
+    const points = db.query(`SELECT * FROM points WHERE map_id = 1`);
+    const userFavourites = db
 
-  /////////// testing ///////////////////
   getAllMapData($mapId).then((json) => {
     const map = json.map;
     const mapPoints = json.mapPoints;
     const mapFavourite = json.mapFavourite;
-    renderButton(map, mapPoints, mapFavourite);
+    console.log(map, mapPoints,mapFavourite)
+    return
+    // renderButton(map, mapPoints, mapFavourite);
   });
 });
