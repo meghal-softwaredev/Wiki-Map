@@ -24,10 +24,7 @@ $(() => {
         break;
       case "showMap":
         $mapWrapper.empty();
-        // const $map = makeMap(options.mapId);
-        console.log("options.mapId:", options.mapId);
         mapFinal(options.mapId).then((result) => {
-          console.log("mapId inside view_show:", options.mapId);
           result.appendTo($mapWrapper);
           $mapWrapper.appendTo($main);
         });

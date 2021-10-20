@@ -37,7 +37,6 @@ $(() => {
 
       $mapArticle.on("click", (event) => {
         const mapId = $(event.target).parent(".user-map").attr("data-id");
-        console.log("Step1: mapId from maps list:", mapId);
         views_manager.show("showMap", { mapId });
       });
     });

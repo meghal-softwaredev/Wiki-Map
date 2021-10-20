@@ -140,11 +140,7 @@ module.exports = (db) => {
   // All map data for id (points, favourites, maps)
   router.get("/all/id", (req, res) => {
     const userId = req.session.userId;
-    const mapId = req.body.mapId;
-    //////// req.body is empty
-    console.log("req.body:", req);
-
-    console.log("mapId inside get:", mapId);
+    const mapId = req.query.mapId;
 
     const map = db.query(`SELECT * FROM maps WHERE id = $1`, [mapId]);
     const points = db.query(`SELECT * FROM points WHERE map_id = $1`, [mapId]);
@@ -159,9 +155,9 @@ module.exports = (db) => {
         .query(`SELECT * FROM maps WHERE id = $1`, [mapId])
         .then((result) => {
           return res.json({
-            map: result.rows,
+            map: result.rows[0],
             mapPoints: {},
-            mapFavourite: {},
+            mapFavourite: { id: "not logged in" },
           });
         })
         .catch((err) => err.message);
@@ -169,9 +165,9 @@ module.exports = (db) => {
 
     Promise.all([map, points, favourite]).then((result) => {
       return res.json({
-        map: result[0].rows,
+        map: result[0].rows[0],
         mapPoints: result[1].rows,
-        mapFavourite: result[2].rows,
+        mapFavourite: result[2].rows[0] || {},
       });
     });
   });

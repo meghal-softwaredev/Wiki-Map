@@ -135,9 +135,20 @@ const renderAllMarkers = (markers) => {
   return allMarkers;
 };
 
-const createButton = (mapId, favId) => {
+const createButton = (mapId, favouriteId) => {
+  // const favouriteButton = "";
+  if (favouriteId === "not logged in") {
+    return `<h1>NO LIKES</h1>`;
+  }
+
+  if (!favouriteId) {
+    return `<button id="favourite-btn"><i id="favourite-heart" class="fas fa-heart"></i></button>`;
+  }
+  return `<button id="favourite-btn"><i id="favourite-heart" class="fas fa-heart favourited-map"></i></button>`;
+
   // $(document).on("click", "#favourite-btn", (event) => {
   //   event.preventDefault();
+  //   console.log("fav button clicked 💖💖💖");
   //   const $btn = $("#favourite-heart");
   //   const redHeart = "favourited-map";
   //   // const $mapId = $(".map-id").attr("data-id");
@@ -149,7 +160,8 @@ const createButton = (mapId, favId) => {
   //   $($btn).addClass(redHeart);
   //   return addLike($mapId);
   // });
-  return `<h1>Map ${mapId} and matching fav id ${favId}</h1>`;
+
+  // return $favouriteButton;
 };
 
 const createPointsTable = (mapId, pointsId) => {
@@ -179,15 +191,16 @@ const createPointsTable = (mapId, pointsId) => {
 
 var $mapWrapper = $(`<div class='map-wrapper'></div>`);
 var mapFinal = (mapId) => {
-  console.log("mapId inside mapFinal", mapId);
   return getAllMapData(mapId).then((json) => {
-    console.log("mapId inside getAllMapData call:", mapId);
-    console.log("getAllMapData json:", json);
     const map = json.map;
     const mapPoints = json.mapPoints;
     const mapFavourite = json.mapFavourite;
 
+    console.log("getAllMapData json:", map, mapPoints, mapFavourite);
+
     const $mapTitle = $(`<h1>${map.title}</h1>`);
+
+    console.log("mapFavourite id:", mapFavourite.id);
 
     const $map = $(`
       <div class='map-heart'>
@@ -205,6 +218,7 @@ var mapFinal = (mapId) => {
 
 $(() => {
   mapFinal(mapId);
+
   window.$mapWrapper = $mapWrapper;
   // window.mapFinal = mapFinal;
   // window.getAllMapData = getAllMapData;
