@@ -8,7 +8,7 @@
 */
 
 // these are the main variable
-const markers = [{id:1}];
+const markers = [{id:1}, {id:2}, {id:3}, {id:4}];
 let firstCenter = { lat: 45.5017, lng: -73.5673 };
 
 // this is the HTML ton include the map and every marker with each of their content
@@ -110,6 +110,7 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkD
        <th scope="col">Title</th>
        <th scope="col">Image</th>
        <th scope="col">Description</th>
+       <th scope="col">Edit</th>
        <th scope="col">Delete</th>
      </tr>
    </thead>
@@ -117,14 +118,19 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkD
    `;
     markers.forEach((mark) => {
       allMarkers += `
-          <tr>
+          <tr id="marker${mark.id}">
             <td>${mark.title}</td>
-            <td>change this to a img src= ${mark.image}</td>
+            <td><img src="${mark.image}"></td>
             <td>${mark.description}</td>
             <td>
-            <form>
-              <button type="Delete" id="deleteMarker" data-id="${mark.id}">Delete</button>
-            </form>
+              <form>
+                <button type="Edit" id="editMarker" data-id="${mark.id}">Edit</button>
+              </form>
+            </td>
+            <td>
+              <form>
+                <button type="Delete" id="deleteMarker" data-id="${mark.id}">Delete</button>
+              </form>
             </td>
           </tr>
           `;
@@ -166,4 +172,40 @@ $(() => {
       });
     });
   });
+
+  $(document).on('click', '#editMarker', function(e){
+    e.preventDefault();
+    const target = `#marker${$(this).attr("data-id")}`
+    $(target).html(`
+            <form id="saving">
+              <td><input required form="saving" type="text" id="title" name="title" value="the original title"></td>
+              <td><input required form="saving" type="text" id="image" name="image" value="the original img link"></td>
+              <td><input required form="saving" type="text" id="description" name="description" value="the original desc"></td>
+              <td>
+                <button form="saving" type="submit" id="saveEditMarker" data-id="${$(this).attr("data-id")}">Save</button>
+              </td>
+            </form>
+            <td>
+              <form>
+                <button type="Delete" id="deleteMarker" data-id="${$(this).attr("data-id")}">Delete</button>
+              </form>
+            </td>`);
+  });
+
+  $(document).on('click', '#saveEditMarker', function(e){
+    e.preventDefault();
+    let data = $('#saving').serialize();
+    getUser()
+    .then(json => {
+      editMarker($(this).attr("data-id"), data);
+      addContributors(json.user.id, mapId) // need to setup that mapId var
+      .then(() => {
+        const $main = $("#main-content");
+        $main.empty();
+        window.makeMap = makeMap; // not sure how to call the page "reload", i think it can wotrk that way but need the data to be sure(see how it act)
+      });
+    });
+  });
+
+
 });

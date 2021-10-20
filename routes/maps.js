@@ -27,10 +27,8 @@ module.exports = (db) => {
   router.post("/new", (req, res) => {
     const user = req.body;
     const userID = req.session.userId;
-    const { title, description, emailContributors } = user;
-    return db
-      .query(
-        `
+    const { title, description } = user;
+    return db.query(`
       INSERT INTO maps (title, description, owner_id)
       VALUES ($1, $2, $3)
       RETURNING *`,
@@ -95,6 +93,29 @@ module.exports = (db) => {
       )
       .then((result) => {
         return res.json({ marker: result.rows[0] });
+      })
+      .catch((err) => err.message);
+  });
+
+  router.post("/marker/edit", (req, res) => {
+    const update = {};
+    const id = req.body.markerId;
+    let info = req.body.newData;
+    info = decodeURI(info);
+    info = info.split("&");
+    info.forEach((main) => {
+      main = main.split("=");
+      update[main[0]] = main[1];
+    });
+    const { title, image, description } = update;
+    return db.query(`
+      UPDATE points
+      SET title = $2, description = $3, img_url = $4
+      WHERE id = $1
+      RETURNING *`,
+      [id, title, description, image])
+      .then((result) => {
+        console.log("result", result.rows[0]);
       })
       .catch((err) => err.message);
   });

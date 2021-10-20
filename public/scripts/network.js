@@ -72,3 +72,11 @@ function addContributors(userId, mapId) {
     data: {userId, mapId}
   });
 }
+
+function editMarker(markerId, newData) {
+  return $.ajax({
+    method: "POST",
+    url: "api/maps/marker/edit",
+    data: {markerId, newData}
+  });
+}

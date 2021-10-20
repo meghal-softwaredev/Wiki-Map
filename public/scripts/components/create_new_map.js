@@ -10,7 +10,6 @@ $(() => {
       <input required type="text" id="description" name="description" placeholder="Enter a description">
       <button type="submit" class="createNew-button">Create new map!</button>
     </form>
-  </form>
   `);
 
   window.$createNewMap = $createNewMap;
