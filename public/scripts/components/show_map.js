@@ -135,8 +135,7 @@ const renderAllMarkers = (markers) => {
   return allMarkers;
 };
 
-const createButton = (mapId, favouriteId) => {
-  // const favouriteButton = "";
+const createButton = (favouriteId) => {
   if (favouriteId === "not logged in") {
     return `<h1>NO LIKES</h1>`;
   }
@@ -145,23 +144,6 @@ const createButton = (mapId, favouriteId) => {
     return `<button id="favourite-btn"><i id="favourite-heart" class="fas fa-heart"></i></button>`;
   }
   return `<button id="favourite-btn"><i id="favourite-heart" class="fas fa-heart favourited-map"></i></button>`;
-
-  // $(document).on("click", "#favourite-btn", (event) => {
-  //   event.preventDefault();
-  //   console.log("fav button clicked 💖💖💖");
-  //   const $btn = $("#favourite-heart");
-  //   const redHeart = "favourited-map";
-  //   // const $mapId = $(".map-id").attr("data-id");
-
-  //   if ($($btn).hasClass(redHeart)) {
-  //     $($btn).removeClass(redHeart);
-  //     return deleteLike($mapId);
-  //   }
-  //   $($btn).addClass(redHeart);
-  //   return addLike($mapId);
-  // });
-
-  // return $favouriteButton;
 };
 
 const createPointsTable = (mapId, pointsId) => {
@@ -205,12 +187,26 @@ var mapFinal = (mapId) => {
     const $map = $(`
       <div class='map-heart'>
         ${createMap(map.id)}
-        ${createButton(map.id, mapFavourite.id)}
+        ${createButton(mapFavourite.id)}
       </div>
       <div class='points'>
         ${createPointsTable(map.id, mapPoints.id)}
       </div>
   `);
+
+    /// edit delete like
+    $(document).on("click", "#favourite-btn", (event) => {
+      event.preventDefault();
+      console.log("fav button clicked 💖💖💖");
+      const $btn = $("#favourite-heart");
+      const redHeart = "favourited-map";
+      if ($($btn).hasClass(redHeart)) {
+        $($btn).removeClass(redHeart);
+        return deleteLike(map.id);
+      }
+      $($btn).addClass(redHeart);
+      return addLike(map.id);
+    });
 
     return $map.after($mapTitle);
   });
@@ -220,6 +216,4 @@ $(() => {
   mapFinal(mapId);
 
   window.$mapWrapper = $mapWrapper;
-  // window.mapFinal = mapFinal;
-  // window.getAllMapData = getAllMapData;
 });

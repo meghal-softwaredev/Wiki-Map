@@ -106,35 +106,24 @@ module.exports = (db) => {
   router.post("/like/delete", (req, res) => {
     const userId = req.session.userId;
     const mapId = req.body.mapId;
-    return (
-      db
-        // TEST CODE
-        .query(`DELETE FROM favourites WHERE map_id = 1 AND user_id = 2`)
-        // .query(`DELETE FROM favourites WHERE map_id = $1 AND user_id = $2`, [
-        //   mapId,
-        //   userId,
-        // ])
-        .catch((err) => err.message)
-    );
+    return db
+      .query(`DELETE FROM favourites WHERE map_id = $1 AND user_id = $2`, [
+        mapId,
+        userId,
+      ])
+      .catch((err) => err.message);
   });
 
   // add like
   router.post("/like/add", (req, res) => {
     const userId = req.session.userId;
     const mapId = req.body.mapId;
-    return (
-      db
-        // TEST CODE
-        .query(
-          `INSERT INTO favourites (user_id, map_id)
-        VALUES (3,1);
-        `
-        )
-        // .query(`INSERT INTO favourites (user_id, map_id) VALUES ($1, $2)`, [
-        //  userId, mapId
-        // ])
-        .catch((err) => err.message)
-    );
+    return db
+      .query(`INSERT INTO favourites (user_id, map_id) VALUES ($1, $2)`, [
+        userId,
+        mapId,
+      ])
+      .catch((err) => err.message);
   });
 
   // All map data for id (points, favourites, maps)
