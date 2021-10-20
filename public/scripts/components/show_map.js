@@ -166,6 +166,7 @@ $(() => {
     const $map = $(`
     <h1>My map</h1>
     ${createMap(mapId)}
+
   `);
 
     return $map;
