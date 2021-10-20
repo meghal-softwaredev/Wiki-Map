@@ -31,7 +31,7 @@ let firstCenter = { lat: 45.5017, lng: -73.5673 };
 // this is the HTML ton include the map and every marker with each of their content
 const createMap = (mapId) => {
   return `
-  <h1>${mapId}</h1>
+  <h1 class='map-id' data-id=${mapId}>${mapId}</h1>
 <div id="map" class="map" style="height:400px; width:600px;"></div>
 <section class="new-marker" style="display: none">
   <form id="new-marker-form">
@@ -177,6 +177,7 @@ $(() => {
   const makeMap = (mapId) => {
     const $map = $(`
     <h1>My map</h1>
+    <button id="favourite-btn"><i id="favourite-heart" class="fas fa-heart favourited-map"></i></button>
     ${createMap(mapId)}
   `);
 
@@ -185,4 +186,15 @@ $(() => {
 
   window.$mapWrapper = $mapWrapper;
   window.makeMap = makeMap;
+
+  $(document).on("click", "#favourite-btn", (event) => {
+    event.preventDefault();
+    const $mapId = $(".map-id").attr("data-id");
+    if ($("#favourite-heart").hasClass("favourited-map")) {
+      $("#favourite-heart").removeClass("favourited-map");
+      return deleteLike($mapId);
+    }
+    return $("#favourite-heart").addClass("favourited-map");
+    // return addLike(mapId);
+  });
 });

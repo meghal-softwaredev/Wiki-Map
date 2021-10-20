@@ -10,12 +10,15 @@ const router = express.Router();
 
 module.exports = (db) => {
   // deleting a marker not finished
-  router.post('/deleteMarker', (req, res) => {
+  router.post("/deleteMarker", (req, res) => {
     const id = req.body.id;
-    return db.query(`
+    return db
+      .query(
+        `
     DELETE FROM points WHERE id=$1
       RETURNING *`,
-      [id])
+        [id]
+      )
       .then((result) => {
         console.log("result", result.rows[0]);
         return res.json({ user: result.rows[0] });
@@ -98,6 +101,38 @@ module.exports = (db) => {
         return res.json({ marker: result.rows[0] });
       })
       .catch((err) => err.message);
+  });
+
+  // delete like
+  router.post("/like/delete", (req, res) => {
+    const userID = req.session.userId;
+    const mapId = req.body.mapId;
+    return (
+      db
+        // TEST CODE
+        .query(`DELETE FROM favourites WHERE map_id = 1 AND user_id = 2`)
+        // .query(`DELETE FROM favourites WHERE map_id = $1 AND user_id = $2`, [
+        //   mapId,
+        //   userID,
+        // ])
+        .catch((err) => err.message)
+    );
+  });
+
+  // add like
+  router.post("/like/add", (req, res) => {
+    const userID = req.session.userId;
+    const mapId = req.body.mapId;
+    return (
+      db
+        // TEST CODE
+        .query(`DELETE FROM favourites WHERE map_id = 1 AND user_id = 2`)
+        // .query(`DELETE FROM favourites WHERE map_id = $1 AND user_id = $2`, [
+        //   mapId,
+        //   userID,
+        // ])
+        .catch((err) => err.message)
+    );
   });
 
   return router;

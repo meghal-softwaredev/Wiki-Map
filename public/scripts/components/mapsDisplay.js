@@ -24,7 +24,7 @@ $(() => {
         ${favsData
           .map((fav) => {
             if (fav.map_id === map.id) {
-              return `<i class="fas fa-heart favourited-map"></i>`;
+              return `<i data-favid=${fav.map_id} class="fas fa-heart favourited-map"></i>`;
             }
           })
           .join("")}
@@ -37,6 +37,11 @@ $(() => {
 
       $mapArticle.on("click", (event) => {
         const mapId = $(event.target).parent(".user-map").attr("data-id");
+        const favId = $(event.target)
+          .find(".favourited-map")
+          .attr("data-favid");
+
+        console.log({ favId });
         views_manager.show("showMap", { mapId });
       });
     });
