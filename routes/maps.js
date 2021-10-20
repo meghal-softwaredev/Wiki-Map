@@ -141,42 +141,37 @@ module.exports = (db) => {
   router.get("/all/id", (req, res) => {
     const userId = req.session.userId;
     const mapId = req.body.mapId;
+    //////// req.body is empty
+    console.log("req.body:", req);
 
-    // maps, favourites, points
-    // TEST CODE
-    const maps = db.query(`SELECT * FROM maps WHERE id = 1`);
-    const points = db.query(`SELECT * FROM points WHERE map_id = 1`);
-    const userFavourites = db.query(
-      `SELECT * FROM favourites WHERE user_id = 1 AND map_id = 1`
+    console.log("mapId inside get:", mapId);
+
+    const map = db.query(`SELECT * FROM maps WHERE id = $1`, [mapId]);
+    const points = db.query(`SELECT * FROM points WHERE map_id = $1`, [mapId]);
+    const favourite = db.query(
+      `SELECT * FROM favourites WHERE user_id = $1 AND map_id = $2`,
+      [userId, mapId]
     );
-
-    // const maps = db.query(`SELECT * FROM maps WHERE id = $`, [mapId]);
-    // const maps = db.query(`SELECT * FROM points WHERE map_id = $1`, [mapId]);
-    // const userFavourites = db.query(
-    //   `SELECT * FROM favourites WHERE user_id = $1 AND map_id = $2`,
-    //   [userId, mapId]
-    // );
 
     // if not logged in, only show map and points data
     if (!userId) {
       return db
-        .query(`SELECT * FROM maps WHERE id = 1`)
+        .query(`SELECT * FROM maps WHERE id = $1`, [mapId])
         .then((result) => {
-          return res.json({ userMaps: result.rows });
+          return res.json({
+            map: result.rows,
+            mapPoints: {},
+            mapFavourite: {},
+          });
         })
         .catch((err) => err.message);
     }
 
-    Promise.all([maps, points, userFavourites]).then((result) => {
+    Promise.all([map, points, favourite]).then((result) => {
       return res.json({
         map: result[0].rows,
         mapPoints: result[1].rows,
         mapFavourite: result[2].rows,
-        // TEST CODE
-        // mapFavourite: [
-        //   { id: 1, user_id: 1, map_id: 2, favourite: true },
-        //   { id: 1, user_id: 1, map_id: 1, favourite: true },
-        // ],
       });
     });
   });

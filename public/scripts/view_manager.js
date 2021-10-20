@@ -23,11 +23,14 @@ $(() => {
         $mapsDisplay.appendTo($main);
         break;
       case "showMap":
-        // $mapWrapper.empty();
+        $mapWrapper.empty();
         // const $map = makeMap(options.mapId);
-        const $map = getAllMapData(options.mapId);
-        $mapWrapper.appendTo($main);
-        $map.appendTo($main);
+        console.log("options.mapId:", options.mapId);
+        mapFinal(options.mapId).then((result) => {
+          console.log("mapId inside view_show:", options.mapId);
+          result.appendTo($mapWrapper);
+          $mapWrapper.appendTo($main);
+        });
         break;
       case "profile":
         $profile.appendTo($main);

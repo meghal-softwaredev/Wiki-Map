@@ -136,6 +136,19 @@ const renderAllMarkers = (markers) => {
 };
 
 const createButton = (mapId, favId) => {
+  // $(document).on("click", "#favourite-btn", (event) => {
+  //   event.preventDefault();
+  //   const $btn = $("#favourite-heart");
+  //   const redHeart = "favourited-map";
+  //   // const $mapId = $(".map-id").attr("data-id");
+
+  //   if ($($btn).hasClass(redHeart)) {
+  //     $($btn).removeClass(redHeart);
+  //     return deleteLike($mapId);
+  //   }
+  //   $($btn).addClass(redHeart);
+  //   return addLike($mapId);
+  // });
   return `<h1>Map ${mapId} and matching fav id ${favId}</h1>`;
 };
 
@@ -164,47 +177,35 @@ const createPointsTable = (mapId, pointsId) => {
 //   });
 // });
 
-$(() => {
-  const $mapWrapper = $(`<div class='map-wrapper'></div>`);
-  getAllMapData(mapId).then((json) => {
+var $mapWrapper = $(`<div class='map-wrapper'></div>`);
+var mapFinal = (mapId) => {
+  console.log("mapId inside mapFinal", mapId);
+  return getAllMapData(mapId).then((json) => {
+    console.log("mapId inside getAllMapData call:", mapId);
+    console.log("getAllMapData json:", json);
     const map = json.map;
     const mapPoints = json.mapPoints;
     const mapFavourite = json.mapFavourite;
-    renderButton(map, mapPoints, mapFavourite);
 
     const $mapTitle = $(`<h1>${map.title}</h1>`);
 
     const $map = $(`
-    <div class='map-heart'>
-      ${createMap(map.id)}
-      ${createButton(map.id, mapFavourite.id)}
-    </div>
-    <div class='points'>
-      ${createPointsTable(map.id, mapPoints.id)}
-    </div>
-    `);
-    console.log({ $map });
+      <div class='map-heart'>
+        ${createMap(map.id)}
+        ${createButton(map.id, mapFavourite.id)}
+      </div>
+      <div class='points'>
+        ${createPointsTable(map.id, mapPoints.id)}
+      </div>
+  `);
 
     return $map.after($mapTitle);
   });
+};
 
+$(() => {
+  mapFinal(mapId);
   window.$mapWrapper = $mapWrapper;
-  // window.$map = $map;
-  window.getAllMapData = getAllMapData;
-
-  // const $mapId = $(".map-id").attr("data-id");
-
-  // $(document).on("click", "#favourite-btn", (event) => {
-  //   event.preventDefault();
-  //   const $btn = $("#favourite-heart");
-  //   const redHeart = "favourited-map";
-  //   // const $mapId = $(".map-id").attr("data-id");
-
-  //   if ($($btn).hasClass(redHeart)) {
-  //     $($btn).removeClass(redHeart);
-  //     return deleteLike($mapId);
-  //   }
-  //   $($btn).addClass(redHeart);
-  //   return addLike($mapId);
-  // });
+  // window.mapFinal = mapFinal;
+  // window.getAllMapData = getAllMapData;
 });
