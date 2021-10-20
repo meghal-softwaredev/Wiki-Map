@@ -11,4 +11,5 @@ INSERT INTO favourites (user_id, map_id)
 VALUES (1, 2), (1, 1), (2, 2), (2, 1);
 
 INSERT INTO points (user_id, map_id, title, description, img_url)
-VALUES (1, 2, 'tim hortons', 'coffee and timbits', 'https://imgur.com/gallery/rcxKimS')
+VALUES (1, 2, 'tim hortons', 'coffee and timbits', 'https://imgur.com/gallery/rcxKimS'), (1, 1, 'McDo', 'chicken nug', 'img2'), (1, 1, 'stir fry', 'extra saucy', 'img3')
+

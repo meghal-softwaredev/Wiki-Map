@@ -37,7 +37,8 @@ $(() => {
 
       $mapArticle.on("click", (event) => {
         const mapId = $(event.target).parent(".user-map").attr("data-id");
-        const favId = $(event.target)
+        // /////////////////////////////////////
+        const favId = $(event.target) ///////////////
           .find(".favourited-map")
           .attr("data-favid");
 

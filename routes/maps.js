@@ -138,5 +138,49 @@ module.exports = (db) => {
     );
   });
 
+  // All map data for id (points, favourites, maps)
+  router.get("/all/id", (req, res) => {
+    const userId = req.session.userId;
+    const mapId = req.body.mapId;
+
+    // maps, favourites, points
+    // TEST CODE
+    const maps = db.query(`SELECT * FROM maps WHERE id = 1`);
+    const points = db.query(`SELECT * FROM points WHERE map_id = 1`);
+    const userFavourites = db.query(
+      `SELECT * FROM favourites WHERE user_id = 1 AND map_id = 1`
+    );
+
+    // const maps = db.query(`SELECT * FROM maps WHERE id = $`, [mapId]);
+    // const maps = db.query(`SELECT * FROM points WHERE map_id = $1`, [mapId]);
+    // const userFavourites = db.query(
+    //   `SELECT * FROM favourites WHERE user_id = $1 AND map_id = $2`,
+    //   [userId, mapId]
+    // );
+
+    // if not logged in, only show map and points data
+    if (!userId) {
+      return db
+        .query(`SELECT * FROM maps WHERE id = 1`)
+        .then((result) => {
+          return res.json({ userMaps: result.rows });
+        })
+        .catch((err) => err.message);
+    }
+
+    Promise.all([maps, points, userFavourites]).then((result) => {
+      return res.json({
+        map: result[0].rows,
+        mapPoints: result[1].rows,
+        mapFavourite: result[2].rows,
+        // TEST CODE
+        // mapFavourite: [
+        //   { id: 1, user_id: 1, map_id: 2, favourite: true },
+        //   { id: 1, user_id: 1, map_id: 1, favourite: true },
+        // ],
+      });
+    });
+  });
+
   return router;
 };

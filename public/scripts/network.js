@@ -81,3 +81,10 @@ function addLike(mapId) {
     data: { mapId },
   });
 }
+
+function getAllMapData(mapId) {
+  return $.ajax({
+    url: "api/maps/all/id",
+    data: { mapId },
+  });
+}

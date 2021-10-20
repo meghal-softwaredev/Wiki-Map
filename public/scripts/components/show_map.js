@@ -151,6 +151,15 @@ const renderAllMarkers = (markers) => {
   return allMarkers;
 };
 
+///// test with all routes ///////////
+const renderButton = (map, mapPoints, mapFavourites) => {
+  console.log({ map });
+  console.log({ mapPoints });
+  console.log({ mapFavourites });
+
+  return;
+};
+
 $(() => {
   // const $map = $(`
   // <div id="showMap">
@@ -187,11 +196,13 @@ $(() => {
   window.$mapWrapper = $mapWrapper;
   window.makeMap = makeMap;
 
+  const $mapId = $(".map-id").attr("data-id");
+
   $(document).on("click", "#favourite-btn", (event) => {
     event.preventDefault();
-    const $mapId = $(".map-id").attr("data-id");
     const $btn = $("#favourite-heart");
     const redHeart = "favourited-map";
+    // const $mapId = $(".map-id").attr("data-id");
 
     if ($($btn).hasClass(redHeart)) {
       $($btn).removeClass(redHeart);
@@ -199,5 +210,13 @@ $(() => {
     }
     $($btn).addClass(redHeart);
     return addLike($mapId);
+  });
+
+  /////////// testing ///////////////////
+  getAllMapData($mapId).then((json) => {
+    const map = json.map;
+    const mapPoints = json.mapPoints;
+    const mapFavourites = json.mapFavourites;
+    renderButton(map, mapPoints, mapFavourites);
   });
 });
