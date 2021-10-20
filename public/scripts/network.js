@@ -73,3 +73,11 @@ function deleteLike(mapId) {
     data: { mapId },
   });
 }
+
+function addLike(mapId) {
+  return $.ajax({
+    method: "POST",
+    url: "api/maps/like/add",
+    data: { mapId },
+  });
+}

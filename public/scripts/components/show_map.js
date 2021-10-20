@@ -190,11 +190,14 @@ $(() => {
   $(document).on("click", "#favourite-btn", (event) => {
     event.preventDefault();
     const $mapId = $(".map-id").attr("data-id");
-    if ($("#favourite-heart").hasClass("favourited-map")) {
-      $("#favourite-heart").removeClass("favourited-map");
+    const $btn = $("#favourite-heart");
+    const redHeart = "favourited-map";
+
+    if ($($btn).hasClass(redHeart)) {
+      $($btn).removeClass(redHeart);
       return deleteLike($mapId);
     }
-    return $("#favourite-heart").addClass("favourited-map");
-    // return addLike(mapId);
+    $($btn).addClass(redHeart);
+    return addLike($mapId);
   });
 });
