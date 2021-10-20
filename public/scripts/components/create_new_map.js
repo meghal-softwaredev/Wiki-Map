@@ -5,9 +5,9 @@ $(() => {
     <div class="fullForm">
       <h1>Create a new map</h1>
       <label for="title">Title:</label>
-      <input type="text" id="title" name="title" placeholder="Enter a title">
+      <input required type="text" id="title" name="title" placeholder="Enter a title">
       <label for="description">Description:</label>
-      <input type="text" id="description" name="description" placeholder="Enter a description">
+      <input required type="text" id="description" name="description" placeholder="Enter a description">
       <button type="submit" class="createNew-button">Create new map!</button>
     </form>
   </form>

@@ -120,7 +120,7 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkD
 
 
 // this is the listing of all the marker under the map
-  const renderAllMarkers = (markers) => {
+  const renderMarkersList = (markers) => {
    let allMarkers = `
    <table class="table">
    <thead>
@@ -150,6 +150,7 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkD
     allMarkers +=
     `</tbody>
     </table>`;
+
     return allMarkers;
   };
 
@@ -178,13 +179,14 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkD
 
 
 
+
 $(() => {
   const $mapWrapper = $(`<div class='map-wrapper'></div>`);
   const makeMap = (mapId) => {
     const $map = $(`
-    <h1>My map</h1>
     ${createMap(mapId)}
-  `);
+    ${renderMarkersList(markers)}
+    `);
 
     return $map;
   };
