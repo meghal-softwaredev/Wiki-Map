@@ -31,7 +31,9 @@ module.exports = (db) => {
     const user = req.body;
     const userID = req.session.userId;
     const { title, description } = user;
-    return db.query(`
+    return db
+      .query(
+        `
       INSERT INTO maps (title, description, owner_id)
       VALUES ($1, $2, $3)
       RETURNING *`,
@@ -59,40 +61,31 @@ module.exports = (db) => {
 
     const maps = db.query(`SELECT * FROM maps`);
 
-    // const userFavourites = db.query(
-    //   `SELECT * FROM favourites WHERE user_id = $1`,
-    //   [userId]
-    // );
-    // TEST CODE
     const userFavourites = db.query(
-      `SELECT * FROM favourites WHERE user_id = 1`
+      `SELECT * FROM favourites WHERE user_id = $1`,
+      [userId]
     );
 
     Promise.all([maps, userFavourites]).then((result) => {
       return res.json({
         userMaps: result[0].rows,
-
-        // userFavs: result[1].rows,
-        // TEST CODE
-        userFavs: [
-          { id: 1, user_id: 1, map_id: 2, favourite: true },
-          { id: 1, user_id: 1, map_id: 1, favourite: true },
-        ],
+        userFavs: result[1].rows,
       });
     });
   });
 
   router.post("/marker/new", (req, res) => {
     const marker = req.body;
-    const { mapId, title, description, imageURL, icon, lat, lng} = marker;
+    const { mapId, title, description, imageURL, icon, lat, lng } = marker;
     console.log("imageURl", imageURL, "icon", icon);
-    if (icon === 'beach') {
-      iconURL = "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
-    } else if (icon === 'park') {
+    if (icon === "beach") {
+      iconURL =
+        "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
+    } else if (icon === "park") {
       iconURL = "assets/park.png";
-    } else if (icon === 'restaurant') {
+    } else if (icon === "restaurant") {
       iconURL = "assets/restaurant.jpeg";
-    } else if (icon === 'movie') {
+    } else if (icon === "movie") {
       iconURL = "assets/movie.jpeg";
     }
 
@@ -123,12 +116,15 @@ module.exports = (db) => {
       update[main[0]] = main[1];
     });
     const { title, image, description } = update;
-    return db.query(`
+    return db
+      .query(
+        `
       UPDATE points
       SET title = $2, description = $3, img_url = $4
       WHERE id = $1
       RETURNING *`,
-      [id, title, description, image])
+        [id, title, description, image]
+      )
       .then((result) => {
         console.log("result", result.rows[0]);
       })
