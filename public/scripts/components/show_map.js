@@ -144,66 +144,65 @@ const renderAllMarkers = (markers) => {
 //   return;
 // };
 
-$(() => {
-  // const $map = $(`
-  // <div id="showMap">
-  // <h1>we need to put the map title here</h1>
-  // ${createMap}
-  // ${renderAllMarkers(markers)}
-  // </div>
-  // `);
+// $(() => {
+//   // const $map = $(`
+//   // <div id="showMap">
+//   // <h1>we need to put the map title here</h1>
+//   // ${createMap}
+//   // ${renderAllMarkers(markers)}
+//   // </div>
+//   // `);
 
-  // window.$map = $map;
+//   // window.$map = $map;
 
-  $(document).on("click", "#deleteMarker", function (e) {
-    e.preventDefault();
-    deleteMarker($(this).attr("data-id")).then(() => {
-      const $main = $("#main-content");
-      $main.empty();
-      $map.appendTo($main);
-    });
-  });
-});
+//   $(document).on("click", "#deleteMarker", function (e) {
+//     e.preventDefault();
+//     deleteMarker($(this).attr("data-id")).then(() => {
+//       const $main = $("#main-content");
+//       $main.empty();
+//       $map.appendTo($main);
+//     });
+//   });
+// });
 
 $(() => {
   const $mapWrapper = $(`<div class='map-wrapper'></div>`);
-  const makeMap = (mapId) => {
-    const $map = $(`
-    <h1>My map</h1>
-    <button id="favourite-btn"><i id="favourite-heart" class="fas fa-heart favourited-map"></i></button>
-    ${createMap(mapId)}
-
-  `);
-
-    return $map;
-  };
-
-  window.$mapWrapper = $mapWrapper;
-  window.makeMap = makeMap;
-
-  const $mapId = $(".map-id").attr("data-id");
-
-  $(document).on("click", "#favourite-btn", (event) => {
-    event.preventDefault();
-    const $btn = $("#favourite-heart");
-    const redHeart = "favourited-map";
-    // const $mapId = $(".map-id").attr("data-id");
-
-    if ($($btn).hasClass(redHeart)) {
-      $($btn).removeClass(redHeart);
-      return deleteLike($mapId);
-    }ourites, points
-    // TEST CODE
-    const maps = db.query(`SELECT * FROM maps WHERE id = 1`);
-    const points = db.query(`SELECT * FROM points WHERE map_id = 1`);
-    const userFavourites = db
-
-  getAllMapData($mapId).then((json) => {
+  getAllMapData(mapId).then((json) => {
     const map = json.map;
     const mapPoints = json.mapPoints;
     const mapFavourite = json.mapFavourite;
-    console.log(map, mapPoints,mapFavourite)
-    return
-    // renderButton(map, mapPoints, mapFavourite);
+    renderButton(map, mapPoints, mapFavourite);
+
+    const $map = $(`
+    <h1>${map.title}</h1>
+    <div class='map-heart'>
+      ${createMap(map.id)}
+      <button id="favourite-btn"><i id="favourite-heart" class="fas fa-heart favourited-map"></i></button>
+    </div>
+    <div class='points'>
+      <p>This is a table</p>
+    </div>
+    `);
+
+    return $map;
   });
+
+  window.$mapWrapper = $mapWrapper;
+  window.getAllMapData = getAllMapData;
+
+  // const $mapId = $(".map-id").attr("data-id");
+
+  // $(document).on("click", "#favourite-btn", (event) => {
+  //   event.preventDefault();
+  //   const $btn = $("#favourite-heart");
+  //   const redHeart = "favourited-map";
+  //   // const $mapId = $(".map-id").attr("data-id");
+
+  //   if ($($btn).hasClass(redHeart)) {
+  //     $($btn).removeClass(redHeart);
+  //     return deleteLike($mapId);
+  //   }
+  //   $($btn).addClass(redHeart);
+  //   return addLike($mapId);
+  // });
 });
