@@ -29,14 +29,15 @@ module.exports = (db) => {
   // create a new map in database and adding contributors if there is one.
   router.post("/new", (req, res) => {
     const user = req.body;
+    const userID = req.session.userId;
     const { title, description, emailContributors } = user;
     return db
       .query(
         `
-      INSERT INTO maps (title, description)
-      VALUES ($1, $2)
+      INSERT INTO maps (title, description, owner_id)
+      VALUES ($1, $2, $3)
       RETURNING *`,
-        [title, description]
+        [title, description, userID]
       )
       .then((result) => {
         console.log("result", result.rows[0]);
@@ -85,19 +86,17 @@ module.exports = (db) => {
 
   router.post("/marker/new", (req, res) => {
     const marker = req.body;
-    const mapID = 1;
-    const { title, description, imageURL } = marker;
+    const { title, description, imageURL, lat, lng, mapId } = marker;
     const userID = req.session.userId;
     return db
       .query(
         `
-        INSERT INTO points (user_id, map_id, title, description, img_url)
-        VALUES ($1, $2, $3, $4, $5)
+        INSERT INTO points (user_id, map_id, title, description, img_url, lat, lng)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
         RETURNING *`,
-        [userID, mapID, title, description, imageURL]
+        [userID, mapId, title, description, imageURL, lat, lng]
       )
       .then((result) => {
-        console.log("result", result.rows[0]);
         return res.json({ marker: result.rows[0] });
       })
       .catch((err) => err.message);

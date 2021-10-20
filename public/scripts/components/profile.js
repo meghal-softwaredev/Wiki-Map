@@ -47,7 +47,6 @@ $(() => {
 
   getUser()
   .then(json => {
-    console.log(json);
     userProfile(json.user);
   });
 

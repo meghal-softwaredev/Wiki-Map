@@ -50,7 +50,6 @@ function getUserMaps() {
 }
 
 function setMarker(data) {
-  console.log("network");
   return $.ajax({
     method: "POST",
     url: "api/maps/marker/new",
