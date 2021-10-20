@@ -47,7 +47,7 @@ const createMap = (mapId) => {
       zoom: 9,
       center: firstCenter
     };
-    const map = new google.maps.Map(document.getElementById('map'), options);
+    map = new google.maps.Map(document.getElementById('map'), options);
 
     function addMarker (props) {
 
@@ -109,10 +109,9 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkD
 </div>`;
 };
 
-
 // this is the listing of all the marker under the map
-  const renderAllMarkers = (markers) => {
-   let allMarkers = `
+const renderAllMarkers = (markers) => {
+  let allMarkers = `
    <table class="table">
    <thead>
      <tr>
@@ -125,8 +124,8 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkD
    </thead>
    <tbody>
    `;
-    markers.forEach((mark) => {
-      allMarkers += `
+  markers.forEach((mark) => {
+    allMarkers += `
           <tr>
             <td>${mark.title}</td>
             <td>change this to a img src= ${mark.image}</td>
@@ -139,46 +138,92 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkD
             </td>
           </tr>
           `;
-    });
-    allMarkers +=
-    `</tbody>
+  });
+  allMarkers += `</tbody>
     </table>`;
-    return allMarkers;
-  };
+  return allMarkers;
+};
 
-    $(() => {
-      // const $map = $(`
-      // <div id="showMap">
-      // <h1>we need to put the map title here</h1>
-      // ${createMap}
-      // ${renderAllMarkers(markers)}
-      // </div>
-      // `);
+const createButton = (favouriteId) => {
+  if (favouriteId === "not logged in") {
+    return `<h1>NO LIKES</h1>`;
+  }
 
-      // window.$map = $map;
+  if (!favouriteId) {
+    return `<button id="favourite-btn"><i id="favourite-heart" class="fas fa-heart"></i></button>`;
+  }
+  return `<button id="favourite-btn"><i id="favourite-heart" class="fas fa-heart favourited-map"></i></button>`;
+};
 
-      $(document).on('click', '#deleteMarker', function(e){
-        e.preventDefault();
-        deleteMarker($(this).attr("data-id"))
-        .then(() => {
-          const $main = $("#main-content");
-          $main.empty();
-          $map.appendTo($main);
-        });
-      });
-});
+const createPointsTable = (mapId, pointsId) => {
+  return `<h1>A table for ${mapId} and matching points ${pointsId}</h1>`;
+};
+
+// $(() => {
+//   // const $map = $(`
+//   // <div id="showMap">
+//   // <h1>we need to put the map title here</h1>
+//   // ${createMap}
+//   // ${renderAllMarkers(markers)}
+//   // </div>
+//   // `);
+
+//   // window.$map = $map;
+
+//   $(document).on("click", "#deleteMarker", function (e) {
+//     e.preventDefault();
+//     deleteMarker($(this).attr("data-id")).then(() => {
+//       const $main = $("#main-content");
+//       $main.empty();
+//       $map.appendTo($main);
+//     });
+//   });
+// });
+
+var $mapWrapper = $(`<div class='map-wrapper'></div>`);
+var mapFinal = (mapId) => {
+  return getAllMapData(mapId).then((json) => {
+    const map = json.map;
+    const mapPoints = json.mapPoints;
+    const mapFavourite = json.mapFavourite;
+
+    console.log("getAllMapData json:", map, mapPoints, mapFavourite);
+
+    const $mapTitle = $(`<h1>${map.title}</h1>`);
+
+    console.log("mapFavourite id:", mapFavourite.id);
+
+    const $map = $(`
+      <div class='map-heart'>
+        ${createMap(map.id)}
+        ${createButton(mapFavourite.id)}
+      </div>
+      <div class='points'>
+        ${createPointsTable(map.id, mapPoints.id)}
+      </div>
+  `);
+
+    /// edit delete like
+    $(document).on("click", "#favourite-btn", (event) => {
+      event.preventDefault();
+      console.log("fav button clicked 💖💖💖");
+      const $btn = $("#favourite-heart");
+      const redHeart = "favourited-map";
+      if ($($btn).hasClass(redHeart)) {
+        $($btn).removeClass(redHeart);
+        return deleteLike(map.id);
+      }
+      $($btn).addClass(redHeart);
+      return addLike(map.id);
+    });
+
+    return $map.after($mapTitle);
+  });
+};
 
 $(() => {
-  const $mapWrapper = $(`<div class='map-wrapper'></div>`);
-  const makeMap = (mapId) => {
-    const $map = $(`
-    <h1>My map</h1>
-    ${createMap(mapId)}
-  `);
-   return $map;
-  };
+  mapFinal(mapId);
 
   window.$mapWrapper = $mapWrapper;
-  window.makeMap = makeMap;
 });
 

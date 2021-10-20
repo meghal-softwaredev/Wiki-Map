@@ -24,9 +24,10 @@ $(() => {
         break;
       case "showMap":
         $mapWrapper.empty();
-        const $map = makeMap(options.mapId);
-        $mapWrapper.appendTo($main);
-        $map.appendTo($mapWrapper);
+        mapFinal(options.mapId).then((result) => {
+          result.appendTo($mapWrapper);
+          $mapWrapper.appendTo($main);
+        });
         break;
       case "profile":
         $profile.appendTo($main);
