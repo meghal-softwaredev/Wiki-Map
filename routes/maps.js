@@ -26,7 +26,7 @@ module.exports = (db) => {
       .catch((err) => err.message);
   });
 
-  // create a new map in database and adding contributors if there is one.
+  // create a new map in database
   router.post("/new", (req, res) => {
     const user = req.body;
     const userID = req.session.userId;
@@ -78,10 +78,17 @@ module.exports = (db) => {
     const marker = req.body;
     const { mapId, title, description, imageURL, icon, lat, lng } = marker;
     console.log("imageURl", imageURL, "icon", icon);
+<<<<<<< HEAD
     if (icon === "beach") {
       iconURL =
         "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
     } else if (icon === "park") {
+=======
+    let iconURL;
+    if (icon === 'beach') {
+      iconURL = "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
+    } else if (icon === 'park') {
+>>>>>>> f6ac236ae3aef6832ef8b49dd0a299a54741a34b
       iconURL = "assets/park.png";
     } else if (icon === "restaurant") {
       iconURL = "assets/restaurant.jpeg";
@@ -100,15 +107,15 @@ module.exports = (db) => {
       )
       .then((result) => {
         console.log(result.rows[0]);
-        return res.json({ marker: result.rows[0] });
+
       })
       .catch((err) => err.message);
   });
 
   router.post("/marker/edit", (req, res) => {
     const update = {};
-    const id = req.body.markerId;
-    let info = req.body.newData;
+    const id = req.body.data.id;
+    let info = req.body.data.update;
     info = decodeURI(info);
     info = info.split("&");
     info.forEach((main) => {

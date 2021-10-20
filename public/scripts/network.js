@@ -53,7 +53,7 @@ function setMarker(data) {
   return $.ajax({
     method: "POST",
     url: "api/maps/marker/new",
-    data,
+    data
   });
 }
 
@@ -96,10 +96,10 @@ function addContributors(userId, mapId) {
   });
 }
 
-function editMarker(markerId, newData) {
+function editMarker(data) {
   return $.ajax({
     method: "POST",
     url: "api/maps/marker/edit",
-    data: {markerId, newData}
+    data: {data}
   });
 }
