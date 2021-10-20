@@ -78,17 +78,11 @@ module.exports = (db) => {
     const marker = req.body;
     const { mapId, title, description, imageURL, icon, lat, lng } = marker;
     console.log("imageURl", imageURL, "icon", icon);
-<<<<<<< HEAD
+    let iconURL;
     if (icon === "beach") {
       iconURL =
         "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
     } else if (icon === "park") {
-=======
-    let iconURL;
-    if (icon === 'beach') {
-      iconURL = "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
-    } else if (icon === 'park') {
->>>>>>> f6ac236ae3aef6832ef8b49dd0a299a54741a34b
       iconURL = "assets/park.png";
     } else if (icon === "restaurant") {
       iconURL = "assets/restaurant.jpeg";
@@ -107,7 +101,6 @@ module.exports = (db) => {
       )
       .then((result) => {
         console.log(result.rows[0]);
-
       })
       .catch((err) => err.message);
   });
