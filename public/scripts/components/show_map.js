@@ -118,10 +118,9 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkD
 </div>`;
 };
 
-
 // this is the listing of all the marker under the map
-  const renderAllMarkers = (markers) => {
-   let allMarkers = `
+const renderAllMarkers = (markers) => {
+  let allMarkers = `
    <table class="table">
    <thead>
      <tr>
@@ -133,8 +132,8 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkD
    </thead>
    <tbody>
    `;
-    markers.forEach((mark) => {
-      allMarkers += `
+  markers.forEach((mark) => {
+    allMarkers += `
           <tr>
             <td>${mark.title}</td>
             <td>change this to a img src= ${mark.image}</td>
@@ -146,37 +145,32 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkD
             </td>
           </tr>
           `;
-    });
-    allMarkers +=
-    `</tbody>
+  });
+  allMarkers += `</tbody>
     </table>`;
-    return allMarkers;
-  };
+  return allMarkers;
+};
 
-    $(() => {
-      // const $map = $(`
-      // <div id="showMap">
-      // <h1>we need to put the map title here</h1>
-      // ${createMap}
-      // ${renderAllMarkers(markers)}
-      // </div>
-      // `);
+$(() => {
+  // const $map = $(`
+  // <div id="showMap">
+  // <h1>we need to put the map title here</h1>
+  // ${createMap}
+  // ${renderAllMarkers(markers)}
+  // </div>
+  // `);
 
-      // window.$map = $map;
+  // window.$map = $map;
 
-      $(document).on('click', '#deleteMarker', function(e){
-        e.preventDefault();
-        deleteMarker($(this).attr("data-id"))
-        .then(() => {
-          const $main = $("#main-content");
-          $main.empty();
-          $map.appendTo($main);
-        });
-      });
+  $(document).on("click", "#deleteMarker", function (e) {
+    e.preventDefault();
+    deleteMarker($(this).attr("data-id")).then(() => {
+      const $main = $("#main-content");
+      $main.empty();
+      $map.appendTo($main);
+    });
+  });
 });
-
-
-
 
 $(() => {
   const $mapWrapper = $(`<div class='map-wrapper'></div>`);
