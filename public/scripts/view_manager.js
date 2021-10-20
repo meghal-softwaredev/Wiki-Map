@@ -5,7 +5,6 @@ $(() => {
 
 
   window.views_manager.show = function (item, options) {
-    console.log("in the view manager", item)
     $loginPage.detach();
     $registerPage.detach();
     $mapWrapper.detach();

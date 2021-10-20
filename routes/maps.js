@@ -130,7 +130,7 @@ module.exports = (db) => {
       WHERE id = $1`,
       [id, title, description, image])
       .then(()=> {
-        console.log("in the then")
+        return "get me out";
       })
       .catch((err) => err.message);
   });
@@ -144,7 +144,9 @@ module.exports = (db) => {
         mapId,
         userId,
       ])
-      .catch((err) => err.message);
+      .catch((err) => {
+        console.log("finito miriano")
+        return err.message});
   });
 
   // add like

@@ -194,13 +194,14 @@ var mapFinal = (mapId) => {
       .then(json => {
         console.log("adding cotrib")
         addContributors(json.user.id, map.id)
-        .then(() => {
-          deleteMarker($(this).attr("data-id"))
-          .then(() => {
-            $('#main-content').empty();
-            views_manager.show("showMap", { mapId: map.id });
-          });
-        })
+      })
+      .then(() => {
+        deleteMarker($(this).attr("data-id"))
+      })
+      .then(() => {
+        console.log("wtf")
+        $('#main-content').empty();
+        views_manager.show("showMap", { mapId: map.id });
       });
     });
 
@@ -237,19 +238,19 @@ var mapFinal = (mapId) => {
     $(document).on('click', '#saveEditMarker', function(e){
       e.preventDefault();
       let data = {update: $('#saving').serialize(), id: $(this).attr("data-id")};
-      editMarker(data)
+      getUser()
+      .then((json) => {
+        console.log('add contri', json)
+        addContributors(json.user.id, map.id)
+      })
       .then(() => {
-        console.log("on get")
-        getUser()
-        .then((json) => {
-          console.log('add contri', json)
-          addContributors(json.user.id, map.id)
-          .then(() => {
-            console.log("reload")
-            $('#main-content').empty();
-            views_manager.show("showMap", { mapId: map.id })
-          });
-        })
+        console.log("on edit")
+        editMarker(data)
+      })
+      .then(() => {
+        console.log("reload")
+        $('#main-content').empty();
+        views_manager.show("showMap", { mapId: map.id })
       });
     });
 
