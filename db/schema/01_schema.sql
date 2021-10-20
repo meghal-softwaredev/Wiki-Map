@@ -43,5 +43,7 @@ CREATE TABLE points (
   map_id INTEGER REFERENCES maps(id) ON DELETE CASCADE,
   title VARCHAR(255),
   description VARCHAR(255),
-  img_url VARCHAR(255) NOT NULL
+  img_url VARCHAR(255) NOT NULL,
+  lat Decimal(8,6),
+  lng Decimal(9,6)
 );

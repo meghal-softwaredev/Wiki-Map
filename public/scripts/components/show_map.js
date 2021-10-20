@@ -8,60 +8,48 @@
 */
 
 // these are the main variable
-const markers = [
-  {
-    id: 1,
-    lat: 45.5017,
-    lng: -73.5673,
-    title: "hello",
-    description: "try 1",
-    image: "thats a link",
-  },
-  {
-    id: 2,
-    lat: 45.693,
-    lng: -73.6331,
-    title: "haloa",
-    description: "try 2",
-    image: "thats a linksss",
-  },
-];
+const markers = [];
 let firstCenter = { lat: 45.5017, lng: -73.5673 };
 
 // this is the HTML ton include the map and every marker with each of their content
 const createMap = (mapId) => {
   return `
-  <h1>${mapId}</h1>
-<div id="map" class="map" style="height:400px; width:600px;"></div>
-<section class="new-marker" style="display: none">
-  <form id="new-marker-form">
-    <input name="title" id="marker-title" placeholder="Marker Title" />
-    <textarea name="description" id="marker-description" placeholder="Marker Description"></textarea>
-    <input name="imageURL" id="marker-image" placeholder="Marker Image URL" />
-    <button id="marker-btn">Create Marker</button>
-  </form>
-</section>
+  <div id="map" class="map" style="height:400px; width:600px;"></div>
+  <section class="new-marker" style="display: none">
+    <form id="new-marker-form">
+      <input name="title" id="marker-title" placeholder="Marker Title" />
+      <textarea name="description" id="marker-description" placeholder="Marker Description"></textarea>
+      <input name="imageURL" id="marker-image" placeholder="Marker Image URL" />
+      <button id="marker-btn">Create Marker</button>
+    </form>
+  </section>
 
+  <script>
+  navigator.geolocation.getCurrentPosition(showPosition);
 
-<script>
-navigator.geolocation.getCurrentPosition(showPosition);
-
-function showPosition(position) {
-  firstCenter = {lat:position.coords.latitude, lng:position.coords.longitude};
-}
+  function showPosition(position) {
+    firstCenter = {lat:position.coords.latitude, lng:position.coords.longitude};
+  }
   let map;
 
   function initMap() {
     const options = {
-      zoom:15,
+      zoom: 9,
       center: firstCenter
     };
-     const map = new google.maps.Map(document.getElementById('map'), options);
+    const map = new google.maps.Map(document.getElementById('map'), options);
+
+    function renderAllMarkers(markers) {
+      markers.forEach(marker => {
+          console.log("Title" , marker.title ,"Description" , marker.description);
+      });
+    }
 
     function addMarker (props) {
-      const content = "<h2>" + props.title + "</h2>";
+      const content = "<h2>" + props.title + "</h2>" + "<br /><h2>" + props.description + "</h2>";
+      const coords = new google.maps.LatLng(props.lat, props.lng);
       const marker = new google.maps.Marker({
-        position: props.coords,
+        position: coords,
         map,
         icon: props.icon,
         animation: google.maps.Animation.DROP,
@@ -73,44 +61,38 @@ function showPosition(position) {
       marker.addListener('click', function (){
         infoWindow.open(map, marker)
       });
-      markers.push(marker);
+      markers.push(props);
+      console.log(markers);
+      renderAllMarkers(markers);
     }
-    markers.forEach(mark => {
-      addMarker(mark)
-    })
 
-    map.addListener('click', event => {
-      //form SlideDown
+    function setMarkerInfo(marker){
+      const id = marker.id;
+      const title = marker.title;
+      const description = marker.description;
+      const icon = marker.img_url;
+      const lat = marker.lat;
+      const lng = marker.lng;
+      const props = { id, title, description, icon, lat, lng };
+      addMarker(props);
+    }
+    map.addListener('click', event1 => {
       $('.new-marker').show().slideDown('slow', () => {
         $('#marker-title').focus();
-        $('#new-marker-form').on("submit", (event) => {
-
+        $('#new-marker-form').on("submit", (event2) => {
           event.preventDefault();
-          const data = $('#new-marker-form').serialize();
-          console.log("", data);
+          const lat = event1.latLng.lat();
+          const lng = event1.latLng.lng();
+          const mapId1 = ${mapId};
+          const data = $('#new-marker-form').serialize() + '&lat=' + JSON.stringify(lat) + '&lng=' + JSON.stringify(lng) + '&mapId=' + JSON.stringify(mapId1);
           setMarker(data)
           .then(json => {
-
+            setMarkerInfo(json.marker);
           });
           $('.new-marker').show().slideUp();
-          });
+        });
+      });
     });
-
-      const title = "test";
-      const description = "Hello";
-      const icon = "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
-      const coords = event.latLng;
-      const props = {
-        title,
-        description,
-        icon,
-        coords
-      }
-      addMarker(props);
-    });
-    document
-    .getElementById("delete-markers")
-    .addEventListener("click", deleteMarkers);
   }
 </script>
 <script
