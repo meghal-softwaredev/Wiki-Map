@@ -83,17 +83,29 @@ module.exports = (db) => {
 
   router.post("/marker/new", (req, res) => {
     const marker = req.body;
-    const { title, description, imageURL, lat, lng, mapId } = marker;
+    const { mapId, title, description, imageURL, icon, lat, lng} = marker;
+    console.log("imageURl", imageURL, "icon", icon);
+    if (icon === 'beach') {
+      iconURL = "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
+    } else if (icon === 'park') {
+      iconURL = "assets/park.png";
+    } else if (icon === 'restaurant') {
+      iconURL = "assets/restaurant.jpeg";
+    } else if (icon === 'movie') {
+      iconURL = "assets/movie.jpeg";
+    }
+
     const userID = req.session.userId;
     return db
       .query(
         `
-        INSERT INTO points (user_id, map_id, title, description, img_url, lat, lng)
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        INSERT INTO points (user_id, map_id, title, description, img_url, icon_url, lat, lng)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
         RETURNING *`,
-        [userID, mapId, title, description, imageURL, lat, lng]
+        [userID, mapId, title, description, imageURL, iconURL, lat, lng]
       )
       .then((result) => {
+        console.log(result.rows[0]);
         return res.json({ marker: result.rows[0] });
       })
       .catch((err) => err.message);

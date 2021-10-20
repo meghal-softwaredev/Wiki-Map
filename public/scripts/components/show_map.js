@@ -14,14 +14,24 @@ let firstCenter = { lat: 45.5017, lng: -73.5673 };
 // this is the HTML ton include the map and every marker with each of their content
 const createMap = (mapId) => {
   return `
+  <div id="floating-panel">
+    <input id="delete-markers" type="button" value="Delete Markers" />
+  </div>
   <div id="map" class="map" style="height:400px; width:600px;"></div>
   <section class="new-marker" style="display: none">
     <form id="new-marker-form">
       <input name="title" id="marker-title" placeholder="Marker Title" />
       <textarea name="description" id="marker-description" placeholder="Marker Description"></textarea>
       <input name="imageURL" id="marker-image" placeholder="Marker Image URL" />
+      <select name="icon" id="icon">
+        <option value="beach">Beach</option>
+        <option value="park">Parks</option>
+        <option value="restaurant">Restaurant</option>
+        <option value="movie">Movie</option>
+      </select>
       <button id="marker-btn">Create Marker</button>
     </form>
+
   </section>
 
   <script>
@@ -39,14 +49,10 @@ const createMap = (mapId) => {
     };
     const map = new google.maps.Map(document.getElementById('map'), options);
 
-    function renderAllMarkers(markers) {
-      markers.forEach(marker => {
-          console.log("Title" , marker.title ,"Description" , marker.description);
-      });
-    }
-
     function addMarker (props) {
-      const content = "<h2>" + props.title + "</h2>" + "<br /><h2>" + props.description + "</h2>";
+
+      const content = "<p>" + props.title + "</p>" + "<br /><p>" + props.description + "</p>" + '<a href="#"/>' + props.image + '</a>';
+
       const coords = new google.maps.LatLng(props.lat, props.lng);
       const marker = new google.maps.Marker({
         position: coords,
@@ -63,17 +69,17 @@ const createMap = (mapId) => {
       });
       markers.push(props);
       console.log(markers);
-      renderAllMarkers(markers);
     }
 
     function setMarkerInfo(marker){
       const id = marker.id;
       const title = marker.title;
       const description = marker.description;
-      const icon = marker.img_url;
+      const image = marker.img_url;
+      const icon = marker.icon_url;
       const lat = marker.lat;
       const lng = marker.lng;
-      const props = { id, title, description, icon, lat, lng };
+      const props = { id, title, description, image, icon, lat, lng };
       addMarker(props);
     }
     map.addListener('click', event1 => {
@@ -85,9 +91,12 @@ const createMap = (mapId) => {
           const lng = event1.latLng.lng();
           const mapId1 = ${mapId};
           const data = $('#new-marker-form').serialize() + '&lat=' + JSON.stringify(lat) + '&lng=' + JSON.stringify(lng) + '&mapId=' + JSON.stringify(mapId1);
+          console.log('data', data);
           setMarker(data)
           .then(json => {
+            console.log("inside setmarker client")
             setMarkerInfo(json.marker);
+            console.log("setmarker", json.marker);
           });
           $('.new-marker').show().slideUp();
         });
@@ -110,6 +119,7 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkD
        <th scope="col">Title</th>
        <th scope="col">Image</th>
        <th scope="col">Description</th>
+       <th scope="col">Edit</th>
        <th scope="col">Delete</th>
      </tr>
    </thead>
@@ -124,6 +134,7 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkD
             <td>
             <form>
               <button type="Delete" id="deleteMarker" data-id="${mark.id}">Delete</button>
+              <button type="Edit" id="editMarker" data-id="${mark.id}">Edit</button>
             </form>
             </td>
           </tr>
@@ -157,21 +168,17 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkD
       });
 });
 
-
-
-
 $(() => {
   const $mapWrapper = $(`<div class='map-wrapper'></div>`);
   const makeMap = (mapId) => {
     const $map = $(`
     <h1>My map</h1>
     ${createMap(mapId)}
-
   `);
-
-    return $map;
+   return $map;
   };
 
   window.$mapWrapper = $mapWrapper;
   window.makeMap = makeMap;
 });
+
