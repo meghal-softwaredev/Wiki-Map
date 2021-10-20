@@ -135,14 +135,13 @@ const renderAllMarkers = (markers) => {
   return allMarkers;
 };
 
-///// test with all routes ///////////
-// const renderButton = (map, mapPoints, mapFavourites) => {
-//   console.log({ map });
-//   console.log({ mapPoints });
-//   console.log({ mapFavourites });
+const createButton = (mapId, favId) => {
+  return `<h1>Map ${mapId} and matching fav id ${favId}</h1>`;
+};
 
-//   return;
-// };
+const createPointsTable = (mapId, pointsId) => {
+  return `<h1>A table for ${mapId} and matching points ${pointsId}</h1>`;
+};
 
 // $(() => {
 //   // const $map = $(`
@@ -173,21 +172,24 @@ $(() => {
     const mapFavourite = json.mapFavourite;
     renderButton(map, mapPoints, mapFavourite);
 
+    const $mapTitle = $(`<h1>${map.title}</h1>`);
+
     const $map = $(`
-    <h1>${map.title}</h1>
     <div class='map-heart'>
       ${createMap(map.id)}
-      <button id="favourite-btn"><i id="favourite-heart" class="fas fa-heart favourited-map"></i></button>
+      ${createButton(map.id, mapFavourite.id)}
     </div>
     <div class='points'>
-      <p>This is a table</p>
+      ${createPointsTable(map.id, mapPoints.id)}
     </div>
     `);
+    console.log({ $map });
 
-    return $map;
+    return $map.after($mapTitle);
   });
 
   window.$mapWrapper = $mapWrapper;
+  // window.$map = $map;
   window.getAllMapData = getAllMapData;
 
   // const $mapId = $(".map-id").attr("data-id");
