@@ -26,7 +26,7 @@ module.exports = (db) => {
       .catch((err) => err.message);
   });
 
-  // create a new map in database and adding contributors if there is one.
+  // create a new map in database
   router.post("/new", (req, res) => {
     const user = req.body;
     const userID = req.session.userId;
@@ -86,6 +86,7 @@ module.exports = (db) => {
     const marker = req.body;
     const { mapId, title, description, imageURL, icon, lat, lng} = marker;
     console.log("imageURl", imageURL, "icon", icon);
+    let iconURL;
     if (icon === 'beach') {
       iconURL = "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
     } else if (icon === 'park') {
@@ -107,15 +108,15 @@ module.exports = (db) => {
       )
       .then((result) => {
         console.log(result.rows[0]);
-        return res.json({ marker: result.rows[0] });
+
       })
       .catch((err) => err.message);
   });
 
   router.post("/marker/edit", (req, res) => {
     const update = {};
-    const id = req.body.markerId;
-    let info = req.body.newData;
+    const id = req.body.data.id;
+    let info = req.body.data.update;
     info = decodeURI(info);
     info = info.split("&");
     info.forEach((main) => {
@@ -126,11 +127,10 @@ module.exports = (db) => {
     return db.query(`
       UPDATE points
       SET title = $2, description = $3, img_url = $4
-      WHERE id = $1
-      RETURNING *`,
+      WHERE id = $1`,
       [id, title, description, image])
-      .then((result) => {
-        console.log("result", result.rows[0]);
+      .then(()=> {
+        console.log("in the then")
       })
       .catch((err) => err.message);
   });

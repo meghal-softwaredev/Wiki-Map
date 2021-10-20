@@ -8,15 +8,12 @@
 */
 
 // these are the main variable
-const markers = [{id:1}, {id:2}, {id:3}, {id:4}];
+const markers = [];
 let firstCenter = { lat: 45.5017, lng: -73.5673 };
 
 // this is the HTML ton include the map and every marker with each of their content
 const createMap = (mapId) => {
   return `
-  <div id="floating-panel">
-    <input id="delete-markers" type="button" value="Delete Markers" />
-  </div>
   <div id="map" class="map" style="height:400px; width:600px;"></div>
   <section class="new-marker" style="display: none">
     <form id="new-marker-form">
@@ -68,7 +65,7 @@ const createMap = (mapId) => {
         infoWindow.open(map, marker)
       });
       markers.push(props);
-      console.log(markers);
+      console.log("markers in map: ",markers);
     }
 
     function setMarkerInfo(marker){
@@ -110,19 +107,19 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkD
 };
 
 // this is the listing of all the marker under the map
-  const listAllMarkers = (markers) => {
-   let allMarkers = `
-   <table class="table">
-   <thead>
-     <tr>
-       <th scope="col">Title</th>
-       <th scope="col">Image</th>
-       <th scope="col">Description</th>
-       <th scope="col">Edit</th>
-       <th scope="col">Delete</th>
-     </tr>
-   </thead>
-   <tbody>
+const listAllMarkers = (markers) => {
+  let allMarkers = `
+    <table class="table">
+       <thead>
+          <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Image</th>
+            <th scope="col">Description</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
+          </tr>
+        </thead>
+      <tbody>
    `;
     markers.forEach((mark) => {
       allMarkers += `
@@ -143,8 +140,7 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkD
           </tr>
           `;
   });
-  allMarkers += `</tbody>
-    </table>`;
+  allMarkers += `</tbody></table>`;
   return allMarkers;
 };
 
@@ -159,30 +155,6 @@ const createButton = (favouriteId) => {
   return `<button id="favourite-btn"><i id="favourite-heart" class="fas fa-heart favourited-map"></i></button>`;
 };
 
-const createPointsTable = (mapId, pointsId) => {
-  return `<h1>A table for ${mapId} and matching points ${pointsId}</h1>`;
-};
-
-// $(() => {
-//   // const $map = $(`
-//   // <div id="showMap">
-//   // <h1>we need to put the map title here</h1>
-//   // ${createMap}
-//   // ${renderAllMarkers(markers)}
-//   // </div>
-//   // `);
-
-//   // window.$map = $map;
-
-//   $(document).on("click", "#deleteMarker", function (e) {
-//     e.preventDefault();
-//     deleteMarker($(this).attr("data-id")).then(() => {
-//       const $main = $("#main-content");
-//       $main.empty();
-//       $map.appendTo($main);
-//     });
-//   });
-// });
 
 var $mapWrapper = $(`<div class='map-wrapper'></div>`);
 var mapFinal = (mapId) => {
@@ -190,20 +162,14 @@ var mapFinal = (mapId) => {
     const map = json.map;
     const mapPoints = json.mapPoints;
     const mapFavourite = json.mapFavourite;
-
-    console.log("getAllMapData json:", map, mapPoints, mapFavourite);
-
     const $mapTitle = $(`<h1>${map.title}</h1>`);
-
-    console.log("mapFavourite id:", mapFavourite.id);
-
     const $map = $(`
       <div class='map-heart'>
         ${createMap(map.id)}
         ${createButton(mapFavourite.id)}
       </div>
       <div class='points'>
-        ${createPointsTable(map.id, mapPoints.id)}
+        ${listAllMarkers(mapPoints)}
       </div>
   `);
 
@@ -221,64 +187,72 @@ var mapFinal = (mapId) => {
       return addLike(map.id);
     });
 
+
+    $(document).on('click', '#deleteMarker', function(e){
+      e.preventDefault();
+      getUser()
+      .then(json => {
+        console.log("adding cotrib")
+        addContributors(json.user.id, map.id)
+        .then(() => {
+          deleteMarker($(this).attr("data-id"))
+          .then(() => {
+            $('#main-content').empty();
+            views_manager.show("showMap", { mapId: map.id });
+          });
+        })
+      });
+    });
+
+    $(document).on('click', '#editMarker', function(e){
+      e.preventDefault();
+      const target = `#marker${$(this).attr("data-id")}`;
+      const idOfPoint = $(this).attr("data-id");
+      let titre;
+      let desc;
+      let img;
+      for (let i = 0; i < mapPoints.length; i++) {
+        if (mapPoints[i].id === Number(idOfPoint)) {
+          desc = mapPoints[i].description;
+          titre = mapPoints[i].title;
+          img = mapPoints[i].img_url;
+        }
+      }
+      $(target).html(`
+              <form id="saving">
+                <td><input required form="saving" type="text" id="title" name="title" value="${titre}"></td>
+                <td><input required form="saving" type="text" id="image" name="image" value="${img}"></td>
+                <td><input required form="saving" type="text" id="description" name="description" value="${desc}"></td>
+                <td>
+                  <button form="saving" type="submit" id="saveEditMarker" data-id="${$(this).attr("data-id")}">Save</button>
+                </td>
+              </form>
+              <td>
+                <form>
+                  <button type="Delete" id="deleteMarker" data-id="${$(this).attr("data-id")}">Delete</button>
+                </form>
+              </td>`);
+    });
+
+    $(document).on('click', '#saveEditMarker', function(e){
+      e.preventDefault();
+      let data = {update: $('#saving').serialize(), id: $(this).attr("data-id")};
+      editMarker(data)
+      .then(() => {
+        console.log("on get")
+        getUser()
+        .then((json) => {
+          console.log('add contri', json)
+          addContributors(json.user.id, map.id)
+          .then(() => {
+            console.log("reload")
+            $('#main-content').empty();
+            views_manager.show("showMap", { mapId: map.id })
+          });
+        })
+      });
+    });
+
     return $map.after($mapTitle);
   });
 };
-
-$(() => {
-  mapFinal(mapId);
-
-  window.$mapWrapper = $mapWrapper;
-  window.makeMap = makeMap;
-
-  $(document).on('click', '#deleteMarker', function(e){
-    e.preventDefault();
-    getUser()
-    .then(json => {
-      addContributors(json.user.id, mapId) // need to setup that mapId var
-      deleteMarker($(this).attr("data-id"))
-      .then(() => {
-        const $main = $("#main-content");
-        $main.empty();
-        window.makeMap = makeMap; // not sure how to call the page "reload", i think it can wotrk that way but need the data to be sure(see how it act)
-      });
-    });
-  });
-
-  $(document).on('click', '#editMarker', function(e){
-    e.preventDefault();
-    const target = `#marker${$(this).attr("data-id")}`
-    $(target).html(`
-            <form id="saving">
-              <td><input required form="saving" type="text" id="title" name="title" value="the original title"></td>
-              <td><input required form="saving" type="text" id="image" name="image" value="the original img link"></td>
-              <td><input required form="saving" type="text" id="description" name="description" value="the original desc"></td>
-              <td>
-                <button form="saving" type="submit" id="saveEditMarker" data-id="${$(this).attr("data-id")}">Save</button>
-              </td>
-            </form>
-            <td>
-              <form>
-                <button type="Delete" id="deleteMarker" data-id="${$(this).attr("data-id")}">Delete</button>
-              </form>
-            </td>`);
-  });
-
-  $(document).on('click', '#saveEditMarker', function(e){
-    e.preventDefault();
-    let data = $('#saving').serialize();
-    getUser()
-    .then(json => {
-      editMarker($(this).attr("data-id"), data);
-      addContributors(json.user.id, mapId) // need to setup that mapId var
-      .then(() => {
-        const $main = $("#main-content");
-        $main.empty();
-        window.makeMap = makeMap; // not sure how to call the page "reload", i think it can wotrk that way but need the data to be sure(see how it act)
-      });
-    });
-  });
-
-
-});
-
