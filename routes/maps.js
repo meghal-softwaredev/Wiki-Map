@@ -167,18 +167,27 @@ module.exports = (db) => {
       [userId, mapId]
     );
 
+    console.log("Points:", points);
+
     // if not logged in, only show map and points data
     if (!userId) {
-      return db
-        .query(`SELECT * FROM maps WHERE id = $1`, [mapId])
-        .then((result) => {
-          return res.json({
-            map: result.rows[0],
-            mapPoints: {},
-            mapFavourite: { id: "not logged in" },
-          });
-        })
-        .catch((err) => err.message);
+      Promise.all([map, points]).then((result) => {
+        return res.json({
+          map: result[0].rows[0],
+          mapPoints: result[1].rows,
+          mapFavourite: { id: "not logged in" },
+        });
+      });
+      // return db
+      //   .query(`SELECT * FROM maps WHERE id = $1`, [mapId])
+      //   .then((result) => {
+      //     return res.json({
+      //       map: result.rows[0],
+      //       mapPoints: {},
+      //       mapFavourite: { id: "not logged in" },
+      //     });
+      //   })
+      //   .catch((err) => err.message);
     }
 
     Promise.all([map, points, favourite]).then((result) => {

@@ -8,11 +8,11 @@
 */
 
 // these are the main variable
-const markers = [{id:1}, {id:2}, {id:3}, {id:4}];
+const markers = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
 let firstCenter = { lat: 45.5017, lng: -73.5673 };
 
 // this is the HTML ton include the map and every marker with each of their content
-const createMap = (mapId) => {
+const createMap = (mapId, pointer) => {
   return `
   <div id="floating-panel">
     <input id="delete-markers" type="button" value="Delete Markers" />
@@ -67,6 +67,9 @@ const createMap = (mapId) => {
       marker.addListener('click', function (){
         infoWindow.open(map, marker)
       });
+      //////////////////////////////////////////////////////////////////////////////
+      console.log({markers});
+      markers.concat(pointers); 
       markers.push(props);
       console.log(markers);
     }
@@ -91,12 +94,12 @@ const createMap = (mapId) => {
           const lng = event1.latLng.lng();
           const mapId1 = ${mapId};
           const data = $('#new-marker-form').serialize() + '&lat=' + JSON.stringify(lat) + '&lng=' + JSON.stringify(lng) + '&mapId=' + JSON.stringify(mapId1);
-          console.log('data', data);
+          // console.log('data', data);
           setMarker(data)
           .then(json => {
-            console.log("inside setmarker client")
+            // console.log("inside setmarker client")
             setMarkerInfo(json.marker);
-            console.log("setmarker", json.marker);
+            //console.log("setmarker", json.marker);
           });
           $('.new-marker').show().slideUp();
         });
@@ -110,8 +113,8 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkD
 };
 
 // this is the listing of all the marker under the map
-  const listAllMarkers = (markers) => {
-   let allMarkers = `
+const listAllMarkers = (markers) => {
+  let allMarkers = `
    <table class="table">
    <thead>
      <tr>
@@ -124,8 +127,8 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkD
    </thead>
    <tbody>
    `;
-    markers.forEach((mark) => {
-      allMarkers += `
+  markers.forEach((mark) => {
+    allMarkers += `
           <tr id="marker${mark.id}">
             <td>${mark.title}</td>
             <td><img src="${mark.image}"></td>
@@ -149,6 +152,7 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkD
 };
 
 const createButton = (favouriteId) => {
+  console.log(favouriteId);
   if (favouriteId === "not logged in") {
     return `<h1>NO LIKES</h1>`;
   }
@@ -200,7 +204,7 @@ var mapFinal = (mapId) => {
     const $map = $(`
       <div class='map-heart'>
         ${createMap(map.id)}
-        ${createButton(mapFavourite.id)}
+        ${createButton(mapFavourite.id, mapPoints)}
       </div>
       <div class='points'>
         ${createPointsTable(map.id, mapPoints.id)}
@@ -213,6 +217,7 @@ var mapFinal = (mapId) => {
       console.log("fav button clicked 💖💖💖");
       const $btn = $("#favourite-heart");
       const redHeart = "favourited-map";
+
       if ($($btn).hasClass(redHeart)) {
         $($btn).removeClass(redHeart);
         return deleteLike(map.id);
@@ -229,15 +234,12 @@ $(() => {
   mapFinal(mapId);
 
   window.$mapWrapper = $mapWrapper;
-  window.makeMap = makeMap;
 
-  $(document).on('click', '#deleteMarker', function(e){
+  $(document).on("click", "#deleteMarker", function (e) {
     e.preventDefault();
-    getUser()
-    .then(json => {
-      addContributors(json.user.id, mapId) // need to setup that mapId var
-      deleteMarker($(this).attr("data-id"))
-      .then(() => {
+    getUser().then((json) => {
+      addContributors(json.user.id, mapId); // need to setup that mapId var
+      deleteMarker($(this).attr("data-id")).then(() => {
         const $main = $("#main-content");
         $main.empty();
         window.makeMap = makeMap; // not sure how to call the page "reload", i think it can wotrk that way but need the data to be sure(see how it act)
@@ -245,40 +247,40 @@ $(() => {
     });
   });
 
-  $(document).on('click', '#editMarker', function(e){
+  $(document).on("click", "#editMarker", function (e) {
     e.preventDefault();
-    const target = `#marker${$(this).attr("data-id")}`
+    const target = `#marker${$(this).attr("data-id")}`;
     $(target).html(`
             <form id="saving">
               <td><input required form="saving" type="text" id="title" name="title" value="the original title"></td>
               <td><input required form="saving" type="text" id="image" name="image" value="the original img link"></td>
               <td><input required form="saving" type="text" id="description" name="description" value="the original desc"></td>
               <td>
-                <button form="saving" type="submit" id="saveEditMarker" data-id="${$(this).attr("data-id")}">Save</button>
+                <button form="saving" type="submit" id="saveEditMarker" data-id="${$(
+                  this
+                ).attr("data-id")}">Save</button>
               </td>
             </form>
             <td>
               <form>
-                <button type="Delete" id="deleteMarker" data-id="${$(this).attr("data-id")}">Delete</button>
+                <button type="Delete" id="deleteMarker" data-id="${$(this).attr(
+                  "data-id"
+                )}">Delete</button>
               </form>
             </td>`);
   });
 
-  $(document).on('click', '#saveEditMarker', function(e){
+  $(document).on("click", "#saveEditMarker", function (e) {
     e.preventDefault();
-    let data = $('#saving').serialize();
-    getUser()
-    .then(json => {
+    let data = $("#saving").serialize();
+    getUser().then((json) => {
       editMarker($(this).attr("data-id"), data);
       addContributors(json.user.id, mapId) // need to setup that mapId var
-      .then(() => {
-        const $main = $("#main-content");
-        $main.empty();
-        window.makeMap = makeMap; // not sure how to call the page "reload", i think it can wotrk that way but need the data to be sure(see how it act)
-      });
+        .then(() => {
+          const $main = $("#main-content");
+          $main.empty();
+          window.makeMap = makeMap; // not sure how to call the page "reload", i think it can wotrk that way but need the data to be sure(see how it act)
+        });
     });
   });
-
-
 });
-
