@@ -47,9 +47,9 @@ module.exports = (db) => {
 
   // Show all maps
   router.get("/all", (req, res) => {
-    const userID = req.session.userId;
+    const userId = req.session.userId;
 
-    if (!userID) {
+    if (!userId) {
       return db
         .query(`SELECT * FROM maps`)
         .then((result) => {
@@ -62,7 +62,7 @@ module.exports = (db) => {
 
     // const userFavourites = db.query(
     //   `SELECT * FROM favourites WHERE user_id = $1`,
-    //   [userID]
+    //   [userId]
     // );
     // TEST CODE
     const userFavourites = db.query(
@@ -105,7 +105,7 @@ module.exports = (db) => {
 
   // delete like
   router.post("/like/delete", (req, res) => {
-    const userID = req.session.userId;
+    const userId = req.session.userId;
     const mapId = req.body.mapId;
     return (
       db
@@ -113,7 +113,7 @@ module.exports = (db) => {
         .query(`DELETE FROM favourites WHERE map_id = 1 AND user_id = 2`)
         // .query(`DELETE FROM favourites WHERE map_id = $1 AND user_id = $2`, [
         //   mapId,
-        //   userID,
+        //   userId,
         // ])
         .catch((err) => err.message)
     );
@@ -121,15 +121,18 @@ module.exports = (db) => {
 
   // add like
   router.post("/like/add", (req, res) => {
-    const userID = req.session.userId;
+    const userId = req.session.userId;
     const mapId = req.body.mapId;
     return (
       db
         // TEST CODE
-        .query(`DELETE FROM favourites WHERE map_id = 1 AND user_id = 2`)
-        // .query(`DELETE FROM favourites WHERE map_id = $1 AND user_id = $2`, [
-        //   mapId,
-        //   userID,
+        .query(
+          `INSERT INTO favourites (user_id, map_id)
+        VALUES (3,1);
+        `
+        )
+        // .query(`INSERT INTO favourites (user_id, map_id) VALUES ($1, $2)`, [
+        //  userId, mapId
         // ])
         .catch((err) => err.message)
     );

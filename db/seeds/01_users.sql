@@ -1,5 +1,5 @@
 INSERT INTO users (name, email, password) 
-VALUES ('Angelica Anderson', 'angelica@gmail.com', 'password'), ('Billy Bob', 'billy@gmail.com', 'password');
+VALUES ('Angelica Anderson', 'angelica@gmail.com', 'password'), ('Billy Bob', 'billy@gmail.com', 'password'), ('Cathy Cat', 'cathy@gmail.com', '123');
 
 INSERT INTO maps (owner_id, title, description) 
 VALUES (1, 'parks', 'green places'), (2, 'restaurants', 'best lunch spots'), (2, 'thrifting', 'I only spent 99 cents!');
