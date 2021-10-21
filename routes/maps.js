@@ -101,6 +101,7 @@ module.exports = (db) => {
       )
       .then((result) => {
         console.log(result.rows[0]);
+        return res.json({ marker: result.rows[0] });
       })
       .catch((err) => err.message);
   });
