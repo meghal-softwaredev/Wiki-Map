@@ -9,6 +9,7 @@
 
 // these are the main variable
 const markers = [];
+console.log("markers:", markers);
 let firstCenter = { lat: 45.5017, lng: -73.5673 };
 
 // this is the HTML ton include the map and every marker with each of their content
