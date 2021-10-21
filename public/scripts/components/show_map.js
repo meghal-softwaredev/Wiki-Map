@@ -44,7 +44,7 @@ function addMarker(props) {
     <h2>${props.title}</h2>
     <p>${props.description}</p>
     <div class="info-img-wrapper">
-      <img class='info-img' src=${props.image} alt="user image of location"/>
+      <img src=${props.image} alt="user image of location"/>
     </div>
   </div>`;
 

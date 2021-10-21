@@ -13,3 +13,23 @@
     font-family: $font-body;
   }
 }
+
+.info-window {
+  width: auto;
+  height: auto;
+  h2 {
+    font-family: $font-title;
+    text-transform: capitalize;
+  }
+  p {
+    text-transform: capitalize;
+  }
+  .info-img-wrapper {
+    height: 150px;
+    width: 100px;
+    img {
+      max-height: 200px;
+      width: 100%;
+    }
+  }
+}
