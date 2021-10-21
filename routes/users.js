@@ -98,5 +98,26 @@ module.exports = (db) => {
       })
       .catch((err) => {res.send(err)});
   });
+
+  router.post("/addContributors", (req, res) => {
+    const { userId, mapId } = req.body;
+    return db.query(`
+    SELECT * FROM contributors
+    WHERE user_id=$1 and map_id=$2`,
+    [userId, mapId])
+    .then((result) => {
+      if (!result.rows[0]) {
+        return db.query(`
+        INSERT INTO contributors (user_id, map_id)
+        VALUES ($1, $2)
+        RETURNING *`,[userId, mapId])
+        .then((result) => {
+          console.log("result", result.rows[0]);
+        })
+      } else {
+        res.send("already a  contributor")
+      }
+    })
+  });
   return router;
 };

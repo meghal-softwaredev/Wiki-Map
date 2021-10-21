@@ -26,14 +26,12 @@ module.exports = (db) => {
       .catch((err) => err.message);
   });
 
-  // create a new map in database and adding contributors if there is one.
+  // create a new map in database
   router.post("/new", (req, res) => {
     const user = req.body;
     const userID = req.session.userId;
-    const { title, description, emailContributors } = user;
-    return db
-      .query(
-        `
+    const { title, description } = user;
+    return db.query(`
       INSERT INTO maps (title, description, owner_id)
       VALUES ($1, $2, $3)
       RETURNING *`,
@@ -110,7 +108,29 @@ module.exports = (db) => {
       )
       .then((result) => {
         console.log(result.rows[0]);
-        return res.json({ marker: result.rows[0] });
+
+      })
+      .catch((err) => err.message);
+  });
+
+  router.post("/marker/edit", (req, res) => {
+    const update = {};
+    const id = req.body.data.id;
+    let info = req.body.data.update;
+    info = decodeURI(info);
+    info = info.split("&");
+    info.forEach((main) => {
+      main = main.split("=");
+      update[main[0]] = main[1];
+    });
+    const { title, image, description } = update;
+    return db.query(`
+      UPDATE points
+      SET title = $2, description = $3, img_url = $4
+      WHERE id = $1`,
+      [id, title, description, image])
+      .then(()=> {
+        return "get me out";
       })
       .catch((err) => err.message);
   });
@@ -124,7 +144,9 @@ module.exports = (db) => {
         mapId,
         userId,
       ])
-      .catch((err) => err.message);
+      .catch((err) => {
+        console.log("finito miriano")
+        return err.message});
   });
 
   // add like
