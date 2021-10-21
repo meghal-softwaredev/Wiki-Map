@@ -10,7 +10,6 @@ $(() => {
   window.$profile = $profile;
 
   const renderUserProfile = (user, mapsData, userContributor) => {
-
     const $userProfileInfo = $(`
       <div class="info">
         <h4>User Name: </h4>
@@ -19,7 +18,7 @@ $(() => {
       <div class="info">
         <h4>Email: </h4>
         <p>${user.email}</p>
-        </div>`);
+      </div>`);
 
     $profile.append($userProfileInfo);
 
@@ -36,14 +35,10 @@ $(() => {
 
     mapsData.forEach((map) => {
       const $userFavouritesInfo = $(`
-      <article class="user-map">
-        <div class="map-info">
-          <h3 class="title">${map.title}</h3>
-          <span>|</span>
+      <article class="user-list">
+        <div class="map-list">
+          <h4 class="title">${map.title}</h4>
           <p class="description">${map.description}</p>
-        </div>
-        <div class="like-button">
-          <i class="fas fa-heart favourited-map"></i>
         </div>
       </article>`);
       $profile.append($userFavouritesInfo);
@@ -52,30 +47,26 @@ $(() => {
       <section id="show-contributors">
         <div class="category">
           <i class="fas fa-users"></i>
-          <h2>Contributors</h2>
+          <h2>Contributions</h2>
         </div>
       <section>
     `);
     $profile.append($contributors);
     userContributor.forEach((map) => {
       const $userContributorInfo = $(`
-      <article class="user-map">
+      <article class="user-list">
         <div class="map-item>
         <img src="" alt="" />
-        <div class="map-info">
-          <h3 class="title">${map.title}</h3>
+        <div class="map-list">
+          <h4 class="title">${map.title}</h4>
           <p class="description">${map.description}</p>
         </div>
-        // <div class="like-button">
-        //   <i class="fas fa-heart"></i>
-        // </div>
       </div>`);
       $profile.append($userContributorInfo);
     });
   };
 
-  getUserProfile()
-  .then((json) => {
+  getUserProfile().then((json) => {
     const userProfile = json.userProfile;
     const userFavourites = json.userFavourites;
     const userContributor = json.userContributor;

@@ -12,8 +12,8 @@ $mapsDisplay.on("click", (event) => {
   }
 });
 
-function renderMapList (mapsData, favsData) {
-  const favsIds = favsData.map(fav => fav.map_id);
+function renderMapList(mapsData, favsData) {
+  const favsIds = favsData.map((fav) => fav.map_id);
   return mapsData.map((aMap) => {
     return $(`
     <article data-id=${aMap.id} class="user-map">
@@ -21,20 +21,26 @@ function renderMapList (mapsData, favsData) {
     <i class="fas fa-map-marked-alt"></i>
     <div class="map-info">
     <h3 class="title">${aMap.title}</h3>
-    <span>|</span>
     <p class="description">${aMap.description}</p>
     </div>
-    ${favsIds.includes(aMap.id) ? '<i data-favid="' + aMap.id + '" class="fas fa-heart favourited-map"></i>' : ""}
+    ${
+      favsIds.includes(aMap.id)
+        ? '<i data-favid="' +
+          aMap.id +
+          '" class="fas fa-heart favourited-map"></i>'
+        : ""
+    }
     </div>
     </article>
     `);
   });
 }
-function createList () {
-  return getUserMaps()
-  .then((json) => {
+function createList() {
+  return getUserMaps().then((json) => {
     const userMaps = json.userMaps;
     const userFavs = json.userFavs;
-    return Promise.resolve($mapsDisplay.append(renderMapList(userMaps, userFavs)))
+    return Promise.resolve(
+      $mapsDisplay.append(renderMapList(userMaps, userFavs))
+    );
   });
 }
