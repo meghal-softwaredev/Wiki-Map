@@ -100,7 +100,6 @@ module.exports = (db) => {
         [userID, mapId, title, description, imageURL, iconURL, lat, lng]
       )
       .then((result) => {
-        console.log(result.rows[0]);
         return res.json({marker: result.rows[0]});
       })
       .catch((err) => err.message);
