@@ -81,7 +81,6 @@ const createMap = (mapId, pointer) => {
     }
   }
 
-  setMarkerInfo(${JSON.stringify(pointer)});
 
   function initMap() {
     console.log('initMap executed');
@@ -93,30 +92,35 @@ const createMap = (mapId, pointer) => {
     map = new google.maps.Map(document.getElementById('map'), options);
     console.log('what is map:', map)
 
+
+    setMarkerInfo(${JSON.stringify(pointer)});
+
+    let lat;
+    let lng;
+
+    $('#new-marker-form').on("submit", (event2) => {
+      event2.preventDefault();
+      const mapId1 = ${mapId};
+      // const allMarkers = ${JSON.stringify(pointer)};
+      const data = $('#new-marker-form').serialize() + '&lat=' + JSON.stringify(lat) + '&lng=' + JSON.stringify(lng) + '&mapId=' + JSON.stringify(mapId1);
+      // console.log('data', data);
+      setMarker(data)
+      .then(json => {
+        console.log("inside setmarker client");
+        console.log('json stringify:', ${JSON.stringify(pointer)})
+        // allMarkers.push(json.marker);
+        setMarkerInfo([json.marker]);
+        //console.log("setmarker", json.marker);
+      });
+      $('.new-marker').show().slideUp();
+    });
     
     map.addListener('click', event1 => {
       console.log('map click listener executed');
-
+      lat = event1.latLng.lat();
+      lng = event1.latLng.lng();
       $('.new-marker').show().slideDown('slow', () => {
         $('#marker-title').focus();
-        $('#new-marker-form').on("submit", (event2) => {
-          event.preventDefault();
-          const lat = event1.latLng.lat();
-          const lng = event1.latLng.lng();
-          const mapId1 = ${mapId};
-          const allMarkers = ${JSON.stringify(pointer)};
-          const data = $('#new-marker-form').serialize() + '&lat=' + JSON.stringify(lat) + '&lng=' + JSON.stringify(lng) + '&mapId=' + JSON.stringify(mapId1);
-          // console.log('data', data);
-          setMarker(data)
-          .then(json => {
-            console.log("inside setmarker client");
-            console.log('json stringify:', ${JSON.stringify(pointer)})
-            allMarkers.push(json.marker);
-            setMarkerInfo(allMarkers);
-            //console.log("setmarker", json.marker);
-          });
-          $('.new-marker').show().slideUp();
-        });
       });
     });
   }
@@ -182,6 +186,8 @@ var mapFinal = (mapId) => {
     const mapPoints = json.mapPoints;
     const mapFavourite = json.mapFavourite;
     console.log("mapPoints:", mapPoints);
+
+    markers.splice([]);
 
     const $map = $(`
       <div class="title-like">
