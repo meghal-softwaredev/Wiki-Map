@@ -8,6 +8,13 @@ $(() => {
   window.$mapsDisplay = $mapsDisplay;
 
   const renderAllMaps = (mapsData, favsData = []) => {
+    if (mapsData.length === 0) {
+      const $noMaps = `<div id="no-maps">
+        <h2>No maps to show! Login in to create your own.</h2>
+      </div>`;
+      return $mapsDisplay.append($noMaps);
+    }
+
     mapsData.map((map) => {
       // console.log("map", map);
       const $mapArticle = $(

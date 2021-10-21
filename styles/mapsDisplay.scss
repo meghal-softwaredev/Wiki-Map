@@ -2,8 +2,22 @@
 
 #maps-display {
   h1 {
-    margin: 1em auto;
+    margin: 2rem auto;
     text-align: center;
+    font-family: $font-title;
+    font-weight: 600;
+  }
+}
+
+#no-maps {
+  @include flex-center(row);
+  border-top: 3px solid $red;
+  width: 70%;
+  padding: 2rem 0;
+  margin: 0 auto;
+  h2 {
+    font-family: $font-title;
+    font-weight: 300;
   }
 }
 
