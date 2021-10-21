@@ -10,6 +10,7 @@ $(() => {
   window.$profile = $profile;
 
   const renderUserProfile = (user, mapsData, userContributor) => {
+
     const $userProfileInfo = $(`
       <div class="info">
         <h4>User Name: </h4>
@@ -18,8 +19,10 @@ $(() => {
       <div class="info">
         <h4>Email: </h4>
         <p>${user.email}</p>
-      </div>`);
+        </div>`);
+
     $profile.append($userProfileInfo);
+
     const $favourite = $(`
       <section id="show-favourite">
         <div class="category">
@@ -28,6 +31,7 @@ $(() => {
         </div>
       <section>
     `);
+
     $profile.append($favourite);
 
     mapsData.forEach((map) => {
@@ -70,7 +74,8 @@ $(() => {
     });
   };
 
-  getUserProfile().then((json) => {
+  getUserProfile()
+  .then((json) => {
     const userProfile = json.userProfile;
     const userFavourites = json.userFavourites;
     const userContributor = json.userContributor;

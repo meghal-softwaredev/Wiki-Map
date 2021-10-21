@@ -34,6 +34,7 @@ function createNewMap(data) {
 }
 
 function getUserMaps() {
+  console.log("get user map called")
   return $.ajax({
     url: "api/maps/all",
   });
@@ -99,10 +100,3 @@ function editMarker(data) {
     data: { data },
   });
 }
-
-////////////////////////////////////////////
-// function renderMarkers(data) {
-//   return $.ajax({
-//     url: "api/maps/getMarkers",
-//   });
-// }

@@ -139,10 +139,11 @@ const listAllMarkers = (markers) => {
       <tbody>
    `;
   markers.forEach((mark) => {
+
     allMarkers += `
           <tr id="marker${mark.id}">
             <td>${mark.title}</td>
-            <td><img src="${mark.image}"></td>
+            <td><img src="${mark.img_url}"></td>
             <td>${mark.description}</td>
             <td>
               <form>
@@ -209,25 +210,26 @@ var mapFinal = (mapId) => {
 
       if ($($btn).hasClass(redHeart)) {
         $($btn).removeClass(redHeart);
-        return deleteLike(map.id);
+        deleteLike(map.id);
+        views_manager.show("showMap", { mapId: map.id });
+      } else {
+        $($btn).addClass(redHeart);
+        addLike(map.id);
+        views_manager.show("showMap", { mapId: map.id });
       }
-      $($btn).addClass(redHeart);
-      return addLike(map.id);
     });
 
     $(document).on("click", "#deleteMarker", function (e) {
       e.preventDefault();
       getUser()
         .then((json) => {
-          console.log("adding cotrib");
           addContributors(json.user.id, map.id);
         })
         .then(() => {
           deleteMarker($(this).attr("data-id"));
         })
         .then(() => {
-          console.log("wtf");
-          $("#main-content").empty();
+          console.log("in the refresh of the page")
           views_manager.show("showMap", { mapId: map.id });
         });
     });
@@ -274,16 +276,12 @@ var mapFinal = (mapId) => {
       };
       getUser()
         .then((json) => {
-          console.log("add contri", json);
           addContributors(json.user.id, map.id);
         })
         .then(() => {
-          console.log("on edit");
           editMarker(data);
         })
         .then(() => {
-          console.log("reload");
-          $("#main-content").empty();
           views_manager.show("showMap", { mapId: map.id });
         });
     });

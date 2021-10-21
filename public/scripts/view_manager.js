@@ -1,12 +1,13 @@
 $(() => {
   const $main = $("#main-content");
 
+
   window.views_manager = {};
 
   window.views_manager.show = function (item, options) {
     $loginPage.detach();
     $registerPage.detach();
-    $mapWrapper.detach();
+    $mapWrapper.empty();
     $mapsDisplay.detach();
     $createNewMap.detach();
     $profile.detach();
@@ -20,10 +21,16 @@ $(() => {
         $registerPage.appendTo($main);
         break;
       case "mapsDisplay":
-        $mapsDisplay.appendTo($main);
+        $mapsDisplay.empty();
+        $mapsDisplay.append($('<h1>All Maps</h1>'))
+        createList()
+          .then(() =>{
+            $mapsDisplay.appendTo($main);
+          })
         break;
       case "showMap":
-        $mapWrapper.empty();
+         $mapWrapper.empty();
+         $(document).off();
         mapFinal(options.mapId).then((result) => {
           result.appendTo($mapWrapper);
           $mapWrapper.appendTo($main);

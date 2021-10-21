@@ -12,17 +12,10 @@ module.exports = (db) => {
   // deleting a marker not finished
   router.post("/deleteMarker", (req, res) => {
     const id = req.body.id;
-    return db
-      .query(
-        `
+     db.query(`
     DELETE FROM points WHERE id=$1
-      RETURNING *`,
-        [id]
-      )
-      .then((result) => {
-        console.log("result", result.rows[0]);
-        return res.json({ user: result.rows[0] });
-      })
+      RETURNING *`
+      , [id])
       .catch((err) => err.message);
   });
 
@@ -224,22 +217,6 @@ module.exports = (db) => {
       });
     });
   });
-
-  //////////////////////////////////////////////////////
-  // router.get("/getMarkers", (req, res) => {
-  //   const userId = req.session.userId;
-  //   const mapId = req.query.mapId;
-  //   return db
-  //     .query(
-  //       `
-  //       SELECT * FROM points WHERE map_id = $1 AND user_id = $2`,
-  //       [mapId, userId]
-  //     )
-  //     .then((result) => {
-  //       return res.json({ marker: result.rows[0] });
-  //     })
-  //     .catch((err) => err.message);
-  // });
 
   return router;
 };
