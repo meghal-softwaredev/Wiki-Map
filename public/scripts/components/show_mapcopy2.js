@@ -14,93 +14,42 @@ let firstCenter = { lat: 45.5017, lng: -73.5673 };
 // this is the HTML ton include the map and every marker with each of their content
 const createMap = (mapId, pointer) => {
   return `
-  <div id="map" class="map" style="height:600px; width:100%;"></div>
-  <section class="new-marker" style="display: none">
-    <form id="new-marker-form">
-      <input name="title" id="marker-title" placeholder="Marker Title" />
-      <textarea name="description" id="marker-description" placeholder="Marker Description"></textarea>
-      <input name="imageURL" id="marker-image" placeholder="Marker Image URL" />
-      <select name="icon" id="icon">
-        <option value="beach">Beach</option>
-        <option value="park">Parks</option>
-        <option value="restaurant">Restaurant</option>
-        <option value="movie">Movie</option>
-      </select>
-      <button id="marker-btn">Create Marker</button>
-    </form>
+  <div id="map" style="width: 500px; height: 400px;"></div>
 
-  </section>
+  <script type="text/javascript">
+    var locations = [
+      ['Bondi Beach', -33.890542, 151.274856, 4],
+      ['Coogee Beach', -33.923036, 151.259052, 5],
+      ['Cronulla Beach', -34.028249, 151.157507, 3],
+      ['Manly Beach', -33.80010128657071, 151.28747820854187, 2],
+      ['Maroubra Beach', -33.950198, 151.259302, 1]
+    ];
 
-  <script>
-  navigator.geolocation.getCurrentPosition(showPosition);
-
-  function showPosition(position) {
-    firstCenter = {lat:position.coords.latitude, lng:position.coords.longitude};
-  }
-  let map;
-
-  function initMap() {
-    const options = {
-      zoom: 9,
-      center: firstCenter
-    };
-    map = new google.maps.Map(document.getElementById('map'), options);
-
-    function addMarker (props) {
-
-      const content = "<p>" + props.title + "</p>" + "<br /><p>" + props.description + "</p>" + '<a href="#"/>' + props.image + '</a>';
-
-      const coords = new google.maps.LatLng(props.lat, props.lng);
-      const marker = new google.maps.Marker({
-        position: coords,
-        map,
-        icon: props.icon,
-        animation: google.maps.Animation.DROP,
-        draggable: true
-      });
-      const infoWindow = new google.maps.InfoWindow({
-        content: content
-      });
-      marker.addListener('click', function (){
-        infoWindow.open(map, marker)
-      });
-      markers.push(props);
-      console.log("markers in map: ",markers);
-    }
-
-    function setMarkerInfo(marker){
-      const id = marker.id;
-      const title = marker.title;
-      const description = marker.description;
-      const image = marker.img_url;
-      const icon = marker.icon_url;
-      const lat = marker.lat;
-      const lng = marker.lng;
-      const props = { id, title, description, image, icon, lat, lng };
-      addMarker(props);
-    }
-    map.addListener('click', event1 => {
-      $('.new-marker').show().slideDown('slow', () => {
-        $('#marker-title').focus();
-        $('#new-marker-form').on("submit", (event2) => {
-          event.preventDefault();
-          const lat = event1.latLng.lat();
-          const lng = event1.latLng.lng();
-          const mapId1 = ${mapId};
-          const data = $('#new-marker-form').serialize() + '&lat=' + JSON.stringify(lat) + '&lng=' + JSON.stringify(lng) + '&mapId=' + JSON.stringify(mapId1);
-          // console.log('data', data);
-          setMarker(data)
-          .then(json => {
-            // console.log("inside setmarker client")
-            setMarkerInfo(json.marker);
-            //console.log("setmarker", json.marker);
-          });
-          $('.new-marker').show().slideUp();
-        });
-      });
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 10,
+      center: new google.maps.LatLng(-33.92, 151.25),
+      mapTypeId: google.maps.MapTypeId.ROADMAP
     });
-  }
-</script>
+
+    var infowindow = new google.maps.InfoWindow();
+
+    var marker, i;
+
+    for (i = 0; i < locations.length; i++) {  
+      marker = new google.maps.Marker({
+        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+        map: map
+      });
+
+      google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+          infowindow.setContent(locations[i][0]);
+          infowindow.open(map, marker);
+        }
+      })(marker, i));
+    }
+  </script>
+
 <script
 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkDPnwd1JKc&callback=initMap&v=weekly"async></script>
 </div>`;

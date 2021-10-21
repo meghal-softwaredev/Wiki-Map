@@ -31,7 +31,9 @@ module.exports = (db) => {
     const user = req.body;
     const userID = req.session.userId;
     const { title, description } = user;
-    return db.query(`
+    return db
+      .query(
+        `
       INSERT INTO maps (title, description, owner_id)
       VALUES ($1, $2, $3)
       RETURNING *`,
@@ -59,41 +61,32 @@ module.exports = (db) => {
 
     const maps = db.query(`SELECT * FROM maps`);
 
-    // const userFavourites = db.query(
-    //   `SELECT * FROM favourites WHERE user_id = $1`,
-    //   [userId]
-    // );
-    // TEST CODE
     const userFavourites = db.query(
-      `SELECT * FROM favourites WHERE user_id = 1`
+      `SELECT * FROM favourites WHERE user_id = $1`,
+      [userId]
     );
 
     Promise.all([maps, userFavourites]).then((result) => {
       return res.json({
         userMaps: result[0].rows,
-
-        // userFavs: result[1].rows,
-        // TEST CODE
-        userFavs: [
-          { id: 1, user_id: 1, map_id: 2, favourite: true },
-          { id: 1, user_id: 1, map_id: 1, favourite: true },
-        ],
+        userFavs: result[1].rows,
       });
     });
   });
 
   router.post("/marker/new", (req, res) => {
     const marker = req.body;
-    const { mapId, title, description, imageURL, icon, lat, lng} = marker;
+    const { mapId, title, description, imageURL, icon, lat, lng } = marker;
     console.log("imageURl", imageURL, "icon", icon);
-    let iconURL = '';
-    if (icon === 'beach') {
-      iconURL = "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
-    } else if (icon === 'park') {
+    let iconURL = "";
+    if (icon === "beach") {
+      iconURL =
+        "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
+    } else if (icon === "park") {
       iconURL = "assets/park.png";
-    } else if (icon === 'restaurant') {
+    } else if (icon === "restaurant") {
       iconURL = "assets/restaurant.jpeg";
-    } else if (icon === 'movie') {
+    } else if (icon === "movie") {
       iconURL = "assets/movie.jpeg";
     }
 
@@ -124,12 +117,15 @@ module.exports = (db) => {
       update[main[0]] = main[1];
     });
     const { title, image, description } = update;
-    return db.query(`
+    return db
+      .query(
+        `
       UPDATE points
       SET title = $2, description = $3, img_url = $4
       WHERE id = $1`,
-      [id, title, description, image])
-      .then(()=> {
+        [id, title, description, image]
+      )
+      .then(() => {
         return "get me out";
       })
       .catch((err) => err.message);
@@ -145,8 +141,9 @@ module.exports = (db) => {
         userId,
       ])
       .catch((err) => {
-        console.log("finito miriano")
-        return err.message});
+        console.log("finito miriano");
+        return err.message;
+      });
   });
 
   // add like
@@ -173,18 +170,27 @@ module.exports = (db) => {
       [userId, mapId]
     );
 
+    console.log("Points:", points);
+
     // if not logged in, only show map and points data
     if (!userId) {
-      return db
-        .query(`SELECT * FROM maps WHERE id = $1`, [mapId])
-        .then((result) => {
-          return res.json({
-            map: result.rows[0],
-            mapPoints: {},
-            mapFavourite: { id: "not logged in" },
-          });
-        })
-        .catch((err) => err.message);
+      Promise.all([map, points]).then((result) => {
+        return res.json({
+          map: result[0].rows[0],
+          mapPoints: result[1].rows,
+          mapFavourite: { id: "not logged in" },
+        });
+      });
+      // return db
+      //   .query(`SELECT * FROM maps WHERE id = $1`, [mapId])
+      //   .then((result) => {
+      //     return res.json({
+      //       map: result.rows[0],
+      //       mapPoints: {},
+      //       mapFavourite: { id: "not logged in" },
+      //     });
+      //   })
+      //   .catch((err) => err.message);
     }
 
     Promise.all([map, points, favourite]).then((result) => {
@@ -204,14 +210,16 @@ module.exports = (db) => {
       `SELECT title, description FROM users JOIN maps
       ON users.id = owner_id JOIN favourites
       ON map_id = maps.id
-      WHERE users.id = $1`, [userId]
+      WHERE users.id = $1`,
+      [userId]
     );
 
     const userContributors = db.query(
       `SELECT title, description FROM users JOIN maps
       ON users.id = owner_id JOIN contributors
       ON  map_id = maps.id
-      WHERE users.id = $1`, [userId]
+      WHERE users.id = $1`,
+      [userId]
     );
 
     Promise.all([users, userFavourites, userContributors]).then((result) => {
@@ -221,7 +229,7 @@ module.exports = (db) => {
       return res.json({
         userProfile: result[0].rows[0],
         userFavourites: result[1].rows,
-        userContributor: result[2].rows
+        userContributor: result[2].rows,
       });
     });
   });

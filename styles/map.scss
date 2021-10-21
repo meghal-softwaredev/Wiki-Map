@@ -1,14 +1,10 @@
 @use "_variables" as *;
 
-
 #showMap {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+  @include flex-center(column);
   #map {
-    height: 400px;
-    width: 600px;
+    height: 600px;
+    width: 100%;
   }
   #deleteMarker {
     @include button($red, $darkred);
