@@ -10,10 +10,14 @@
 // these are the main variable
 const markers = [];
 let firstCenter = { lat: 45.5017, lng: -73.5673 };
+let deleteMarkerFlag = false;
+let editMarkerFlag = false;
 
 // this is the HTML ton include the map and every marker with each of their content
 const createMap = (mapId, pointer) => {
   return `
+  <input id="editMarker" type="button" value="Edit Markers" />
+  <input id="delMarker" type="button" value="Delete Markers" />
   <div id="map" class="map" style="height:600px; width:100%;"></div>
   <section class="new-marker" style="display: none">
     <form id="new-marker-form">
@@ -46,9 +50,29 @@ const createMap = (mapId, pointer) => {
     };
     map = new google.maps.Map(document.getElementById('map'), options);
 
+    function removeMarker(id) {
+      console.log("inside remove method")
+      for (var i = 0; i < markers.length; i++) {
+        if (markers[i].id === id) {
+            markers[i].setMap(null);
+            markers.splice(i, 1);
+            return;
+        }
+      }
+    }
+    function updateMarker(data) {
+      console.log("inside edit method")
+      for (var i = 0; i < markers.length; i++) {
+        if (markers[i].id === id) {
+
+            return;
+        }
+      }
+    }
+
     function addMarker (props) {
 
-      const content = "<p>" + props.title + "</p>" + "<br /><p>" + props.description + "</p>" + '<a href="#"/>' + props.image + '</a>';
+    const content = "<p>" + props.title + "</p>" + "<br /><p>" + props.description + "</p>" + '<a href="#"/>' + props.image + '</a>';
 
       const coords = new google.maps.LatLng(props.lat, props.lng);
       const marker = new google.maps.Marker({
@@ -56,19 +80,48 @@ const createMap = (mapId, pointer) => {
         map,
         icon: props.icon,
         animation: google.maps.Animation.DROP,
-        draggable: true
+        draggable: true,
+        id: props.id
       });
       const infoWindow = new google.maps.InfoWindow({
         content: content
       });
+      markers.push(marker);
       marker.addListener('click', function (){
-        infoWindow.open(map, marker)
+        if (deleteMarkerFlag === true) {
+          console.log("before ajax delete");
+          deleteMarker(props.id)
+          .then(json => {
+            console.log("after ajax delete")
+            removeMarker(props.id);
+          });
+          deleteMarkerFlag = false;
+        } else if (editMarkerFlag === true) {
+          console.log("before ajax edit");
+          $('.new-marker').show().slideDown('slow', () => {
+            $('#marker-title').focus();
+            $('#new-marker-form').on("submit", (event2) => {
+              event.preventDefault();
+              const mapId1 = ${mapId};
+              const data = $('#new-marker-form').serialize() + '&mapId=' + JSON.stringify(mapId1) + '&id' + JSON.stringify(props.id);
+              console.log(data);
+              editMark(data)
+              .then(json => {
+                console.log("after ajax edit");
+                updateMarker(json.marker);
+              });
+              $('.new-marker').show().slideUp();
+            });
+          });
+          editMarkerFlag = false;
+        } else {
+          infoWindow.open(map, marker);
+        }
       });
-      markers.push(props);
       console.log("markers in map: ",markers);
     }
 
-    function setMarkerInfo(marker){
+    function setMarkerInfo(marker) {
       const id = marker.id;
       const title = marker.title;
       const description = marker.description;
@@ -79,6 +132,18 @@ const createMap = (mapId, pointer) => {
       const props = { id, title, description, image, icon, lat, lng };
       addMarker(props);
     }
+  }
+
+
+  function initMap() {
+    const options = {
+      zoom: 9,
+      center: firstCenter
+    };
+    map = new google.maps.Map(document.getElementById('map'), options);
+
+    setMarkerInfo(${JSON.stringify(pointer)});
+
     map.addListener('click', event1 => {
       $('.new-marker').show().slideDown('slow', () => {
         $('#marker-title').focus();
@@ -87,17 +152,26 @@ const createMap = (mapId, pointer) => {
           const lat = event1.latLng.lat();
           const lng = event1.latLng.lng();
           const mapId1 = ${mapId};
+          const allMarkers = ${JSON.stringify(pointer)};
           const data = $('#new-marker-form').serialize() + '&lat=' + JSON.stringify(lat) + '&lng=' + JSON.stringify(lng) + '&mapId=' + JSON.stringify(mapId1);
-          // console.log('data', data);
           setMarker(data)
           .then(json => {
-            // console.log("inside setmarker client")
-            setMarkerInfo(json.marker);
-            //console.log("setmarker", json.marker);
+            allMarkers.push(json.marker);
+            setMarkerInfo(allMarkers);
           });
           $('.new-marker').show().slideUp();
         });
       });
+    });
+    $("#delMarker")
+    .on("click", event => {
+      deleteMarkerFlag = true;
+      console.log("deleteMarkerFlag", deleteMarkerFlag)
+    });
+    $("#editMarker")
+    .on("click", event => {
+      editMarkerFlag = true;
+      console.log("editMarkerFlag", editMarkerFlag)
     });
   }
 </script>
@@ -164,11 +238,11 @@ var mapFinal = (mapId) => {
 
     const $map = $(`
       <div class="title-like">
-      ${map.title}
-      ${createButton(mapFavourite.id, mapPoints)}
+        ${map.title}
+        ${createButton(mapFavourite.id, mapPoints)}
       </div>
       <div class='google-map'>
-        ${createMap(map.id)}
+        ${createMap(map.id, mapPoints)}
       </div>
       <div class='points'>
         ${listAllMarkers(mapPoints)}
@@ -178,7 +252,6 @@ var mapFinal = (mapId) => {
     /// edit delete like
     $(document).on("click", "#favourite-btn", (event) => {
       event.preventDefault();
-      console.log("fav button clicked 💖💖💖");
       const $btn = $("#favourite-heart");
       const redHeart = "favourited-map";
 
@@ -262,7 +335,32 @@ var mapFinal = (mapId) => {
           views_manager.show("showMap", { mapId: map.id });
         });
     });
-
     return $map;
   });
 };
+
+$(() => {
+  const $mapWrapper = $(`<div class='map-wrapper'></div>`);
+  const makeMap = (mapId) => {
+    const $map = $(`
+    <h1>My map</h1>
+    ${createMap(mapId)}
+  `);
+
+    $map.on("submit", function (e) {
+      e.preventDefault();
+      console.log(e);
+      deleteMarker(id) // use the action of the button delete but i still dont know how
+        .then(() => {
+          const $main = $("#main-content");
+          $main.empty();
+          $map.appendTo($main);
+        });
+    });
+
+    return $map;
+  };
+
+  window.$mapWrapper = $mapWrapper;
+  window.makeMap = makeMap;
+});

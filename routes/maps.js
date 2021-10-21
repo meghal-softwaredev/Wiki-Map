@@ -10,12 +10,12 @@ const router = express.Router();
 
 module.exports = (db) => {
   // deleting a marker not finished
-  router.post("/deleteMarker", (req, res) => {
+  router.post("/deleteMarker",  (req, res) => {
     const id = req.body.id;
     return db
       .query(
         `
-    DELETE FROM points WHERE id=$1
+      DELETE FROM points WHERE id=$1
       RETURNING *`,
         [id]
       )
@@ -65,6 +65,7 @@ module.exports = (db) => {
       `SELECT * FROM favourites WHERE user_id = $1`,
       [userId]
     );
+    console.log("---route---");
 
     Promise.all([maps, userFavourites]).then((result) => {
       return res.json({
@@ -180,16 +181,6 @@ module.exports = (db) => {
           mapFavourite: { id: "not logged in" },
         });
       });
-      // return db
-      //   .query(`SELECT * FROM maps WHERE id = $1`, [mapId])
-      //   .then((result) => {
-      //     return res.json({
-      //       map: result.rows[0],
-      //       mapPoints: {},
-      //       mapFavourite: { id: "not logged in" },
-      //     });
-      //   })
-      //   .catch((err) => err.message);
     }
 
     Promise.all([map, points, favourite]).then((result) => {
@@ -232,6 +223,26 @@ module.exports = (db) => {
       });
     });
   });
+
+  router.post("/mark/edit", (req, res) => {
+    console.log("mark/edit")
+    console.log("req.body", req.body);
+    const { id, title, imageURL, description, icon, mapId } = req.body;
+    return db
+      .query(
+        `
+      UPDATE points
+      SET title = $2, description = $3, img_url = $4, icon_url = $5
+      WHERE id = $1 AND map_id = $6`,
+        [id, title, description, imageURL, icon, mapId]
+      )
+      .then(() => {
+        console.log("edit result", result.rows[0]);
+        return res.json({marker: result.rows[0]});
+      })
+      .catch((err) => err.message);
+  });
+
 
   return router;
 };
