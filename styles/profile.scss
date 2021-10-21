@@ -47,10 +47,6 @@
     }
   }
 
-  .far {
-    color: $blue;
-  }
-
   .category {
     @include flex-center(row);
     justify-content: flex-start;
@@ -58,6 +54,10 @@
     width: 100%;
     font-size: 4rem;
     margin: 1rem 0;
+
+    .fa-user {
+      color: $blue;
+    }
   }
   #show-favourite {
     width: 100%;

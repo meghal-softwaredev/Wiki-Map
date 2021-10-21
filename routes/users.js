@@ -7,14 +7,13 @@
 
 const express = require("express");
 const router = express.Router();
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 const salt = bcrypt.genSaltSync(10);
 
 module.exports = (db) => {
   // Get user info
   router.get("/info", (req, res) => {
     const userID = req.session.userId;
-    console.log("user ID", userID);
     return db
       .query(
         `
@@ -32,14 +31,20 @@ module.exports = (db) => {
     const user = req.body;
     user.password = bcrypt.hashSync(user.password, salt);
     const { name, email, password } = user;
-    return db.query(`
+    return db
+      .query(
+        `
       SELECT * FROM users WHERE email=$1
-    `, [email])
+    `,
+        [email]
+      )
       .then((account) => {
         if (account.rows[0]) {
           res.send(false);
         } else {
-          return db.query(`
+          return db
+            .query(
+              `
             INSERT INTO users (name, email, password)
             VALUES ($1, $2, $3)
             RETURNING *`,
@@ -73,7 +78,11 @@ module.exports = (db) => {
             const userPassword = data.rows[0].password;
             // verify password
             if (bcrypt.compareSync(password, userPassword)) {
-              return {id: data.rows[0].id, name: data.rows[0].name, email: data.rows[0].email};
+              return {
+                id: data.rows[0].id,
+                name: data.rows[0].name,
+                email: data.rows[0].email,
+              };
             }
           }
           return null;
@@ -93,28 +102,42 @@ module.exports = (db) => {
           res.send(false);
         } else {
           req.session.userId = userInfo.id;
-          res.send({ user: { name: userInfo.name, email: userInfo.email, id: userInfo.id } });
+          res.send({
+            user: {
+              name: userInfo.name,
+              email: userInfo.email,
+              id: userInfo.id,
+            },
+          });
         }
       })
-      .catch((err) => {res.send(err)});
+      .catch((err) => {
+        res.send(err);
+      });
   });
 
   router.post("/addContributors", (req, res) => {
     const { userId, mapId } = req.body;
-    return db.query(`
+    return db
+      .query(
+        `
     SELECT * FROM contributors
     WHERE user_id=$1 and map_id=$2`,
-    [userId, mapId])
-    .then((result) => {
-      if (!result.rows[0]) {
-        db.query(`
+        [userId, mapId]
+      )
+      .then((result) => {
+        if (!result.rows[0]) {
+          db.query(
+            `
         INSERT INTO contributors (user_id, map_id)
         VALUES ($1, $2)
-        `,[userId, mapId])
-      } else {
-        res.send("already a  contributor")
-      }
-    })
+        `,
+            [userId, mapId]
+          );
+        } else {
+          res.send("already a  contributor");
+        }
+      });
   });
   return router;
 };

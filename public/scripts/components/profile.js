@@ -1,7 +1,7 @@
 const $profile = $(`
     <section id="show-profile">
       <div class="category">
-        <i class="far fa-user-circle"></i>
+        <i class="fas fa-user"></i>
         <h2>User Profile</h2>
       </div>
     <section>
