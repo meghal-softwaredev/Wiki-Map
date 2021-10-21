@@ -12,8 +12,100 @@ const markers = [];
 console.log("markers:", markers);
 let firstCenter = { lat: 45.5017, lng: -73.5673 };
 
+// google map set up
+function showPosition(position) {
+  firstCenter = {
+    lat: position.coords.latitude,
+    lng: position.coords.longitude,
+  };
+}
+
+let map;
+let lat;
+let lng;
+
+function setMarkerInfo(markers) {
+  for (const marker of markers) {
+    const id = marker.id;
+    const title = marker.title;
+    const description = marker.description;
+    const image = marker.img_url;
+    const icon = marker.icon_url;
+    const lat = marker.lat;
+    const lng = marker.lng;
+    const props = { id, title, description, image, icon, lat, lng };
+    addMarker(props);
+  }
+}
+
+function addMarker(props) {
+  const content =
+    "<p>" +
+    props.title +
+    "</p>" +
+    "<br /><p>" +
+    props.description +
+    "</p>" +
+    '<a href="#"/>' +
+    props.image +
+    "</a>";
+
+  const coords = new google.maps.LatLng(props.lat, props.lng);
+  const marker = new google.maps.Marker({
+    position: coords,
+    map,
+    icon: props.icon,
+    animation: google.maps.Animation.DROP,
+    draggable: true,
+  });
+  const infoWindow = new google.maps.InfoWindow({
+    content: content,
+  });
+  marker.addListener("click", function () {
+    infoWindow.open(map, marker);
+  });
+  markers.push(props);
+}
+
+function initMap(mapId, pointer) {
+  const options = {
+    zoom: 9,
+    center: firstCenter,
+  };
+  map = new google.maps.Map(document.getElementById("map"), options);
+
+  setMarkerInfo(pointer);
+
+  $("#new-marker-form").on("submit", (event2) => {
+    event2.preventDefault();
+    const mapId1 = mapId;
+    const data =
+      $("#new-marker-form").serialize() +
+      "&lat=" +
+      JSON.stringify(lat) +
+      "&lng=" +
+      JSON.stringify(lng) +
+      "&mapId=" +
+      JSON.stringify(mapId1);
+    setMarker(data).then((json) => {
+      setMarkerInfo([json.marker]);
+    });
+    $(".new-marker").show().slideUp();
+  });
+
+  map.addListener("click", (event1) => {
+    lat = event1.latLng.lat();
+    lng = event1.latLng.lng();
+    $(".new-marker")
+      .show()
+      .slideDown("slow", () => {
+        $("#marker-title").focus();
+      });
+  });
+}
+
 // this is the HTML ton include the map and every marker with each of their content
-const createMap = (mapId, pointer) => {
+const createMap = () => {
   return `
   <div id="map" class="map" style="height:600px; width:100%;"></div>
   <section class="new-marker" style="display: none">
@@ -29,104 +121,7 @@ const createMap = (mapId, pointer) => {
       </select>
       <button id="marker-btn">Create Marker</button>
     </form>
-
   </section>
-
-  <script>
-  navigator.geolocation.getCurrentPosition(showPosition);
-
-  function showPosition(position) {
-    console.log('show position executed');
-    firstCenter = {lat:position.coords.latitude, lng:position.coords.longitude};
-  }
-  let map;
-
-  function addMarker (props) {
-    console.log('addMarker executed');
-
-    const content = "<p>" + props.title + "</p>" + "<br /><p>" + props.description + "</p>" + '<a href="#"/>' + props.image + '</a>';
-
-    const coords = new google.maps.LatLng(props.lat, props.lng);
-    const marker = new google.maps.Marker({
-      position: coords,
-      map,
-      icon: props.icon,
-      animation: google.maps.Animation.DROP,
-      draggable: true
-    });
-    const infoWindow = new google.maps.InfoWindow({
-      content: content
-    });
-    marker.addListener('click', function (){
-      infoWindow.open(map, marker)
-    });
-    markers.push(props);
-    console.log("markers in map: ",markers);
-  }
-
-  function setMarkerInfo(markers){
-    console.log('setMarker executed');
-
-    for (const marker of markers) {
-      const id = marker.id;
-      const title = marker.title;
-      const description = marker.description;
-      const image = marker.img_url;
-      const icon = marker.icon_url;
-      const lat = marker.lat;
-      const lng = marker.lng;
-      const props = { id, title, description, image, icon, lat, lng };
-      console.log('marker inside setMarkerInfo:', marker);
-      addMarker(props);
-    }
-  }
-
-
-  function initMap() {
-    console.log('initMap executed');
-
-    const options = {
-      zoom: 9,
-      center: firstCenter
-    };
-    map = new google.maps.Map(document.getElementById('map'), options);
-    console.log('what is map:', map)
-
-
-    setMarkerInfo(${JSON.stringify(pointer)});
-
-    let lat;
-    let lng;
-
-    $('#new-marker-form').on("submit", (event2) => {
-      event2.preventDefault();
-      const mapId1 = ${mapId};
-      // const allMarkers = ${JSON.stringify(pointer)};
-      const data = $('#new-marker-form').serialize() + '&lat=' + JSON.stringify(lat) + '&lng=' + JSON.stringify(lng) + '&mapId=' + JSON.stringify(mapId1);
-      // console.log('data', data);
-      setMarker(data)
-      .then(json => {
-        console.log("inside setmarker client");
-        console.log('json stringify:', ${JSON.stringify(pointer)})
-        // allMarkers.push(json.marker);
-        setMarkerInfo([json.marker]);
-        //console.log("setmarker", json.marker);
-      });
-      $('.new-marker').show().slideUp();
-    });
-    
-    map.addListener('click', event1 => {
-      console.log('map click listener executed');
-      lat = event1.latLng.lat();
-      lng = event1.latLng.lng();
-      $('.new-marker').show().slideDown('slow', () => {
-        $('#marker-title').focus();
-      });
-    });
-  }
-</script>
-<script
-src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkDPnwd1JKc&callback=initMap&v=weekly"async></script>
 </div>`;
 };
 
@@ -188,6 +183,7 @@ var mapFinal = (mapId) => {
     console.log("mapPoints:", mapPoints);
 
     markers.splice([]);
+    navigator.geolocation.getCurrentPosition(showPosition);
 
     const $map = $(`
       <div class="title-like">
@@ -201,6 +197,10 @@ var mapFinal = (mapId) => {
         ${listAllMarkers(mapPoints)}
       </div>
   `);
+
+    setTimeout(() => {
+      initMap(map.id, mapPoints);
+    }, 5);
 
     /// edit delete like
     $(document).on("click", "#favourite-btn", (event) => {
