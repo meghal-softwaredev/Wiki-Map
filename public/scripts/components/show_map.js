@@ -195,15 +195,19 @@ var mapFinal = (mapId) => {
 
     $(document).on("click", "#deleteMarker", function (e) {
       e.preventDefault();
-      getUser().then((json) => {
-        console.log("adding cotrib");
-        addContributors(json.user.id, map.id).then(() => {
-          deleteMarker($(this).attr("data-id")).then(() => {
-            $("#main-content").empty();
-            views_manager.show("showMap", { mapId: map.id });
-          });
+      getUser()
+        .then((json) => {
+          console.log("adding cotrib");
+          addContributors(json.user.id, map.id);
+        })
+        .then(() => {
+          deleteMarker($(this).attr("data-id"));
+        })
+        .then(() => {
+          console.log("wtf");
+          $("#main-content").empty();
+          views_manager.show("showMap", { mapId: map.id });
         });
-      });
     });
 
     $(document).on("click", "#editMarker", function (e) {
@@ -246,17 +250,20 @@ var mapFinal = (mapId) => {
         update: $("#saving").serialize(),
         id: $(this).attr("data-id"),
       };
-      editMarker(data).then(() => {
-        console.log("on get");
-        getUser().then((json) => {
+      getUser()
+        .then((json) => {
           console.log("add contri", json);
-          addContributors(json.user.id, map.id).then(() => {
-            console.log("reload");
-            $("#main-content").empty();
-            views_manager.show("showMap", { mapId: map.id });
-          });
+          addContributors(json.user.id, map.id);
+        })
+        .then(() => {
+          console.log("on edit");
+          editMarker(data);
+        })
+        .then(() => {
+          console.log("reload");
+          $("#main-content").empty();
+          views_manager.show("showMap", { mapId: map.id });
         });
-      });
     });
 
     return $map;

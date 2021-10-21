@@ -78,7 +78,7 @@ module.exports = (db) => {
     const marker = req.body;
     const { mapId, title, description, imageURL, icon, lat, lng } = marker;
     console.log("imageURl", imageURL, "icon", icon);
-    let iconURL;
+    let iconURL = "";
     if (icon === "beach") {
       iconURL =
         "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
@@ -121,12 +121,11 @@ module.exports = (db) => {
         `
       UPDATE points
       SET title = $2, description = $3, img_url = $4
-      WHERE id = $1
-      RETURNING *`,
+      WHERE id = $1`,
         [id, title, description, image]
       )
-      .then((result) => {
-        console.log("result", result.rows[0]);
+      .then(() => {
+        return "get me out";
       })
       .catch((err) => err.message);
   });
@@ -140,7 +139,10 @@ module.exports = (db) => {
         mapId,
         userId,
       ])
-      .catch((err) => err.message);
+      .catch((err) => {
+        console.log("finito miriano");
+        return err.message;
+      });
   });
 
   // add like
@@ -195,6 +197,38 @@ module.exports = (db) => {
         map: result[0].rows[0],
         mapPoints: result[1].rows,
         mapFavourite: result[2].rows[0] || {},
+      });
+    });
+  });
+
+  router.get("/userProfile", (req, res) => {
+    const userId = req.session.userId;
+
+    const users = db.query(`SELECT * FROM users where id = $1`, [userId]);
+    const userFavourites = db.query(
+      `SELECT title, description FROM users JOIN maps
+      ON users.id = owner_id JOIN favourites
+      ON map_id = maps.id
+      WHERE users.id = $1`,
+      [userId]
+    );
+
+    const userContributors = db.query(
+      `SELECT title, description FROM users JOIN maps
+      ON users.id = owner_id JOIN contributors
+      ON  map_id = maps.id
+      WHERE users.id = $1`,
+      [userId]
+    );
+
+    Promise.all([users, userFavourites, userContributors]).then((result) => {
+      console.log(result[0].rows);
+      console.log(result[1].rows);
+      console.log(result[2].rows);
+      return res.json({
+        userProfile: result[0].rows[0],
+        userFavourites: result[1].rows,
+        userContributor: result[2].rows,
       });
     });
   });
