@@ -45,6 +45,7 @@ $(() => {
   getUserMaps().then((json) => {
     const userMaps = json.userMaps;
     const userFavs = json.userFavs;
+    console.log("getUserMaps");
     renderAllMaps(userMaps, userFavs);
   });
 });

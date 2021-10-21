@@ -65,6 +65,7 @@ module.exports = (db) => {
       `SELECT * FROM favourites WHERE user_id = $1`,
       [userId]
     );
+    console.log("---route---");
 
     Promise.all([maps, userFavourites]).then((result) => {
       return res.json({

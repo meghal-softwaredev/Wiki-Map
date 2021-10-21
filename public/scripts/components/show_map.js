@@ -9,7 +9,6 @@
 
 // these are the main variable
 const markers = [];
-console.log("markers:", markers);
 let firstCenter = { lat: 45.5017, lng: -73.5673 };
 
 // this is the HTML ton include the map and every marker with each of their content
@@ -36,66 +35,56 @@ const createMap = (mapId, pointer) => {
   navigator.geolocation.getCurrentPosition(showPosition);
 
   function showPosition(position) {
-    console.log('show position executed');
     firstCenter = {lat:position.coords.latitude, lng:position.coords.longitude};
   }
   let map;
 
-  function initMap() {
-    console.log('initMap executed');
+  function addMarker (props) {
 
+    const content = "<p>" + props.title + "</p>" + "<br /><p>" + props.description + "</p>" + '<a href="#"/>' + props.image + '</a>';
+
+    const coords = new google.maps.LatLng(props.lat, props.lng);
+    const marker = new google.maps.Marker({
+      position: coords,
+      map,
+      icon: props.icon,
+      animation: google.maps.Animation.DROP,
+      draggable: true
+    });
+    const infoWindow = new google.maps.InfoWindow({
+      content: content
+    });
+    marker.addListener('click', function (){
+      infoWindow.open(map, marker)
+    });
+    markers.push(props);
+  }
+
+  function setMarkerInfo(markers){
+    for (const marker of markers) {
+      const id = marker.id;
+      const title = marker.title;
+      const description = marker.description;
+      const image = marker.img_url;
+      const icon = marker.icon_url;
+      const lat = marker.lat;
+      const lng = marker.lng;
+      const props = { id, title, description, image, icon, lat, lng };
+      addMarker(props);
+    }
+  }
+
+
+  function initMap() {
     const options = {
       zoom: 9,
       center: firstCenter
     };
     map = new google.maps.Map(document.getElementById('map'), options);
-    console.log('what is map:', map)
 
-    function addMarker (props) {
-      console.log('addMarker executed');
+    setMarkerInfo(${JSON.stringify(pointer)});
 
-      const content = "<p>" + props.title + "</p>" + "<br /><p>" + props.description + "</p>" + '<a href="#"/>' + props.image + '</a>';
-
-      const coords = new google.maps.LatLng(props.lat, props.lng);
-      const marker = new google.maps.Marker({
-        position: coords,
-        map,
-        icon: props.icon,
-        animation: google.maps.Animation.DROP,
-        draggable: true
-      });
-      const infoWindow = new google.maps.InfoWindow({
-        content: content
-      });
-      marker.addListener('click', function (){
-        infoWindow.open(map, marker)
-      });
-      markers.push(props);
-      console.log("markers in map: ",markers);
-    }
-
-      function setMarkerInfo(markers){
-        console.log('setMarker executed');
-
-        for (const marker of markers) {
-          const id = marker.id;
-          const title = marker.title;
-          const description = marker.description;
-          const image = marker.img_url;
-          const icon = marker.icon_url;
-          const lat = marker.lat;
-          const lng = marker.lng;
-          const props = { id, title, description, image, icon, lat, lng };
-          console.log('marker inside setMarkerInfo:', marker);
-          addMarker(props);
-        }
-      }
-    
-
-    
     map.addListener('click', event1 => {
-      console.log('map click listener executed');
-
       $('.new-marker').show().slideDown('slow', () => {
         $('#marker-title').focus();
         $('#new-marker-form').on("submit", (event2) => {
@@ -105,14 +94,10 @@ const createMap = (mapId, pointer) => {
           const mapId1 = ${mapId};
           const allMarkers = ${JSON.stringify(pointer)};
           const data = $('#new-marker-form').serialize() + '&lat=' + JSON.stringify(lat) + '&lng=' + JSON.stringify(lng) + '&mapId=' + JSON.stringify(mapId1);
-          // console.log('data', data);
           setMarker(data)
           .then(json => {
-            console.log("inside setmarker client");
-            console.log('json stringify:', ${JSON.stringify(pointer)})
             allMarkers.push(json.marker);
             setMarkerInfo(allMarkers);
-            //console.log("setmarker", json.marker);
           });
           $('.new-marker').show().slideUp();
         });
@@ -180,7 +165,6 @@ var mapFinal = (mapId) => {
     const map = json.map;
     const mapPoints = json.mapPoints;
     const mapFavourite = json.mapFavourite;
-    console.log("mapPoints:", mapPoints);
 
     const $map = $(`
       <div class="title-like">
@@ -198,7 +182,6 @@ var mapFinal = (mapId) => {
     /// edit delete like
     $(document).on("click", "#favourite-btn", (event) => {
       event.preventDefault();
-      console.log("fav button clicked 💖💖💖");
       const $btn = $("#favourite-heart");
       const redHeart = "favourited-map";
 
