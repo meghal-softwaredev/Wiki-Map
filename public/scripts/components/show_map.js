@@ -139,7 +139,6 @@ const listAllMarkers = (markers) => {
       <tbody>
    `;
   markers.forEach((mark) => {
-
     allMarkers += `
           <tr id="marker${mark.id}">
             <td>${mark.title}</td>
@@ -164,7 +163,7 @@ const listAllMarkers = (markers) => {
 
 const createButton = (favouriteId) => {
   if (favouriteId === "not logged in") {
-    return `<h1>NO LIKES</h1>`;
+    return " ";
   }
 
   if (!favouriteId) {
@@ -186,7 +185,7 @@ var mapFinal = (mapId) => {
 
     const $map = $(`
       <div class="title-like">
-        ${map.title}
+        <h2>${map.title}</h2>
         ${createButton(mapFavourite.id, mapPoints)}
       </div>
       <div class='google-map'>
@@ -229,7 +228,7 @@ var mapFinal = (mapId) => {
           deleteMarker($(this).attr("data-id"));
         })
         .then(() => {
-          console.log("in the refresh of the page")
+          console.log("in the refresh of the page");
           views_manager.show("showMap", { mapId: map.id });
         });
     });

@@ -1,5 +1,29 @@
 @use "_variables" as *;
 
+// title and like button
+.title-like {
+  @include flex-center(row);
+  margin: 2rem auto;
+
+  h2 {
+    text-transform: capitalize;
+    font-family: $font-title;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  button {
+    border: 3px solid $black;
+    border-radius: 50%;
+    padding: 0.6rem;
+    margin-left: 10px;
+    .fa-heart {
+      font-size: 2rem;
+    }
+  }
+}
+
+// google map
 #showMap {
   @include flex-center(column);
   #map {
@@ -33,3 +57,5 @@
     }
   }
 }
+
+// points table
