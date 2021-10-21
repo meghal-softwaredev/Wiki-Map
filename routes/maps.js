@@ -88,6 +88,7 @@ module.exports = (db) => {
     const marker = req.body;
     const { mapId, title, description, imageURL, icon, lat, lng} = marker;
     console.log("imageURl", imageURL, "icon", icon);
+    let iconURL = '';
     if (icon === 'beach') {
       iconURL = "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
     } else if (icon === 'park') {
@@ -169,6 +170,36 @@ module.exports = (db) => {
         map: result[0].rows[0],
         mapPoints: result[1].rows,
         mapFavourite: result[2].rows[0] || {},
+      });
+    });
+  });
+
+  router.get("/userProfile", (req, res) => {
+    const userId = req.session.userId;
+
+    const users = db.query(`SELECT * FROM users where id = $1`, [userId]);
+    const userFavourites = db.query(
+      `SELECT title, description FROM users JOIN maps
+      ON users.id = owner_id JOIN favourites
+      ON map_id = maps.id
+      WHERE users.id = $1`, [userId]
+    );
+
+    const userContributors = db.query(
+      `SELECT title, description FROM users JOIN maps
+      ON users.id = owner_id JOIN contributors
+      ON  map_id = maps.id
+      WHERE users.id = $1`, [userId]
+    );
+
+    Promise.all([users, userFavourites, userContributors]).then((result) => {
+      console.log(result[0].rows);
+      console.log(result[1].rows);
+      console.log(result[2].rows);
+      return res.json({
+        userProfile: result[0].rows[0],
+        userFavourites: result[1].rows,
+        userContributor: result[2].rows
       });
     });
   });

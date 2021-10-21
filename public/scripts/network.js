@@ -24,16 +24,6 @@ function logOut() {
     url: "/api/users/logout",
   });
 }
-function getFavouriteMaps() {
-  return $.ajax({
-    url: "/api/users/favourite",
-  });
-}
-function getContributedMaps() {
-  return $.ajax({
-    url: "/api/users/contributed",
-  });
-}
 
 function createNewMap(data) {
   return $.ajax({
@@ -85,5 +75,11 @@ function getAllMapData(mapId) {
   return $.ajax({
     url: "api/maps/all/id",
     data: { mapId },
+  });
+}
+
+function getUserProfile() {
+  return $.ajax({
+    url: "api/maps/userProfile",
   });
 }
