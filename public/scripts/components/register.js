@@ -43,7 +43,6 @@ $(() => {
           $("#error").append("An account at this email already exist.");
         });
       } else {
-        console.log("on se rend ici:", account);
         header.update(account.user);
         views_manager.show("mapsDisplay");
       }

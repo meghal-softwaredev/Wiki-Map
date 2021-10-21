@@ -12,15 +12,15 @@ $mapsDisplay.on("click", (event) => {
   }
 });
 
-function renderMapList (mapsData, favsData) {
+function renderMapList(mapsData, favsData) {
   if (!mapsData) {
-    return $('<h2>There is no map!</h2>');
+    return $("<h2>There is no map!</h2>");
   } else {
     let favsIds;
     if (favsData) {
-      favsIds = favsData.map(fav => fav.map_id);
+      favsIds = favsData.map((fav) => fav.map_id);
     } else {
-      favsIds = ['a']
+      favsIds = ["a"];
     }
     return mapsData.map((aMap) => {
       return $(`
@@ -29,10 +29,15 @@ function renderMapList (mapsData, favsData) {
       <i class="fas fa-map-marked-alt"></i>
       <div class="map-info">
       <h3 class="title">${aMap.title}</h3>
-      <span>|</span>
       <p class="description">${aMap.description}</p>
       </div>
-      ${favsIds.includes(aMap.id) ? '<i data-favid="' + aMap.id + '" class="fas fa-heart favourited-map"></i>' : ""}
+      ${
+        favsIds.includes(aMap.id)
+          ? '<i data-favid="' +
+            aMap.id +
+            '" class="fas fa-heart favourited-map"></i>'
+          : ""
+      }
       </div>
       </article>
       `);

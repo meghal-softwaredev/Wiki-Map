@@ -12,11 +12,12 @@ module.exports = (db) => {
   // deleting a marker not finished
   router.post("/deleteMarker", (req, res) => {
     const id = req.body.id;
-     db.query(`
+    db.query(
+      `
     DELETE FROM points WHERE id=$1
-      RETURNING *`
-      , [id])
-      .catch((err) => err.message);
+      RETURNING *`,
+      [id]
+    ).catch((err) => err.message);
   });
 
   // create a new map in database
@@ -33,7 +34,6 @@ module.exports = (db) => {
         [title, description, userID]
       )
       .then((result) => {
-        console.log("result", result.rows[0]);
         return res.json({ map: result.rows[0] });
       })
       .catch((err) => err.message);
@@ -58,7 +58,6 @@ module.exports = (db) => {
       `SELECT * FROM favourites WHERE user_id = $1`,
       [userId]
     );
-    console.log("---route---");
 
     Promise.all([maps, userFavourites]).then((result) => {
       return res.json({
@@ -71,7 +70,6 @@ module.exports = (db) => {
   router.post("/marker/new", (req, res) => {
     const marker = req.body;
     const { mapId, title, description, imageURL, icon, lat, lng } = marker;
-    console.log("imageURl", imageURL, "icon", icon);
     let iconURL = "";
     if (icon === "beach") {
       iconURL =
@@ -94,7 +92,6 @@ module.exports = (db) => {
         [userID, mapId, title, description, imageURL, iconURL, lat, lng]
       )
       .then((result) => {
-        console.log(result.rows[0]);
         return res.json({ marker: result.rows[0] });
       })
       .catch((err) => err.message);
@@ -137,7 +134,6 @@ module.exports = (db) => {
         userId,
       ])
       .catch((err) => {
-        console.log("finito miriano");
         return err.message;
       });
   });
@@ -165,8 +161,6 @@ module.exports = (db) => {
       `SELECT * FROM favourites WHERE user_id = $1 AND map_id = $2`,
       [userId, mapId]
     );
-
-    console.log("Points:", points);
 
     // if not logged in, only show map and points data
     if (!userId) {

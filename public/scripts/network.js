@@ -34,7 +34,6 @@ function createNewMap(data) {
 }
 
 function getUserMaps() {
-  console.log("get user map called")
   return $.ajax({
     url: "api/maps/all",
   });

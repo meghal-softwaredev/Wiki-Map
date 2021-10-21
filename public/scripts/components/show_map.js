@@ -88,10 +88,9 @@ function initMap(mapId, pointer) {
     setMarker(data).then((json) => {
       setMarkerInfo([json.marker]);
     });
-    getUser()
-        .then((json) => {
-          addContributors(json.user.id, mapId1);
-        })
+    getUser().then((json) => {
+      addContributors(json.user.id, mapId1);
+    });
     $(".new-marker").show().slideUp();
     views_manager.show("showMap", { mapId: mapId1 });
   });
@@ -107,7 +106,7 @@ function initMap(mapId, pointer) {
   });
 }
 
-// this is the HTML ton include the map and every marker with each of their content
+// this is the HTML to include the map and every marker with each of their content
 const createMap = () => {
   return `
   <div id="map" class="map" style="height:600px; width:100%;"></div>
