@@ -46,9 +46,9 @@ function addMarker(props) {
     "<br /><p>" +
     props.description +
     "</p>" +
-    '<a href="#"/>' +
+    '<img href="#"/>' +
     props.image +
-    "</a>";
+    "</img>";
 
   const coords = new google.maps.LatLng(props.lat, props.lng);
   const marker = new google.maps.Marker({
