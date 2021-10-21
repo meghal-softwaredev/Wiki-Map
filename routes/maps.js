@@ -58,6 +58,7 @@ module.exports = (db) => {
       `SELECT * FROM favourites WHERE user_id = $1`,
       [userId]
     );
+    console.log("---route---");
 
     Promise.all([maps, userFavourites]).then((result) => {
       return res.json({
@@ -174,16 +175,6 @@ module.exports = (db) => {
           mapFavourite: { id: "not logged in" },
         });
       });
-      // return db
-      //   .query(`SELECT * FROM maps WHERE id = $1`, [mapId])
-      //   .then((result) => {
-      //     return res.json({
-      //       map: result.rows[0],
-      //       mapPoints: {},
-      //       mapFavourite: { id: "not logged in" },
-      //     });
-      //   })
-      //   .catch((err) => err.message);
     }
 
     Promise.all([map, points, favourite]).then((result) => {

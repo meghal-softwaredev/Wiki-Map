@@ -2,22 +2,25 @@
 
 #createNewMapForm {
   height: 90vh;
-  font-family: $font-body;
+  font-family: $font-title;
+  width: auto;
   @include flex-center(row);
   img {
     height: 500px;
     margin-right: 10em;
   }
-  .fullForm{
+  .fullForm {
     display: flex;
     flex-direction: column;
     gap: 0.5em;
-    label{
-      align-self: center;
+
+    label {
+      text-align: center;
     }
-    h1{
+    h1 {
       font-family: $font-title;
     }
+
     .createNew-button {
       @include button($green, $darkgreen);
     }

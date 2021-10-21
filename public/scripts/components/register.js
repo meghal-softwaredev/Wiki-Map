@@ -15,15 +15,15 @@ $(() => {
       <div id="error"></div>
         <div class="form-group">
           <label for="name">Name</label>
-            <input required type="name" class="form-control" style="width:300px;" id="name" name="name" placeholder="Enter name">
+            <input required type="name" class="form-control" id="name" name="name" placeholder="Enter name">
         </div>
         <div class="form-group">
           <label for="email">Email address</label>
-            <input required type="email" class="form-control" style="width:300px;" id="email" name="email" placeholder="Enter email">
+            <input required type="email" class="form-control" id="email" name="email" placeholder="Enter email">
         </div>
         <div class="form-group">
           <label for="password">Password</label>
-            <input required type="password" class="form-control" style="width:300px;" id="password" name="password" placeholder="Password">
+            <input required type="password" class="form-control" id="password" name="password" placeholder="Password">
         </div>
         <button class="signup-button">Sign up</button>
       </form>
@@ -36,17 +36,16 @@ $(() => {
   $registerForm.on("submit", function (e) {
     e.preventDefault();
     const data = $(this).serialize();
-    signUp(data)
-    .then((account) => {
+    signUp(data).then((account) => {
       if (!account) {
         $("#error").slideDown("slow", () => {
-          $('#error').empty();
-          $('#error').append("An account at this email already exist.");
+          $("#error").empty();
+          $("#error").append("An account at this email already exist.");
         });
       } else {
-        console.log("on se rend ici:", account)
+        console.log("on se rend ici:", account);
         header.update(account.user);
-        views_manager.show('mapsDisplay');
+        views_manager.show("mapsDisplay");
       }
     });
   });

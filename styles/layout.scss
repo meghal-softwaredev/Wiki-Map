@@ -15,6 +15,10 @@ main {
   font-family: $font-body;
 }
 
+input {
+  width: 300px;
+}
+
 .favourited-map {
   color: $red;
 }
