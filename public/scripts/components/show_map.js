@@ -107,6 +107,8 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkD
 </div>`;
 };
 
+const renderAllMarkers = (marker) => {};
+
 // this is the listing of all the marker under the map
 const listAllMarkers = (markers) => {
   let allMarkers = `

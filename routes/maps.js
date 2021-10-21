@@ -181,16 +181,6 @@ module.exports = (db) => {
           mapFavourite: { id: "not logged in" },
         });
       });
-      // return db
-      //   .query(`SELECT * FROM maps WHERE id = $1`, [mapId])
-      //   .then((result) => {
-      //     return res.json({
-      //       map: result.rows[0],
-      //       mapPoints: {},
-      //       mapFavourite: { id: "not logged in" },
-      //     });
-      //   })
-      //   .catch((err) => err.message);
     }
 
     Promise.all([map, points, favourite]).then((result) => {
@@ -233,6 +223,22 @@ module.exports = (db) => {
       });
     });
   });
+
+  //////////////////////////////////////////////////////
+  // router.get("/getMarkers", (req, res) => {
+  //   const userId = req.session.userId;
+  //   const mapId = req.query.mapId;
+  //   return db
+  //     .query(
+  //       `
+  //       SELECT * FROM points WHERE map_id = $1 AND user_id = $2`,
+  //       [mapId, userId]
+  //     )
+  //     .then((result) => {
+  //       return res.json({ marker: result.rows[0] });
+  //     })
+  //     .catch((err) => err.message);
+  // });
 
   return router;
 };
