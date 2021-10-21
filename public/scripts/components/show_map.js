@@ -64,12 +64,11 @@ const createMap = (mapId, pointer) => {
       marker.addListener('click', function (){
         infoWindow.open(map, marker)
       });
-      //////////////////////////////////////////////////////////////////////////////
-      console.log({markers});
-      markers.concat(pointers); 
       markers.push(props);
       console.log("markers in map: ",markers);
     }
+
+    
 
     function setMarkerInfo(marker){
       const id = marker.id;
