@@ -97,7 +97,10 @@ const createMap = (mapId, pointer) => {
             //console.log("setmarker", json.marker);
           });
           $('.new-marker').show().slideUp();
-        }); ${createMap(map.id
+        });
+      });
+    });
+  }
 </script>
 <script
 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkDPnwd1JKc&callback=initMap&v=weekly"async></script>
