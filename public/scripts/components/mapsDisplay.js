@@ -1,50 +1,40 @@
-$(() => {
-  const $mapsDisplay = $(`
-  <section id="maps-display">
-    <h1>All Maps</h1>
-  </section>
-  `);
+const $mapsDisplay = $(`
+<section id="maps-display">
+</section>
+`);
 
-  window.$mapsDisplay = $mapsDisplay;
+window.$mapsDisplay = $mapsDisplay;
 
-  const renderAllMaps = (mapsData, favsData = []) => {
-    mapsData.map((map) => {
-      // console.log("map", map);
-      const $mapArticle = $(
-        `<article data-id=${map.id} class="user-map"></article>`
-      );
-      const $mapData = $(`
-      <div class="map-item">
-        <i class="fas fa-map-marked-alt"></i>
-        <div class="map-info">
-          <h3 class="title">${map.title}</h3>
-          <span>|</span>
-          <p class="description">${map.description}</p>
-        </div>
-        ${favsData
-          .map((fav) => {
-            if (fav.map_id === map.id) {
-              return `<i data-favid=${fav.map_id} class="fas fa-heart favourited-map"></i>`;
-            }
-          })
-          .join("")}
-      </div>
+$mapsDisplay.on("click", (event) => {
+  const mapId = $(event.target).parent(".user-map").attr("data-id");
+  if (mapId) {
+    views_manager.show("showMap", { mapId });
+  }
+});
+
+function renderMapList (mapsData, favsData) {
+  const favsIds = favsData.map(fav => fav.map_id);
+  return mapsData.map((aMap) => {
+    return $(`
+    <article data-id=${aMap.id} class="user-map">
+    <div class="map-item">
+    <i class="fas fa-map-marked-alt"></i>
+    <div class="map-info">
+    <h3 class="title">${aMap.title}</h3>
+    <span>|</span>
+    <p class="description">${aMap.description}</p>
+    </div>
+    ${favsIds.includes(aMap.id) ? '<i data-favid="' + aMap.id + '" class="fas fa-heart favourited-map"></i>' : ""}
+    </div>
+    </article>
     `);
-
-      $mapArticle.append($mapData);
-
-      $mapsDisplay.append($mapArticle);
-
-      $mapArticle.on("click", (event) => {
-        const mapId = $(event.target).parent(".user-map").attr("data-id");
-        views_manager.show("showMap", { mapId });
-      });
-    });
-  };
-
-  getUserMaps().then((json) => {
+  });
+}
+function createList () {
+  return getUserMaps()
+  .then((json) => {
     const userMaps = json.userMaps;
     const userFavs = json.userFavs;
-    renderAllMaps(userMaps, userFavs);
+    return Promise.resolve($mapsDisplay.append(renderMapList(userMaps, userFavs)))
   });
-});
+}
