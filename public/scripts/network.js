@@ -99,3 +99,17 @@ function editMarker(data) {
     data: {data}
   });
 }
+
+function renderMarkers(data) {
+  return $.ajax({
+    url: "api/maps/getMarkers",
+  });
+}
+
+function editMark(data) {
+  return $.ajax({
+    method: "POST",
+    url: "api/maps/mark/edit",
+    data: {data}
+  });
+}
