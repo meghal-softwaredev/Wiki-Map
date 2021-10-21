@@ -72,7 +72,7 @@ const createMap = (mapId, pointer) => {
 
     function addMarker (props) {
 
-      const content = "<p>" + props.title + "</p>" + "<br /><p>" + props.description + "</p>" + '<a href="#"/>' + props.image + '</a>';
+    const content = "<p>" + props.title + "</p>" + "<br /><p>" + props.description + "</p>" + '<a href="#"/>' + props.image + '</a>';
 
       const coords = new google.maps.LatLng(props.lat, props.lng);
       const marker = new google.maps.Marker({
@@ -132,6 +132,18 @@ const createMap = (mapId, pointer) => {
       const props = { id, title, description, image, icon, lat, lng };
       addMarker(props);
     }
+  }
+
+
+  function initMap() {
+    const options = {
+      zoom: 9,
+      center: firstCenter
+    };
+    map = new google.maps.Map(document.getElementById('map'), options);
+
+    setMarkerInfo(${JSON.stringify(pointer)});
+
     map.addListener('click', event1 => {
       $('.new-marker').show().slideDown('slow', () => {
         $('#marker-title').focus();
@@ -140,10 +152,12 @@ const createMap = (mapId, pointer) => {
           const lat = event1.latLng.lat();
           const lng = event1.latLng.lng();
           const mapId1 = ${mapId};
+          const allMarkers = ${JSON.stringify(pointer)};
           const data = $('#new-marker-form').serialize() + '&lat=' + JSON.stringify(lat) + '&lng=' + JSON.stringify(lng) + '&mapId=' + JSON.stringify(mapId1);
           setMarker(data)
           .then(json => {
-            setMarkerInfo(json.marker);
+            allMarkers.push(json.marker);
+            setMarkerInfo(allMarkers);
           });
           $('.new-marker').show().slideUp();
         });
@@ -224,11 +238,11 @@ var mapFinal = (mapId) => {
 
     const $map = $(`
       <div class="title-like">
-      ${map.title}
-      ${createButton(mapFavourite.id, mapPoints)}
+        ${map.title}
+        ${createButton(mapFavourite.id, mapPoints)}
       </div>
       <div class='google-map'>
-        ${createMap(map.id)}
+        ${createMap(map.id, mapPoints)}
       </div>
       <div class='points'>
         ${listAllMarkers(mapPoints)}
@@ -238,7 +252,6 @@ var mapFinal = (mapId) => {
     /// edit delete like
     $(document).on("click", "#favourite-btn", (event) => {
       event.preventDefault();
-      console.log("fav button clicked 💖💖💖");
       const $btn = $("#favourite-heart");
       const redHeart = "favourited-map";
 
