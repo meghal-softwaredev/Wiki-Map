@@ -108,16 +108,17 @@ const createMap = () => {
   <div id="map" class="map" style="height:600px; width:100%;"></div>
   <section class="new-marker" style="display: none">
     <form id="new-marker-form">
-      <input name="title" id="marker-title" placeholder="Marker Title" />
-      <textarea name="description" id="marker-description" placeholder="Marker Description"></textarea>
-      <input name="imageURL" id="marker-image" placeholder="Marker Image URL" />
+      <h2>Create your marker:</h2> 
+      <input name="title" id="marker-title" class="form-control" placeholder="Marker Title" />
+      <textarea name="description" id="marker-description" class="form-control" placeholder="Marker Description"></textarea>
+      <input name="imageURL" id="marker-image" class="form-control" placeholder="Marker Image URL" />
       <select name="icon" id="icon">
         <option value="beach">Beach</option>
         <option value="park">Parks</option>
         <option value="restaurant">Restaurant</option>
         <option value="movie">Movie</option>
       </select>
-      <button id="marker-btn">Create Marker</button>
+      <button id="marker-btn">Create</button>
     </form>
   </section>
 </div>`;
@@ -142,7 +143,7 @@ const listAllMarkers = (markers) => {
     allMarkers += `
           <tr id="marker${mark.id}">
             <td>${mark.title}</td>
-            <td><img src="${mark.img_url}"></td>
+            <td class="table-img"><img src="${mark.img_url}"></td>
             <td>${mark.description}</td>
             <td>
               <form>
@@ -178,7 +179,6 @@ var mapFinal = (mapId) => {
     const map = json.map;
     const mapPoints = json.mapPoints;
     const mapFavourite = json.mapFavourite;
-    console.log("mapPoints:", mapPoints);
 
     markers.splice([]);
     navigator.geolocation.getCurrentPosition(showPosition);
@@ -200,7 +200,6 @@ var mapFinal = (mapId) => {
       initMap(map.id, mapPoints);
     }, 5);
 
-    /// edit delete like
     $(document).on("click", "#favourite-btn", (event) => {
       event.preventDefault();
       console.log("fav button clicked 💖💖💖");
@@ -249,9 +248,9 @@ var mapFinal = (mapId) => {
       }
       $(target).html(`
               <form id="saving">
-                <td><input required form="saving" type="text" id="title" name="title" value="${titre}"></td>
-                <td><input required form="saving" type="text" id="image" name="image" value="${img}"></td>
-                <td><input required form="saving" type="text" id="description" name="description" value="${desc}"></td>
+                <td><input required class="form-control" form="saving" type="text" id="title" name="title" value="${titre}"></td>
+                <td><input required class="form-control" form="saving" type="text" id="image" name="image" value="${img}"></td>
+                <td><input required class="form-control" form="saving" type="text" id="description" name="description" value="${desc}"></td>
                 <td>
                   <button form="saving" type="submit" id="saveEditMarker" data-id="${$(
                     this
