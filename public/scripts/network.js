@@ -42,7 +42,7 @@ function getUserMaps() {
 function setMarker(data) {
   return $.ajax({
     method: "POST",
-    url: "api/maps/marker/new",
+    url: "/api/maps/marker/new",
     data,
   });
 }
