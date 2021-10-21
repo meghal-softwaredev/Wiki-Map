@@ -33,16 +33,15 @@ $(() => {
     mapsData.forEach((map) => {
       const $userFavouritesInfo = $(`
       <article class="user-map">
-        <div class="map-item>
-        <img src="" alt="" />
         <div class="map-info">
           <h3 class="title">${map.title}</h3>
+          <span>|</span>
           <p class="description">${map.description}</p>
         </div>
         <div class="like-button">
           <i class="fas fa-heart favourited-map"></i>
         </div>
-      </div>`);
+      </article>`);
       $profile.append($userFavouritesInfo);
     });
     const $contributors = $(`
