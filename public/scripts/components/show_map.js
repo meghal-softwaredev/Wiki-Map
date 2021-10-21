@@ -164,6 +164,7 @@ var mapFinal = (mapId) => {
     const map = json.map;
     const mapPoints = json.mapPoints;
     const mapFavourite = json.mapFavourite;
+    console.log("mapPoints:", mapPoints);
 
     const $map = $(`
       <div class="title-like">
@@ -171,7 +172,7 @@ var mapFinal = (mapId) => {
       ${createButton(mapFavourite.id, mapPoints)}
       </div>
       <div class='google-map'>
-        ${createMap(map.id)}
+        ${createMap(map.id, mapPoints)}
       </div>
       <div class='points'>
         ${listAllMarkers(mapPoints)}
