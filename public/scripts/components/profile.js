@@ -1,52 +1,59 @@
 $(() => {
   const $profile = $(`
     <section id="show-profile">
-      <h2>User Profile</h2>
+      <div class="category">
+        <i class="fas fa-user-circle"></i>
+        <h2>User Profile</h2>
+      </div>
     <section>
   `);
   window.$profile = $profile;
 
   const renderUserProfile = (user, mapsData, userContributor) => {
     const $userProfileInfo = $(`
-      <div>
-        <label>User Name: </label>
+      <div class="info">
+        <h4>User Name: </h4>
         <p>${user.name}</p>
       </div>
-      <div>
-        <label>Email: </label>
+      <div class="info">
+        <h4>Email: </h4>
         <p>${user.email}</p>
-        </div>`);
+      </div>`);
     $profile.append($userProfileInfo);
     const $favourite = $(`
       <section id="show-favourite">
-        <h2>Favourites</h2>
+        <div class="category">
+          <i class="fas fa-heart"></i>
+          <h2>Favourites</h2>
+        </div>
       <section>
     `);
     $profile.append($favourite);
 
-    mapsData.forEach(map => {
+    mapsData.forEach((map) => {
       const $userFavouritesInfo = $(`
       <article class="user-map">
-        <div class="map-item>
-        <img src="" alt="" />
         <div class="map-info">
           <h3 class="title">${map.title}</h3>
+          <span>|</span>
           <p class="description">${map.description}</p>
         </div>
         <div class="like-button">
-          <i class="fas fa-heart"></i>
+          <i class="fas fa-heart favourited-map"></i>
         </div>
-      </div>`);
+      </article>`);
       $profile.append($userFavouritesInfo);
     });
     const $contributors = $(`
-      <br>
       <section id="show-contributors">
-        <h2>Contributors</h2>
+        <div class="category">
+          <i class="fas fa-users"></i>
+          <h2>Contributors</h2>
+        </div>
       <section>
     `);
     $profile.append($contributors);
-    userContributor.forEach(map => {
+    userContributor.forEach((map) => {
       const $userContributorInfo = $(`
       <article class="user-map">
         <div class="map-item>
@@ -55,13 +62,13 @@ $(() => {
           <h3 class="title">${map.title}</h3>
           <p class="description">${map.description}</p>
         </div>
-        <div class="like-button">
-          <i class="fas fa-heart"></i>
-        </div>
+        // <div class="like-button">
+        //   <i class="fas fa-heart"></i>
+        // </div>
       </div>`);
       $profile.append($userContributorInfo);
     });
-  }
+  };
 
   getUserProfile().then((json) => {
     const userProfile = json.userProfile;
