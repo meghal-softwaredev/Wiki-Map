@@ -36,18 +36,23 @@ const createMap = (mapId, pointer) => {
   navigator.geolocation.getCurrentPosition(showPosition);
 
   function showPosition(position) {
+    console.log('show position executed');
     firstCenter = {lat:position.coords.latitude, lng:position.coords.longitude};
   }
   let map;
 
   function initMap() {
+    console.log('initMap executed');
+
     const options = {
       zoom: 9,
       center: firstCenter
     };
     map = new google.maps.Map(document.getElementById('map'), options);
+    console.log('what is map:', map)
 
     function addMarker (props) {
+      console.log('addMarker executed');
 
       const content = "<p>" + props.title + "</p>" + "<br /><p>" + props.description + "</p>" + '<a href="#"/>' + props.image + '</a>';
 
@@ -69,18 +74,28 @@ const createMap = (mapId, pointer) => {
       console.log("markers in map: ",markers);
     }
 
-    function setMarkerInfo(marker){
-      const id = marker.id;
-      const title = marker.title;
-      const description = marker.description;
-      const image = marker.img_url;
-      const icon = marker.icon_url;
-      const lat = marker.lat;
-      const lng = marker.lng;
-      const props = { id, title, description, image, icon, lat, lng };
-      addMarker(props);
-    }
+      function setMarkerInfo(markers){
+        console.log('setMarker executed');
+
+        for (const marker of markers) {
+          const id = marker.id;
+          const title = marker.title;
+          const description = marker.description;
+          const image = marker.img_url;
+          const icon = marker.icon_url;
+          const lat = marker.lat;
+          const lng = marker.lng;
+          const props = { id, title, description, image, icon, lat, lng };
+          console.log('marker inside setMarkerInfo:', marker);
+          addMarker(props);
+        }
+      }
+    
+
+    
     map.addListener('click', event1 => {
+      console.log('map click listener executed');
+
       $('.new-marker').show().slideDown('slow', () => {
         $('#marker-title').focus();
         $('#new-marker-form').on("submit", (event2) => {
@@ -88,12 +103,15 @@ const createMap = (mapId, pointer) => {
           const lat = event1.latLng.lat();
           const lng = event1.latLng.lng();
           const mapId1 = ${mapId};
+          const allMarkers = ${JSON.stringify(pointer)};
           const data = $('#new-marker-form').serialize() + '&lat=' + JSON.stringify(lat) + '&lng=' + JSON.stringify(lng) + '&mapId=' + JSON.stringify(mapId1);
           // console.log('data', data);
           setMarker(data)
           .then(json => {
-            // console.log("inside setmarker client")
-            setMarkerInfo(json.marker);
+            console.log("inside setmarker client");
+            console.log('json stringify:', ${JSON.stringify(pointer)})
+            allMarkers.push(json.marker);
+            setMarkerInfo(allMarkers);
             //console.log("setmarker", json.marker);
           });
           $('.new-marker').show().slideUp();
@@ -106,8 +124,6 @@ const createMap = (mapId, pointer) => {
 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgE-0OBpY_KHAx8MKg9HOsKkDPnwd1JKc&callback=initMap&v=weekly"async></script>
 </div>`;
 };
-
-const renderAllMarkers = (marker) => {};
 
 // this is the listing of all the marker under the map
 const listAllMarkers = (markers) => {
@@ -168,8 +184,8 @@ var mapFinal = (mapId) => {
 
     const $map = $(`
       <div class="title-like">
-      ${map.title}
-      ${createButton(mapFavourite.id, mapPoints)}
+        ${map.title}
+        ${createButton(mapFavourite.id, mapPoints)}
       </div>
       <div class='google-map'>
         ${createMap(map.id, mapPoints)}
