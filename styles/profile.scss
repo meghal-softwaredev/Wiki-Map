@@ -1,0 +1,75 @@
+@use "_variables" as *;
+
+#show-profile {
+  @include flex-center(column);
+  align-items: flex-start;
+  margin-top: 2em;
+  padding: 20px;
+  width: 100%;
+  border: 2px solid $black;
+  border-radius: 5px;
+  background-color: $lightgrey;
+
+  label,
+  h1,
+  h2,
+  .title {
+    font-family: $font-title;
+    font-weight: 600;
+    margin: 0;
+    align-self: center;
+    justify-self: center;
+  }
+
+  i {
+    margin-right: 0.3em;
+  }
+
+  .info {
+    @include flex-center(row);
+    justify-content: flex-start;
+    width: 100%;
+    margin: 0;
+    padding: 10px;
+    &:hover {
+      background-color: rgb(204, 204, 204);
+    }
+
+    p,
+    h4 {
+      margin: 0;
+      align-self: center;
+      justify-self: center;
+    }
+  }
+
+  .fa-user-circle {
+    color: $blue;
+  }
+
+  .category {
+    @include flex-center(row);
+    justify-content: flex-start;
+    height: auto;
+    width: 100%;
+    font-size: 4rem;
+    margin: 1rem 0;
+  }
+  #show-favourite {
+    width: 100%;
+    .category {
+      i {
+        color: $red;
+      }
+    }
+  }
+
+  #show-contributors {
+    width: 100%;
+    .category {
+      i {
+        color: $green;
+      }
+    }
+  }
+}
