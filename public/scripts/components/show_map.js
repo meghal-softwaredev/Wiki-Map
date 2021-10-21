@@ -291,7 +291,3 @@ var mapFinal = (mapId) => {
     return $map;
   });
 };
-
-$(() => {
-  mapFinal(mapId);
-});
