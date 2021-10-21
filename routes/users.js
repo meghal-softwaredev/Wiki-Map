@@ -107,13 +107,10 @@ module.exports = (db) => {
     [userId, mapId])
     .then((result) => {
       if (!result.rows[0]) {
-        return db.query(`
+        db.query(`
         INSERT INTO contributors (user_id, map_id)
         VALUES ($1, $2)
-        RETURNING *`,[userId, mapId])
-        .then((result) => {
-          console.log("result", result.rows[0]);
-        })
+        `,[userId, mapId])
       } else {
         res.send("already a  contributor")
       }

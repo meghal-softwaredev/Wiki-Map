@@ -12,17 +12,10 @@ module.exports = (db) => {
   // deleting a marker not finished
   router.post("/deleteMarker", (req, res) => {
     const id = req.body.id;
-    return db
-      .query(
-        `
+     db.query(`
     DELETE FROM points WHERE id=$1
-      RETURNING *`,
-        [id]
-      )
-      .then((result) => {
-        console.log("result", result.rows[0]);
-        return res.json({ user: result.rows[0] });
-      })
+      RETURNING *`
+      , [id])
       .catch((err) => err.message);
   });
 

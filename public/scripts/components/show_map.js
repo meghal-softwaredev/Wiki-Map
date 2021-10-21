@@ -12,6 +12,7 @@ const markers = [];
 let firstCenter = { lat: 45.5017, lng: -73.5673 };
 
 // this is the HTML ton include the map and every marker with each of their content
+
 const createMap = (mapId, pointer) => {
   return `
   <div id="map" class="map" style="height:600px; width:100%;"></div>
@@ -122,10 +123,11 @@ const listAllMarkers = (markers) => {
       <tbody>
    `;
   markers.forEach((mark) => {
+
     allMarkers += `
           <tr id="marker${mark.id}">
             <td>${mark.title}</td>
-            <td><img src="${mark.image}"></td>
+            <td><img src="${mark.img_url}"></td>
             <td>${mark.description}</td>
             <td>
               <form>
@@ -161,14 +163,13 @@ var mapFinal = (mapId) => {
     const map = json.map;
     const mapPoints = json.mapPoints;
     const mapFavourite = json.mapFavourite;
-
     const $map = $(`
       <div class="title-like">
       ${map.title}
       ${createButton(mapFavourite.id, mapPoints)}
       </div>
       <div class='google-map'>
-        ${createMap(map.id)}
+        ${createMap(map.id, mapPoints)}
       </div>
       <div class='points'>
         ${listAllMarkers(mapPoints)}
@@ -184,25 +185,26 @@ var mapFinal = (mapId) => {
 
       if ($($btn).hasClass(redHeart)) {
         $($btn).removeClass(redHeart);
-        return deleteLike(map.id);
+        deleteLike(map.id);
+        views_manager.show("showMap", { mapId: map.id });
+      } else {
+        $($btn).addClass(redHeart);
+        addLike(map.id);
+        views_manager.show("showMap", { mapId: map.id });
       }
-      $($btn).addClass(redHeart);
-      return addLike(map.id);
     });
 
     $(document).on("click", "#deleteMarker", function (e) {
       e.preventDefault();
       getUser()
         .then((json) => {
-          console.log("adding cotrib");
           addContributors(json.user.id, map.id);
         })
         .then(() => {
           deleteMarker($(this).attr("data-id"));
         })
         .then(() => {
-          console.log("wtf");
-          $("#main-content").empty();
+          console.log("in the refresh of the page")
           views_manager.show("showMap", { mapId: map.id });
         });
     });
@@ -249,16 +251,12 @@ var mapFinal = (mapId) => {
       };
       getUser()
         .then((json) => {
-          console.log("add contri", json);
           addContributors(json.user.id, map.id);
         })
         .then(() => {
-          console.log("on edit");
           editMarker(data);
         })
         .then(() => {
-          console.log("reload");
-          $("#main-content").empty();
           views_manager.show("showMap", { mapId: map.id });
         });
     });
@@ -266,3 +264,4 @@ var mapFinal = (mapId) => {
     return $map;
   });
 };
+

@@ -1,12 +1,13 @@
 $(() => {
   const $main = $("#main-content");
 
+
   window.views_manager = {};
 
   window.views_manager.show = function (item, options) {
     $loginPage.detach();
     $registerPage.detach();
-    $mapWrapper.detach();
+    $mapWrapper.empty();
     $mapsDisplay.detach();
     $createNewMap.detach();
     $profile.detach();
@@ -23,8 +24,10 @@ $(() => {
         $mapsDisplay.appendTo($main);
         break;
       case "showMap":
-        $mapWrapper.empty();
+         $mapWrapper.empty();
+         $(document).off();
         mapFinal(options.mapId).then((result) => {
+          console.log("in the views-manager")
           result.appendTo($mapWrapper);
           $mapWrapper.appendTo($main);
         });
