@@ -9,7 +9,6 @@
 
 // these are the main variable
 const markers = [];
-console.log("markers:", markers);
 let firstCenter = { lat: 45.5017, lng: -73.5673 };
 
 // google map set up
@@ -49,6 +48,7 @@ function addMarker(props) {
   </div>`;
 
   const coords = new google.maps.LatLng(props.lat, props.lng);
+
   const marker = new google.maps.Marker({
     position: coords,
     map,
@@ -113,9 +113,6 @@ const createMap = () => {
       <input name="imageURL" id="marker-image" placeholder="Marker Image URL" />
       <select name="icon" id="icon">
         <option value="beach">Beach</option>
-        <option value="park">Parks</option>
-        <option value="restaurant">Restaurant</option>
-        <option value="movie">Movie</option>
       </select>
       <button id="marker-btn">Create Marker</button>
     </form>
