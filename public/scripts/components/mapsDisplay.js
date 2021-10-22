@@ -39,11 +39,12 @@ function renderMapList (mapsData, favsData) {
     });
   }
 }
-function createList () {
-  return getUserMaps()
-  .then((json) => {
+function createList() {
+  return getUserMaps().then((json) => {
     const userMaps = json.userMaps;
     const userFavs = json.userFavs;
-    return Promise.resolve($mapsDisplay.append(renderMapList(userMaps, userFavs)))
+    return Promise.resolve(
+      $mapsDisplay.append(renderMapList(userMaps, userFavs))
+    );
   });
 }

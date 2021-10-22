@@ -1,5 +1,30 @@
 @use "_variables" as *;
 
+// title and like button
+.title-like {
+  @include flex-center(row);
+  margin: 2rem auto;
+
+  h2 {
+    text-transform: capitalize;
+    font-family: $font-title;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  button {
+    border: 3px solid $black;
+    border-radius: 50%;
+    padding: 0.6rem;
+    margin-left: 1rem;
+    background-color: transparent;
+    .fa-heart {
+      font-size: 2rem;
+    }
+  }
+}
+
+// google map
 #showMap {
   @include flex-center(column);
   #map {
@@ -28,8 +53,61 @@
     height: 150px;
     width: 100px;
     img {
-      max-height: 200px;
+      height: auto;
       width: 100%;
+    }
+  }
+}
+
+#new-marker-form {
+  h2 {
+    font-family: $font-title;
+    margin-top: 10px;
+  }
+  textarea {
+    margin: 5px 0;
+  }
+
+  #marker-btn {
+    @include button($green, $darkgreen);
+    margin: 5px;
+  }
+}
+
+// points table
+.table {
+  width: 100%;
+  th {
+    font-family: $font-title;
+    // text-align: center;
+  }
+
+  tr:nth-child(even) {
+    background-color: $lightgrey;
+  }
+
+  .table-img {
+    height: 150px;
+    width: 200px;
+    img {
+      height: auto;
+      width: 100%;
+    }
+  }
+  td {
+    text-transform: capitalize;
+
+    #editMarker {
+      @include button($yellow, $darkyellow);
+      color: $black;
+    }
+
+    #deleteMarker {
+      @include button($red, $darkred);
+    }
+
+    #saveEditMarker {
+      @include button($green, $darkgreen);
     }
   }
 }
