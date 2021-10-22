@@ -61,7 +61,6 @@
   }
   #show-favourite {
     width: 100%;
-    margin: 3em 0;
     .category {
       i {
         color: $red;
@@ -69,21 +68,32 @@
     }
   }
 
-  .user-map {
+  .user-list {
     @include flex-center(row);
-    text-transform: capitalize;
+    justify-content: flex-start;
+    width: 100%;
+    margin: 0;
+    padding: 10px;
+    &:hover {
+      background-color: #eaeaea;
+    }
 
-    .map-info {
+    .map-list {
       @include flex-center(row);
-      h3,
+
       p,
-      span {
+      h4 {
         margin: 0;
-        text-transform: capitalize;
+        align-self: center;
+        justify-self: center;
       }
-      span {
-        font-size: 2em;
-        margin: 0;
+
+      h4 {
+        text-transform: capitalize;
+        font-weight: 500;
+        margin-right: 0.5em;
+        border-right: 2px solid $black;
+        padding-right: 10px;
       }
     }
     .fa-heart {

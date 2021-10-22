@@ -37,7 +37,11 @@ $(() => {
         });
         break;
       case "profile":
-        $profile.appendTo($main);
+        $profile.empty();
+        renderProfile()
+          .then(() => {
+            $profile.appendTo($main);
+          })
         break;
       case "createNewMap":
         $createNewMap.appendTo($main);
