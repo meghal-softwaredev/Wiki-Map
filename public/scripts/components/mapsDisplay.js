@@ -13,22 +13,31 @@ $mapsDisplay.on("click", (event) => {
 });
 
 function renderMapList (mapsData, favsData) {
-  const favsIds = favsData.map(fav => fav.map_id);
-  return mapsData.map((aMap) => {
-    return $(`
-    <article data-id=${aMap.id} class="user-map">
-    <div class="map-item">
-    <i class="fas fa-map-marked-alt"></i>
-    <div class="map-info">
-    <h3 class="title">${aMap.title}</h3>
-    <span>|</span>
-    <p class="description">${aMap.description}</p>
-    </div>
-    ${favsIds.includes(aMap.id) ? '<i data-favid="' + aMap.id + '" class="fas fa-heart favourited-map"></i>' : ""}
-    </div>
-    </article>
-    `);
-  });
+  if (!mapsData) {
+    return $('<h2>There is no map!</h2>');
+  } else {
+    let favsIds;
+    if (favsData) {
+      favsIds = favsData.map(fav => fav.map_id);
+    } else {
+      favsIds = ['a']
+    }
+    return mapsData.map((aMap) => {
+      return $(`
+      <article data-id=${aMap.id} class="user-map">
+      <div class="map-item">
+      <i class="fas fa-map-marked-alt"></i>
+      <div class="map-info">
+      <h3 class="title">${aMap.title}</h3>
+      <span>|</span>
+      <p class="description">${aMap.description}</p>
+      </div>
+      ${favsIds.includes(aMap.id) ? '<i data-favid="' + aMap.id + '" class="fas fa-heart favourited-map"></i>' : ""}
+      </div>
+      </article>
+      `);
+    });
+  }
 }
 function createList () {
   return getUserMaps()
