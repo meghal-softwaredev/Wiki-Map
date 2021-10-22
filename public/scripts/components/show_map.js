@@ -88,7 +88,12 @@ function initMap(mapId, pointer) {
     setMarker(data).then((json) => {
       setMarkerInfo([json.marker]);
     });
+    getUser()
+        .then((json) => {
+          addContributors(json.user.id, mapId1);
+        })
     $(".new-marker").show().slideUp();
+    views_manager.show("showMap", { mapId: mapId1 });
   });
 
   map.addListener("click", (event1) => {
@@ -179,7 +184,6 @@ var mapFinal = (mapId) => {
     const map = json.map;
     const mapPoints = json.mapPoints;
     const mapFavourite = json.mapFavourite;
-    console.log("mapPoints:", mapPoints);
 
     markers.splice([]);
     navigator.geolocation.getCurrentPosition(showPosition);
@@ -204,7 +208,6 @@ var mapFinal = (mapId) => {
     /// edit delete like
     $(document).on("click", "#favourite-btn", (event) => {
       event.preventDefault();
-      console.log("fav button clicked 💖💖💖");
       const $btn = $("#favourite-heart");
       const redHeart = "favourited-map";
 
@@ -229,7 +232,6 @@ var mapFinal = (mapId) => {
           deleteMarker($(this).attr("data-id"));
         })
         .then(() => {
-          console.log("in the refresh of the page")
           views_manager.show("showMap", { mapId: map.id });
         });
     });

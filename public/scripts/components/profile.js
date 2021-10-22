@@ -1,4 +1,3 @@
-$(() => {
   const $profile = $(`
     <section id="show-profile">
       <div class="category">
@@ -74,11 +73,12 @@ $(() => {
     });
   };
 
-  getUserProfile()
-  .then((json) => {
-    const userProfile = json.userProfile;
-    const userFavourites = json.userFavourites;
-    const userContributor = json.userContributor;
-    renderUserProfile(userProfile, userFavourites, userContributor);
-  });
-});
+  function renderProfile () {
+    return getUserProfile()
+    .then((json) => {
+      const userProfile = json.userProfile;
+      const userFavourites = json.userFavourites;
+      const userContributor = json.userContributor;
+      return Promise.resolve($profile.append(renderUserProfile(userProfile, userFavourites, userContributor)));
+    });
+  }

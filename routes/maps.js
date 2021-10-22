@@ -104,13 +104,15 @@ module.exports = (db) => {
     const update = {};
     const id = req.body.data.id;
     let info = req.body.data.update;
-    info = decodeURI(info);
     info = info.split("&");
     info.forEach((main) => {
       main = main.split("=");
       update[main[0]] = main[1];
     });
-    const { title, image, description } = update;
+    const { title, description } = update;
+    let image = update.image;
+    image = image.split("%3A").join(":");
+    image = image.split("%2F").join("/");
     return db
       .query(
         `
@@ -207,9 +209,6 @@ module.exports = (db) => {
     );
 
     Promise.all([users, userFavourites, userContributors]).then((result) => {
-      console.log(result[0].rows);
-      console.log(result[1].rows);
-      console.log(result[2].rows);
       return res.json({
         userProfile: result[0].rows[0],
         userFavourites: result[1].rows,
