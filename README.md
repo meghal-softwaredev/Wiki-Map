@@ -4,10 +4,6 @@ Wiki-Map is a full stack single page web application built with HTML, SCSS, JQue
 
 ## Final Product
 
-!["Screenshot of display all maps page"](https://github.com/meghalshah210/Wiki-Map/blob/master/docs/maps.png)
-
-!["Screenshot of create map page"](https://github.com/meghalshah210/Wiki-Map/blob/master/docs/create-map.png)
-
 !["Screenshot of edit map page"](https://github.com/meghalshah210/Wiki-Map/blob/master/docs/edit-map.png)
 
 !["Screenshot of profile page"](https://github.com/meghalshah210/Wiki-Map/blob/master/docs/profile.png)
